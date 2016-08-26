@@ -41,7 +41,7 @@ public class DicoAdapter extends ArrayAdapter<Entry> {
         Entry item = getItem(position);
         String text = (StringUtils.isBlank(item.kanji) ? " " : item.kanji + "- ") + item.reading;
         holder.text1.setText(text);
-        holder.text2.setText(item.senses.toString());
+        holder.text2.setText(StringUtils.join(item.senses,"\n"));
 
         return convertView;
     }
