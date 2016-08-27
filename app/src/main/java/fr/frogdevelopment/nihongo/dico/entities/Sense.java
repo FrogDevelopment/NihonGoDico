@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico;
+package fr.frogdevelopment.nihongo.dico.entities;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -27,6 +27,10 @@ public class Sense {
 
         if (!misc.isEmpty()) {
             builder.append("misc", misc);
+        }
+
+        if (!dial.isEmpty()) {
+            builder.append("dial", dial);
         }
 
         builder.append("gloss", gloss);

@@ -14,12 +14,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fr.frogdevelopment.nihongo.dico.entities.Preview;
 
-public class DicoAdapter extends ArrayAdapter<Entry> {
+public class DicoAdapter extends ArrayAdapter<Preview> {
 
     private final LayoutInflater mInflater;
 
-    public DicoAdapter(Activity context, List<Entry> items) {
+    public DicoAdapter(Activity context, List<Preview> items) {
         super(context, 0, items);
 
         mInflater = context.getLayoutInflater();
@@ -38,10 +39,10 @@ public class DicoAdapter extends ArrayAdapter<Entry> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Entry item = getItem(position);
+        Preview item = getItem(position);
         String text = (StringUtils.isBlank(item.kanji) ? " " : item.kanji + "- ") + item.reading;
         holder.text1.setText(text);
-        holder.text2.setText(StringUtils.join(item.senses,"\n"));
+        holder.text2.setText(StringUtils.join(item.gloss,"\n"));
 
         return convertView;
     }

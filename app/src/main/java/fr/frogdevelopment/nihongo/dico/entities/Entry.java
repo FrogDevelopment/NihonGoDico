@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico;
+package fr.frogdevelopment.nihongo.dico.entities;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
