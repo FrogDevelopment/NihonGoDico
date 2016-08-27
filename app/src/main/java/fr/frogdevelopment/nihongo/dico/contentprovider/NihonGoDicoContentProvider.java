@@ -16,7 +16,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.SparseLongArray;
 
-public class NihonGoContentProvider extends ContentProvider {
+public class NihonGoDicoContentProvider extends ContentProvider {
 
 	private DictionaryOpenHelper mOpenHelper;
 
