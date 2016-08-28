@@ -24,6 +24,7 @@ public class NihonGoDicoContentProvider extends ContentProvider {
 
 	public static final String AUTHORITY = ".NihonGoDicoContentProvider";
 
+
 	// used for the UriMatcher
 	private static final int    WORDS                  = 10;
 	private static final int    WORD_ID                = 11;
