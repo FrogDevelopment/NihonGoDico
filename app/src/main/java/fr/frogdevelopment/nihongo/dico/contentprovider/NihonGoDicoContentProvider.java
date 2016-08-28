@@ -16,6 +16,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.SparseLongArray;
 
+import fr.frogdevelopment.nihongo.dico.utils.InputUtils;
+
 public class NihonGoDicoContentProvider extends ContentProvider {
 
 	private DictionaryOpenHelper mOpenHelper;
@@ -75,31 +77,34 @@ public class NihonGoDicoContentProvider extends ContentProvider {
 		// Using SQLiteQueryBuilder instead of query() method
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 		String groupBy = null;
+
+		queryBuilder.setTables("entry INNER JOIN sense ON (entry._id = sense.entry_id)");
 		int uriType = sURIMatcher.match(uri);
+
 		switch (uriType) {
 
-//			case WORD_ID:
-//				queryBuilder.setTables(EntryContract.TABLE_NAME);
-//				queryBuilder.appendWhere(EntryContract._ID + "=" + uri.getLastPathSegment());
-//				break;
-			case WORDS:
-				queryBuilder.setTables("entry INNER JOIN sense ON (entry._id = sense.entry_id)");
-//				queryBuilder.setTables("sense");
+			case WORD_ID:
+				queryBuilder.appendWhere(EntryContract._ID + "=" + uri.getLastPathSegment());
 				break;
 
-//			case SEARCH:
-//				queryBuilder.setTables(EntryContract.TABLE_NAME);
-//				final String search = selectionArgs[0];
-//				if (InputUtils.containsNoJapanese(search)) {
-//					queryBuilder.appendWhere(" AND (" + EntryContract.INPUT + " LIKE '%" + search + "%' OR " + EntryContract.TAGS + " LIKE '%" + search + "%')");
-//				} else if (InputUtils.containsKanji(search)) {
-//					queryBuilder.appendWhere(" AND " + EntryContract.KANJI + " LIKE '%" + search + "%'");
-//				} else {
-//					queryBuilder.appendWhere(" AND " + EntryContract.KANA + " LIKE '%" + search + "%'");
-//				}
-//				selectionArgs = null;
-//
-//				break;
+			case SEARCH:
+				final String search = selectionArgs[0];
+				String fieldName;
+				if (InputUtils.containsKanji(search)) {
+					fieldName = EntryContract.TABLE_NAME + "." + EntryContract.KANJI;
+					sortOrder = EntryContract.KANJI + " ASC";
+				} else if (InputUtils.isOnlyKana(search)) {
+					fieldName = EntryContract.TABLE_NAME + "." + EntryContract.READING;
+					sortOrder = EntryContract.READING + " ASC";
+				} else {
+					fieldName = SenseContract.TABLE_NAME + "." + SenseContract.GLOSS;
+					sortOrder = SenseContract.GLOSS + " ASC";
+				}
+
+				queryBuilder.appendWhere(fieldName + " LIKE '%" + search + "%'");
+				selectionArgs = null;
+
+				break;
 
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
