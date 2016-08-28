@@ -74,15 +74,10 @@ public class NihonGoDicoContentProvider extends ContentProvider {
 
 	@Override
 	public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-
-		// Using SQLiteQueryBuilder instead of query() method
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-		String groupBy = null;
-
 		queryBuilder.setTables("entry INNER JOIN sense ON (entry._id = sense.entry_id)");
-		int uriType = sURIMatcher.match(uri);
 
-		switch (uriType) {
+		switch (sURIMatcher.match(uri)) {
 
 			case WORD_ID:
 				queryBuilder.appendWhere(EntryContract._ID + "=" + uri.getLastPathSegment());
@@ -103,7 +98,6 @@ public class NihonGoDicoContentProvider extends ContentProvider {
 				}
 
 				queryBuilder.appendWhere(fieldName + " LIKE '%" + search + "%'");
-				selectionArgs = null;
 
 				break;
 
@@ -112,7 +106,7 @@ public class NihonGoDicoContentProvider extends ContentProvider {
 		}
 
 		SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-		Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, groupBy, null, sortOrder);
+		Cursor cursor = queryBuilder.query(db, projection, null, null, null, null, sortOrder);
 		// make sure that potential listeners are getting notified
 		cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
