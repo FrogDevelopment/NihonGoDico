@@ -1,13 +1,10 @@
-package fr.frogdevelopment.nihongo.dico;
+package fr.frogdevelopment.nihongo.dico.adapters;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
@@ -23,11 +19,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.dico.entities.Preview;
 
-public class DicoAdapter extends ArrayAdapter<Preview> {
+abstract class DicoAdapter extends ArrayAdapter<Preview> {
 
     private final LayoutInflater mInflater;
 
-    public DicoAdapter(Activity context, List<Preview> items) {
+    protected DicoAdapter(Activity context, List<Preview> items) {
         super(context, 0, items);
 
         mInflater = context.getLayoutInflater();
@@ -47,17 +43,27 @@ public class DicoAdapter extends ArrayAdapter<Preview> {
         }
 
         Preview item = getItem(position);
-        String text = (StringUtils.isBlank(item.kanji) ? " " : item.kanji + "- ") + item.reading;
-        holder.text1.setText(text);
 
-        SpannableStringBuilder str = new SpannableStringBuilder(item.gloss);
-        for (Pair<Integer, Integer> indices : item.matchIndices) {
-            str.setSpan(new StyleSpan(Typeface.BOLD), indices.getLeft(), indices.getRight(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            str.setSpan(new ForegroundColorSpan(Color.RED), indices.getLeft(), indices.getRight(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        holder.text2.setText(str);
+        handleFirstLine(holder.text1, item);
+        handleSecondLine(holder.text2, item);
 
         return convertView;
+    }
+
+    protected void handleFirstLine(TextView textview, Preview item) {
+        String pre = StringUtils.isBlank(item.kanji) ? " " : item.kanji + " - ";
+        int start = pre.length();
+
+        String text = pre + item.reading;
+        int end = text.length();
+
+        SpannableStringBuilder str = new SpannableStringBuilder(text);
+        str.setSpan(new RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textview.setText(str);
+    }
+
+    protected void handleSecondLine(TextView textview, Preview item) {
+        textview.setText(item.gloss);
     }
 
     class ViewHolder {

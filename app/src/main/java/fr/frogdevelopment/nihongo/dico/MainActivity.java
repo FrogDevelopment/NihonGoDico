@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ListAdapter;
 import android.widget.SearchView;
 
 import com.google.android.gms.appindexing.Action;
@@ -29,6 +30,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import fr.frogdevelopment.nihongo.dico.adapters.ResearchByGlossAdapter;
+import fr.frogdevelopment.nihongo.dico.adapters.ResearchByKanaAdapter;
+import fr.frogdevelopment.nihongo.dico.adapters.ResearchByKanjiAdapter;
 import fr.frogdevelopment.nihongo.dico.contentprovider.EntryContract;
 import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
 import fr.frogdevelopment.nihongo.dico.contentprovider.SenseContract;
@@ -37,7 +41,9 @@ import fr.frogdevelopment.nihongo.dico.utils.InputUtils;
 
 public class MainActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final int LOADER_DICO_ID = 100;
+    private static final int LOADER_DICO_ID_KANJI = 100;
+    private static final int LOADER_DICO_ID_KANA = 200;
+    private static final int LOADER_DICO_ID_GLOSS = 300;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -83,7 +89,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             // Searches the dictionary and displays results for the given query.
-            query = intent.getStringExtra(SearchManager.QUERY);
+            String query = intent.getStringExtra(SearchManager.QUERY);
 
             // todo https://developer.android.com/guide/topics/search/adding-recent-query-suggestions.html
 //			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
@@ -91,7 +97,17 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 
             Bundle args = new Bundle();
             args.putString("query", query);
-            getLoaderManager().initLoader(LOADER_DICO_ID, args, this);
+
+            int loaderId;
+            if (InputUtils.containsKanji(query)) {
+                loaderId = LOADER_DICO_ID_KANJI;
+            } else if (InputUtils.isOnlyKana(query)) {
+                loaderId = LOADER_DICO_ID_KANA;
+            } else {
+                loaderId = LOADER_DICO_ID_GLOSS;
+            }
+
+            getLoaderManager().initLoader(loaderId, args, this);
         }
     }
 
@@ -100,8 +116,24 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] columns = {EntryContract.KANJI, EntryContract.READING, SenseContract.GLOSS};
-        String[] selectionArgs = {args.getString("query")};
-        return new CursorLoader(this, NihonGoDicoContentProvider.URI_SEARCH, columns, null, selectionArgs, null);
+        query = args.getString("query");
+
+        Uri uri;
+        switch (id) {
+            case LOADER_DICO_ID_KANJI:
+                uri = NihonGoDicoContentProvider.URI_SEARCH_KANJI;
+                break;
+            case LOADER_DICO_ID_KANA:
+                uri = NihonGoDicoContentProvider.URI_SEARCH_KANA;
+                break;
+            case LOADER_DICO_ID_GLOSS:
+            default:
+                uri = NihonGoDicoContentProvider.URI_SEARCH_GLOSS;
+        }
+
+        String[] selectionArgs = {query};
+
+        return new CursorLoader(this, uri, columns, null, selectionArgs, null);
     }
 
     @Override
@@ -123,21 +155,16 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
                 preview.reading = data.getString(1);
                 preview.gloss = data.getString(2);
 
-                String[] glosses = preview.gloss.split(", ");
-
-                // keep max similarity
-                preview.similarity = 0;
-                for (String gloss : glosses) {
-                    double v = InputUtils.computeSimilarity(query, gloss);
-                    if (v > preview.similarity) {
-                        preview.similarity = v;
-                    }
-                }
-
-                // get all regions which match
-                Matcher matcher = pattern.matcher(preview.gloss);
-                while (matcher.find()) {
-                    preview.matchIndices.add(Pair.of(matcher.start(), matcher.end()));
+                switch (loader.getId()) {
+                    case LOADER_DICO_ID_KANJI:
+                        computeSimilarity(pattern, preview, preview.kanji);
+                        break;
+                    case LOADER_DICO_ID_KANA:
+                        computeSimilarity(pattern, preview, preview.reading);
+                        break;
+                    case LOADER_DICO_ID_GLOSS:
+                    default:
+                        computeSimilarity(pattern, preview, preview.gloss);
                 }
 
                 previews.add(preview);
@@ -149,9 +176,40 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
             data.close();
             getLoaderManager().destroyLoader(loader.getId());
 
-            // set the list adapter todo user CursorAdapter
-            DicoAdapter mAdapter = new DicoAdapter(this, previews);
-            setListAdapter(mAdapter);
+            // set the list adapter
+            ListAdapter adapter;
+
+            // adapter by research type
+            switch (loader.getId()) {
+                case LOADER_DICO_ID_KANJI:
+                    adapter = new ResearchByKanjiAdapter(this, previews);
+                    break;
+                case LOADER_DICO_ID_KANA:
+                    adapter = new ResearchByKanaAdapter(this, previews);
+                    break;
+                case LOADER_DICO_ID_GLOSS:
+                default:
+                    adapter = new ResearchByGlossAdapter(this, previews);
+            }
+
+            setListAdapter(adapter);
+        }
+    }
+
+    private void computeSimilarity(Pattern pattern, Preview preview, String text) {
+        // keep max similarity
+        preview.similarity = 0;
+        for (String value : text.split(", ")) {
+            double v = InputUtils.computeSimilarity(query, value);
+            if (v > preview.similarity) {
+                preview.similarity = v;
+            }
+        }
+
+        // get all regions which match
+        Matcher matcher = pattern.matcher(text);
+        while (matcher.find()) {
+            preview.matchIndices.add(Pair.of(matcher.start(), matcher.end()));
         }
     }
 
