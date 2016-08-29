@@ -1,13 +1,7 @@
 package fr.frogdevelopment.nihongo.dico.adapters;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,11 +25,12 @@ public class ResearchByKanaAdapter extends DicoAdapter {
         String text = pre + item.reading;
         int end = text.length();
         SpannableStringBuilder str = new SpannableStringBuilder(text);
+        spanKanjiKana(str, start, end);
+
         for (Pair<Integer, Integer> indices : item.matchIndices) {
-            str.setSpan(new StyleSpan(Typeface.BOLD), start + indices.getLeft(), start + indices.getRight(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            str.setSpan(new ForegroundColorSpan(Color.RED), start + indices.getLeft(), start + indices.getRight(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            str.setSpan(new RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spanMatchRegion(str, start + indices.getLeft(), start + indices.getRight());
         }
+
         textview.setText(str);
     }
 }

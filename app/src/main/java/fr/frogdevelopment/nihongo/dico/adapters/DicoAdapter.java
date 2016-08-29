@@ -1,10 +1,14 @@
 package fr.frogdevelopment.nihongo.dico.adapters;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +62,7 @@ abstract class DicoAdapter extends ArrayAdapter<Preview> {
         int end = text.length();
 
         SpannableStringBuilder str = new SpannableStringBuilder(text);
-        str.setSpan(new RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spanKanjiKana(str, start, end);
         textview.setText(str);
     }
 
@@ -76,5 +80,14 @@ abstract class DicoAdapter extends ArrayAdapter<Preview> {
         private ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+    }
+
+    protected void spanKanjiKana(SpannableStringBuilder str, int start, int end) {
+        str.setSpan(new RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    protected void spanMatchRegion(SpannableStringBuilder str, int start, int end) {
+        str.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        str.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 }

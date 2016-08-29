@@ -1,12 +1,7 @@
 package fr.frogdevelopment.nihongo.dico.adapters;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -25,8 +20,7 @@ public class ResearchByGlossAdapter extends DicoAdapter {
     protected void handleSecondLine(TextView textview, Preview item) {
         SpannableStringBuilder str = new SpannableStringBuilder(item.gloss);
         for (Pair<Integer, Integer> indices : item.matchIndices) {
-            str.setSpan(new StyleSpan(Typeface.BOLD), indices.getLeft(), indices.getRight(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            str.setSpan(new ForegroundColorSpan(Color.RED), indices.getLeft(), indices.getRight(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spanMatchRegion(str, indices.getLeft(), indices.getRight());
         }
         textview.setText(str);
     }

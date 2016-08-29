@@ -94,8 +94,8 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
             String query = intent.getStringExtra(SearchManager.QUERY);
 
             // https://developer.android.com/guide/topics/search/adding-recent-query-suggestions.html
-			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
-			suggestions.saveRecentQuery(query, null);
+            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
+            suggestions.saveRecentQuery(query, null);
 
             // fixme proposer la possibilité d'effacer l'history
 //            suggestions.clearHistory();
@@ -113,7 +113,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
             }
 
             getLoaderManager().initLoader(loaderId, args, this);
-        }else {
+        } else {
             boolean data_saved = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("data_saved", false);
             if (!data_saved) {
                 // fixme
@@ -154,59 +154,56 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data.getCount() == 0) {
-           // empty view
-        } else {
-            List<Preview> previews = new ArrayList<>();
-            Pattern pattern = Pattern.compile(query);
-            while (data.moveToNext()) {
-                Preview preview = new Preview();
-                preview.kanji = data.getString(0);
-                preview.reading = data.getString(1);
-                preview.gloss = data.getString(2);
+        List<Preview> previews = new ArrayList<>();
+        Pattern pattern = Pattern.compile(query);
+        while (data.moveToNext()) {
+            Preview preview = new Preview();
+            preview.kanji = data.getString(0);
+            preview.reading = data.getString(1);
+            preview.gloss = data.getString(2);
 
-                switch (loader.getId()) {
-                    case LOADER_DICO_ID_KANJI:
-                        computeSimilarity(pattern, preview, preview.kanji);
-                        break;
-                    case LOADER_DICO_ID_KANA:
-                        computeSimilarity(pattern, preview, preview.reading);
-                        break;
-                    case LOADER_DICO_ID_GLOSS:
-                    default:
-                        computeSimilarity(pattern, preview, preview.gloss);
-                }
-
-                previews.add(preview);
-            }
-
-            // sort by descending similarity score
-            Collections.sort(previews, (p1, p2) -> Double.compare(p2.similarity, p1.similarity));
-
-            data.close();
-            getLoaderManager().destroyLoader(loader.getId());
-
-            // set the list adapter
-            ListAdapter adapter;
-
-            // adapter by research type
             switch (loader.getId()) {
                 case LOADER_DICO_ID_KANJI:
-                    adapter = new ResearchByKanjiAdapter(this, previews);
+                    computeSimilarity(pattern, preview, preview.kanji);
                     break;
                 case LOADER_DICO_ID_KANA:
-                    adapter = new ResearchByKanaAdapter(this, previews);
+                    computeSimilarity(pattern, preview, preview.reading);
                     break;
                 case LOADER_DICO_ID_GLOSS:
                 default:
-                    adapter = new ResearchByGlossAdapter(this, previews);
+                    computeSimilarity(pattern, preview, preview.gloss);
             }
 
-            setListAdapter(adapter);
-
-            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
-            suggestions.saveRecentQuery(query, String.valueOf(previews.size() + " results"));
+            previews.add(preview);
         }
+
+        // sort by descending similarity score
+        Collections.sort(previews, (p1, p2) -> Double.compare(p2.similarity, p1.similarity));
+
+        data.close();
+        getLoaderManager().destroyLoader(loader.getId());
+
+        // set the list adapter
+        ListAdapter adapter;
+
+        // adapter by research type
+        switch (loader.getId()) {
+            case LOADER_DICO_ID_KANJI:
+                adapter = new ResearchByKanjiAdapter(this, previews);
+                break;
+            case LOADER_DICO_ID_KANA:
+                adapter = new ResearchByKanaAdapter(this, previews);
+                break;
+            case LOADER_DICO_ID_GLOSS:
+            default:
+                adapter = new ResearchByGlossAdapter(this, previews);
+        }
+
+        setListAdapter(adapter);
+
+        SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
+        suggestions.saveRecentQuery(query, String.valueOf(previews.size() + " results"));
+
     }
 
     private void computeSimilarity(Pattern pattern, Preview preview, String text) {
