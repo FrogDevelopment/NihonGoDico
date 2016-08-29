@@ -96,7 +96,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 //			suggestions.saveRecentQuery(query, null);
 
             Bundle args = new Bundle();
-            args.putString("query", query);
+            args.putString("query", query.trim());
 
             int loaderId;
             if (InputUtils.containsKanji(query)) {
