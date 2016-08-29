@@ -22,7 +22,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
     private DictionaryOpenHelper mOpenHelper;
 
     public static final String AUTHORITY = ".NihonGoDicoContentProvider";
-    public final static int MODE = DATABASE_MODE_QUERIES;
+    public final static int MODE = DATABASE_MODE_QUERIES|DATABASE_MODE_2LINES;
 
 
     // used for the UriMatcher

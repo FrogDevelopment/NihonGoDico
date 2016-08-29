@@ -194,6 +194,9 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
             }
 
             setListAdapter(adapter);
+
+            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
+            suggestions.saveRecentQuery(query, String.valueOf(previews.size() + " results"));
         }
     }
 
