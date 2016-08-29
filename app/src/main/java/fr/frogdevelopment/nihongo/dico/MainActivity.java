@@ -1,5 +1,6 @@
 package fr.frogdevelopment.nihongo.dico;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.app.SearchManager;
@@ -14,150 +15,185 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import fr.frogdevelopment.nihongo.dico.contentprovider.EntryContract;
 import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
 import fr.frogdevelopment.nihongo.dico.contentprovider.SenseContract;
 import fr.frogdevelopment.nihongo.dico.entities.Preview;
+import fr.frogdevelopment.nihongo.dico.utils.InputUtils;
 
 public class MainActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-	private static final int LOADER_DICO_ID = 100;
-	/**
-	 * ATTENTION: This was auto-generated to implement the App Indexing API.
-	 * See https://g.co/AppIndexing/AndroidStudio for more information.
-	 */
-	private GoogleApiClient client;
+    private static final int LOADER_DICO_ID = 100;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-		// ATTENTION: This was auto-generated to implement the App Indexing API.
-		// See https://g.co/AppIndexing/AndroidStudio for more information.
-		client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-	}
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the options menu from XML
-		getMenuInflater().inflate(R.menu.options_menu, menu);
+        handleIntent(getIntent());
+    }
 
-		MenuItem searchMenuItem = menu.findItem(R.id.dico_menu_search);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the options menu from XML
+        getMenuInflater().inflate(R.menu.options_menu, menu);
 
-		SearchView searchView = (SearchView) searchMenuItem.getActionView();
-		// Get the SearchView and set the searchable configuration
-		SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
-		// Assumes current activity is the searchable activity
-		searchView.setSearchableInfo(searchManager.getSearchableInfo(this.getComponentName()));
-		searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-		searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+        MenuItem searchMenuItem = menu.findItem(R.id.dico_menu_search);
 
-		return true;
-	}
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(this.getComponentName()));
+        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+        searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
 
-	@Override
-	protected void onNewIntent(Intent intent) {
-		setIntent(intent);
-		handleIntent(intent);
-	}
+        return true;
+    }
 
-	private void handleIntent(Intent intent) {
-		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			// Searches the dictionary and displays results for the given query.
-			final String query = intent.getStringExtra(SearchManager.QUERY);
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
 
-			// todo https://developer.android.com/guide/topics/search/adding-recent-query-suggestions.html
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            // Searches the dictionary and displays results for the given query.
+            query = intent.getStringExtra(SearchManager.QUERY);
+
+            // todo https://developer.android.com/guide/topics/search/adding-recent-query-suggestions.html
 //			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
 //			suggestions.saveRecentQuery(query, null);
 
-			Bundle args = new Bundle();
-			args.putString("query", query);
-			getLoaderManager().initLoader(LOADER_DICO_ID, args, this);
-		}
-	}
+            Bundle args = new Bundle();
+            args.putString("query", query);
+            getLoaderManager().initLoader(LOADER_DICO_ID, args, this);
+        }
+    }
 
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		String[] columns = {EntryContract.KANJI, EntryContract.READING, SenseContract.GLOSS};
-		String[] selectionArgs = {args.getString("query")};
-		return new CursorLoader(this, NihonGoDicoContentProvider.URI_SEARCH, columns, null, selectionArgs, null);
-	}
+    private String query;
 
-	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		if (data.getCount() == 0) {
-			// fixme
-			Toast.makeText(this, "No data found", Toast.LENGTH_LONG).show();
-		} else {
-			List<Preview> previews = new ArrayList<>();
-			while (data.moveToNext()) {
-				Preview preview = new Preview();
-				preview.kanji = data.getString(0);
-				preview.reading = data.getString(1);
-				preview.gloss = data.getString(2);
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] columns = {EntryContract.KANJI, EntryContract.READING, SenseContract.GLOSS};
+        String[] selectionArgs = {args.getString("query")};
+        return new CursorLoader(this, NihonGoDicoContentProvider.URI_SEARCH, columns, null, selectionArgs, null);
+    }
 
-				previews.add(preview);
-			}
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data.getCount() == 0) {
+            // fixme
+            new AlertDialog.Builder(this)
+                    .setMessage("no data found. Download it ?")
+                    .setPositiveButton(android.R.string.ok, (dialog, id) -> new LoadTask(MainActivity.this).execute())
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .create()
+                    .show();
+        } else {
+            List<Preview> previews = new ArrayList<>();
+            Pattern pattern = Pattern.compile(query);
+            while (data.moveToNext()) {
+                Preview preview = new Preview();
+                preview.kanji = data.getString(0);
+                preview.reading = data.getString(1);
+                preview.gloss = data.getString(2);
 
-			data.close();
-			getLoaderManager().destroyLoader(loader.getId());
+                String[] glosses = preview.gloss.split(", ");
 
-			// set the list adapter todo user CursorAdapter
-			DicoAdapter mAdapter = new DicoAdapter(this, previews);
-			setListAdapter(mAdapter);
-		}
-	}
+                // keep max similarity
+                preview.similarity = 0;
+                for (String gloss : glosses) {
+                    double v = InputUtils.computeSimilarity(query, gloss);
+                    if (v > preview.similarity) {
+                        preview.similarity = v;
+                    }
+                }
 
-	@Override
-	public void onLoaderReset(Loader<Cursor> loader) {
+                // get all regions which match
+                Matcher matcher = pattern.matcher(preview.gloss);
+                while (matcher.find()) {
+                    preview.matchIndices.add(Pair.of(matcher.start(), matcher.end()));
+                }
 
-	}
+                previews.add(preview);
+            }
 
-	/**
-	 * ATTENTION: This was auto-generated to implement the App Indexing API.
-	 * See https://g.co/AppIndexing/AndroidStudio for more information.
-	 */
-	public Action getIndexApiAction() {
-		Thing object = new Thing.Builder()
-				.setName("Main Page") // TODO: Define a title for the content shown.
-				// TODO: Make sure this auto-generated URL is correct.
-				.setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-				.build();
-		return new Action.Builder(Action.TYPE_VIEW)
-				.setObject(object)
-				.setActionStatus(Action.STATUS_TYPE_COMPLETED)
-				.build();
-	}
+            // sort by descending similarity score
+            Collections.sort(previews, (p1, p2) -> Double.compare(p2.similarity, p1.similarity));
 
-	@Override
-	public void onStart() {
-		super.onStart();
+            data.close();
+            getLoaderManager().destroyLoader(loader.getId());
 
-		// ATTENTION: This was auto-generated to implement the App Indexing API.
-		// See https://g.co/AppIndexing/AndroidStudio for more information.
-		client.connect();
-		AppIndex.AppIndexApi.start(client, getIndexApiAction());
-	}
+            // set the list adapter todo user CursorAdapter
+            DicoAdapter mAdapter = new DicoAdapter(this, previews);
+            setListAdapter(mAdapter);
+        }
+    }
 
-	@Override
-	public void onStop() {
-		super.onStop();
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
 
-		// ATTENTION: This was auto-generated to implement the App Indexing API.
-		// See https://g.co/AppIndexing/AndroidStudio for more information.
-		AppIndex.AppIndexApi.end(client, getIndexApiAction());
-		client.disconnect();
-	}
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
 
 }

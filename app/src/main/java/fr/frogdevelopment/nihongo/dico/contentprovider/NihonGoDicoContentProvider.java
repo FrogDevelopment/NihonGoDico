@@ -88,13 +88,10 @@ public class NihonGoDicoContentProvider extends ContentProvider {
 				String fieldName;
 				if (InputUtils.containsKanji(search)) {
 					fieldName = EntryContract.TABLE_NAME + "." + EntryContract.KANJI;
-					sortOrder = EntryContract.KANJI + " ASC";
 				} else if (InputUtils.isOnlyKana(search)) {
 					fieldName = EntryContract.TABLE_NAME + "." + EntryContract.READING;
-					sortOrder = EntryContract.READING + " ASC";
 				} else {
 					fieldName = SenseContract.TABLE_NAME + "." + SenseContract.GLOSS;
-					sortOrder = SenseContract.GLOSS + " ASC";
 				}
 
 				queryBuilder.appendWhere(fieldName + " LIKE '%" + search + "%'");
@@ -106,7 +103,7 @@ public class NihonGoDicoContentProvider extends ContentProvider {
 		}
 
 		SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-		Cursor cursor = queryBuilder.query(db, projection, null, null, null, null, sortOrder);
+		Cursor cursor = queryBuilder.query(db, projection, null, null, null, null, null);
 		// make sure that potential listeners are getting notified
 		cursor.setNotificationUri(getContext().getContentResolver(), uri);
 

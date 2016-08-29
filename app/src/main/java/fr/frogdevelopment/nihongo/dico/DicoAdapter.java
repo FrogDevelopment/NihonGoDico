@@ -1,7 +1,13 @@
 package fr.frogdevelopment.nihongo.dico;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
@@ -42,7 +49,13 @@ public class DicoAdapter extends ArrayAdapter<Preview> {
         Preview item = getItem(position);
         String text = (StringUtils.isBlank(item.kanji) ? " " : item.kanji + "- ") + item.reading;
         holder.text1.setText(text);
-        holder.text2.setText(StringUtils.join(item.gloss,"\n"));
+
+        SpannableStringBuilder str = new SpannableStringBuilder(item.gloss);
+        for (Pair<Integer, Integer> indices : item.matchIndices) {
+            str.setSpan(new StyleSpan(Typeface.BOLD), indices.getLeft(), indices.getRight(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            str.setSpan(new ForegroundColorSpan(Color.RED), indices.getLeft(), indices.getRight(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        holder.text2.setText(str);
 
         return convertView;
     }
