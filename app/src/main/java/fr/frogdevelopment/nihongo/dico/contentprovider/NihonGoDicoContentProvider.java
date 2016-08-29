@@ -4,9 +4,10 @@
 
 package fr.frogdevelopment.nihongo.dico.contentprovider;
 
-import android.content.ContentProvider;
+import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.SearchRecentSuggestionsProvider;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,14 +17,17 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.SparseLongArray;
 
-public class NihonGoDicoContentProvider extends ContentProvider {
+public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider {
 
     private DictionaryOpenHelper mOpenHelper;
 
     public static final String AUTHORITY = ".NihonGoDicoContentProvider";
+    public final static int MODE = DATABASE_MODE_QUERIES;
 
 
     // used for the UriMatcher
+    private static final int URI_MATCH_SUGGEST = 1;
+
     private static final int WORD_ID = 10;
     private static final String BASE_PATH_WORD = "word";
     private static final String CONTENT_WORD_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_WORD;
@@ -48,6 +52,8 @@ public class NihonGoDicoContentProvider extends ContentProvider {
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
+        sURIMatcher.addURI(AUTHORITY,  SearchManager.SUGGEST_URI_PATH_QUERY, URI_MATCH_SUGGEST);
+
         sURIMatcher.addURI(AUTHORITY, BASE_PATH_WORD + "/#", WORD_ID);
 
         sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH_KANJI, SEARCH_KANJI);
@@ -55,10 +61,14 @@ public class NihonGoDicoContentProvider extends ContentProvider {
         sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH_GLOSS, SEARCH_GLOSS);
     }
 
+    public NihonGoDicoContentProvider() {
+        setupSuggestions(AUTHORITY, MODE);
+    }
+
     @Override
     public boolean onCreate() {
         mOpenHelper = new DictionaryOpenHelper(getContext());
-        return false;
+        return super.onCreate();
     }
 
     @Override
@@ -79,7 +89,7 @@ public class NihonGoDicoContentProvider extends ContentProvider {
                 return CONTENT_SEARCH_GLOSS_TYPE;
 
             default:
-                return null;
+                return super.getType(uri);
         }
     }
 
@@ -89,6 +99,9 @@ public class NihonGoDicoContentProvider extends ContentProvider {
         queryBuilder.setTables("entry INNER JOIN sense ON (entry._id = sense.entry_id)");
 
         switch (sURIMatcher.match(uri)) {
+
+            case URI_MATCH_SUGGEST:
+                return super.query(uri, projection, selection, selectionArgs, sortOrder);
 
             case WORD_ID:
                 queryBuilder.appendWhere(EntryContract._ID + "=" + uri.getLastPathSegment());
@@ -114,21 +127,6 @@ public class NihonGoDicoContentProvider extends ContentProvider {
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
         return cursor;
-    }
-
-    @Override
-    public Uri insert(@NonNull Uri uri, ContentValues values) {
-        throw new UnsupportedOperationException("");
-    }
-
-    @Override
-    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        throw new UnsupportedOperationException("");
-    }
-
-    @Override
-    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
-        throw new UnsupportedOperationException("");
     }
 
     // https://eshyu.wordpress.com/2010/08/15/using-sqlite-transactions-with-your-contentprovider/

@@ -11,6 +11,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
@@ -92,8 +93,8 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
             String query = intent.getStringExtra(SearchManager.QUERY);
 
             // todo https://developer.android.com/guide/topics/search/adding-recent-query-suggestions.html
-//			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
-//			suggestions.saveRecentQuery(query, null);
+			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
+			suggestions.saveRecentQuery(query, null);
 
             Bundle args = new Bundle();
             args.putString("query", query.trim());

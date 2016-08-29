@@ -2,10 +2,12 @@
 <!--
   ~ Copyright (c) Frog Development 2016.
   -->
-
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
             android:hint="@string/search_hint"
             android:includeInGlobalSearch="true"
-            android:label="@string/search_label">
+            android:label="@string/search_label"
+            android:searchSuggestAuthority=".NihonGoDicoContentProvider"
+            android:searchSuggestSelection=" ?"
+            android:searchSuggestThreshold="2">
 
 </searchable>
