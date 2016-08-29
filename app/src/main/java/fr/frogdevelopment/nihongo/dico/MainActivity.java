@@ -11,6 +11,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -112,6 +113,17 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
             }
 
             getLoaderManager().initLoader(loaderId, args, this);
+        }else {
+            boolean data_saved = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("data_saved", false);
+            if (!data_saved) {
+                // fixme
+                new AlertDialog.Builder(this)
+                        .setMessage("no data found. Download it ?")
+                        .setPositiveButton(android.R.string.ok, (dialog, id) -> new LoadTask(MainActivity.this).execute())
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .create()
+                        .show();
+            }
         }
     }
 
@@ -143,13 +155,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data.getCount() == 0) {
-            // fixme
-            new AlertDialog.Builder(this)
-                    .setMessage("no data found. Download it ?")
-                    .setPositiveButton(android.R.string.ok, (dialog, id) -> new LoadTask(MainActivity.this).execute())
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .create()
-                    .show();
+           // empty view
         } else {
             List<Preview> previews = new ArrayList<>();
             Pattern pattern = Pattern.compile(query);

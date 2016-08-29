@@ -3,7 +3,9 @@ package fr.frogdevelopment.nihongo.dico;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,7 +34,7 @@ class LoadTask extends AsyncTask<Void, String, Void> {
 
     @Override
     protected void onPreExecute() {
-        progressDialog = ProgressDialog.show(context, "ProgressDialog", "Fetching data");
+        progressDialog = ProgressDialog.show(context, "Download data", "Fetching data");
     }
 
     @Override
@@ -92,6 +94,9 @@ class LoadTask extends AsyncTask<Void, String, Void> {
     @Override
     protected void onProgressUpdate(String... text) {
         progressDialog.setMessage(text[0]); // todo progress via % ???
+        SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        edit.putBoolean("data_saved",true);
+        edit.apply();
     }
 
     @Override
