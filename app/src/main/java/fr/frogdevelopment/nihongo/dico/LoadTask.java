@@ -1,5 +1,6 @@
 package fr.frogdevelopment.nihongo.dico;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -18,73 +19,83 @@ import fr.frogdevelopment.nihongo.dico.contentprovider.EntryContract;
 import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
 import fr.frogdevelopment.nihongo.dico.contentprovider.SenseContract;
 import fr.frogdevelopment.nihongo.dico.entities.Entry;
-import fr.frogdevelopment.nihongo.dico.entities.Preview;
 import fr.frogdevelopment.nihongo.dico.entities.Sense;
 
-class LoadTask extends AsyncTask<Void, Void, Void> {
+class LoadTask extends AsyncTask<Void, String, Void> {
 
-	private final Context context;
+    private ProgressDialog progressDialog;
+    private final Context context;
 
-	public LoadTask(Context context) {
-		this.context = context;
-	}
+    public LoadTask(Context context) {
+        this.context = context;
+    }
 
-	@Override
-	protected Void doInBackground(Void... voids) {
-		ObjectMapper mapper = new ObjectMapper();
-		TypeReference<List<Entry>> mapType = new TypeReference<List<Entry>>() {
-		};
-		try (InputStream is = context.getResources().openRawResource(R.raw.entries)) {
+    @Override
+    protected void onPreExecute() {
+        progressDialog = ProgressDialog.show(context, "ProgressDialog", "Fetching data");
+    }
 
-			// récupération fichier
-			// publishProgress();
+    @Override
+    protected Void doInBackground(Void... voids) {
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<List<Entry>> mapType = new TypeReference<List<Entry>>() {
+        };
+        try (InputStream is = context.getResources().openRawResource(R.raw.entries)) {
 
-			List<Entry> entries = mapper.readValue(is, mapType);
-			List<Preview> previews = new ArrayList<>();
+            publishProgress("récupération fichier");
 
-			// parsing fichier
-			// publishProgress();
-			ContentValues[] bulkToInsert;
-			List<ContentValues> mValueList = new ArrayList<>();
-			int key = 0;
-			for (Entry entry : entries) {
-				ContentValues entryValues = new ContentValues();
-				entryValues.put("tag", "entry");
-				entryValues.put("key", ++key);
-				entryValues.put(EntryContract.KANJI, entry.kanji);
-				entryValues.put(EntryContract.READING, entry.reading);
+            List<Entry> entries = mapper.readValue(is, mapType);
 
-				mValueList.add(entryValues);
+            publishProgress("parsing fichier");
+            ContentValues[] bulkToInsert;
+            List<ContentValues> mValueList = new ArrayList<>();
+            int key = 0;
+            for (Entry entry : entries) {
+                ContentValues entryValues = new ContentValues();
+                entryValues.put("tag", "entry");
+                entryValues.put("key", ++key);
+                entryValues.put(EntryContract.KANJI, entry.kanji);
+                entryValues.put(EntryContract.READING, entry.reading);
 
-				for (Sense sense : entry.senses) {
-					ContentValues senseValues = new ContentValues();
-					senseValues.put("tag", "sense");
-					senseValues.put("key", key);
-					senseValues.put(SenseContract.POS, StringUtils.join(sense.pos, ","));
-					senseValues.put(SenseContract.FIELD, StringUtils.join(sense.field, ","));
-					senseValues.put(SenseContract.MISC, StringUtils.join(sense.misc, ","));
-					senseValues.put(SenseContract.DIAL, StringUtils.join(sense.dial, ","));
-					senseValues.put(SenseContract.GLOSS, StringUtils.join(sense.gloss, ","));
+                mValueList.add(entryValues);
 
-					mValueList.add(senseValues);
-				}
-			}
+                for (Sense sense : entry.senses) {
+                    ContentValues senseValues = new ContentValues();
+                    senseValues.put("tag", "sense");
+                    senseValues.put("key", key);
+                    senseValues.put(SenseContract.POS, StringUtils.join(sense.pos, ", "));
+                    senseValues.put(SenseContract.FIELD, StringUtils.join(sense.field, ", "));
+                    senseValues.put(SenseContract.MISC, StringUtils.join(sense.misc, ", "));
+                    senseValues.put(SenseContract.DIAL, StringUtils.join(sense.dial, ", "));
+                    senseValues.put(SenseContract.GLOSS, StringUtils.join(sense.gloss, ", "));
 
-			// sauvegarde données
-			// publishProgress();
+                    mValueList.add(senseValues);
+                }
+            }
 
-			// save last lesson and update UI
-			bulkToInsert = new ContentValues[mValueList.size()];
-			mValueList.toArray(bulkToInsert);
-			context.getContentResolver().bulkInsert(NihonGoDicoContentProvider.URI_WORD, bulkToInsert);
+            publishProgress("sauvegarde données");
 
-			// fini
-			// publishProgress();
+            // save last lesson and update UI
+            bulkToInsert = new ContentValues[mValueList.size()];
+            mValueList.toArray(bulkToInsert);
+            context.getContentResolver().bulkInsert(NihonGoDicoContentProvider.URI_WORD, bulkToInsert);
 
-		} catch (IOException e) {
-			e.printStackTrace(); // fixme
-		}
+            publishProgress("Fini");
 
-		return null;
-	}
+        } catch (IOException e) {
+            e.printStackTrace(); // fixme
+        }
+
+        return null;
+    }
+
+    @Override
+    protected void onProgressUpdate(String... text) {
+        progressDialog.setMessage(text[0]);
+    }
+
+    @Override
+    protected void onPostExecute(Void result) {
+        progressDialog.dismiss();
+    }
 }
