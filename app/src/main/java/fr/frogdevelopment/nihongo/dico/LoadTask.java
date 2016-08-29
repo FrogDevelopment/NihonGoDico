@@ -91,7 +91,7 @@ class LoadTask extends AsyncTask<Void, String, Void> {
 
     @Override
     protected void onProgressUpdate(String... text) {
-        progressDialog.setMessage(text[0]);
+        progressDialog.setMessage(text[0]); // todo progress via % ???
     }
 
     @Override
