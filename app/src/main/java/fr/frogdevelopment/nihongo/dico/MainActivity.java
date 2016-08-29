@@ -92,9 +92,12 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
             // Searches the dictionary and displays results for the given query.
             String query = intent.getStringExtra(SearchManager.QUERY);
 
-            // todo https://developer.android.com/guide/topics/search/adding-recent-query-suggestions.html
+            // https://developer.android.com/guide/topics/search/adding-recent-query-suggestions.html
 			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
 			suggestions.saveRecentQuery(query, null);
+
+            // fixme proposer la possibilité d'effacer l'history
+//            suggestions.clearHistory();
 
             Bundle args = new Bundle();
             args.putString("query", query.trim());
