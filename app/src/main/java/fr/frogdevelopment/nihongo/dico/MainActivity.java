@@ -13,11 +13,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
+import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ListAdapter;
 import android.widget.SearchView;
+import android.widget.Toolbar;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -32,6 +34,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.dico.adapters.ResearchByGlossAdapter;
 import fr.frogdevelopment.nihongo.dico.adapters.ResearchByKanaAdapter;
 import fr.frogdevelopment.nihongo.dico.adapters.ResearchByKanjiAdapter;
@@ -46,6 +50,9 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
     private static final int LOADER_DICO_ID_KANJI = 100;
     private static final int LOADER_DICO_ID_KANA = 200;
     private static final int LOADER_DICO_ID_GLOSS = 300;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -60,6 +67,11 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        ButterKnife.bind(this);
+
+        // init toolbar
+        setActionBar(toolbar);
 
         handleIntent(getIntent());
     }
@@ -262,6 +274,13 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Snackbar.make(findViewById(R.id.activity_main), "Are you sure you want to exit ?", Snackbar.LENGTH_LONG)
+                .setAction(android.R.string.ok, v -> finish())
+                .show();
     }
 
 }

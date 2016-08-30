@@ -1,19 +1,18 @@
 <!--
   ~ Copyright (c) Frog Development 2016.
   -->
-
 <resources>
 
     <style name="AppTheme" parent="BaseTheme"/>
 
-    <style name="BaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@android:color/darker_gray</item> 
         <item name="colorControlHighlight">@color/accent_translucent</item> 
         <item name="colorAccent">@color/accent</item>
         <item name="selectableItemBackground">@drawable/selectable_item_background</item>
         <item name="android:selectableItemBackground">@drawable/selectable_item_background</item>
         <!-- to hide toolbar when action bar is showing -->
-        <!--<item name="windowActionModeOverlay">true</item>-->
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
     <style name="FabStyle">
