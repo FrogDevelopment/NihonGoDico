@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Preview {
 
+	public long entry_id;
 	public String kanji;
 	public String reading;
 	public String gloss;
@@ -19,6 +20,7 @@ public class Preview {
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+				.append("entry_id", entry_id)
 				.append("kanji", kanji)
 				.append("reading", reading)
 				.append("gloss", gloss)

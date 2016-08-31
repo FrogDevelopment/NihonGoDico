@@ -70,6 +70,15 @@ abstract class DicoAdapter extends ArrayAdapter<Preview> {
         textview.setText(item.gloss);
     }
 
+    protected void spanKanjiKana(SpannableStringBuilder str, int start, int end) {
+        str.setSpan(new RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    protected void spanMatchRegion(SpannableStringBuilder str, int start, int end) {
+        str.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        str.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
     class ViewHolder {
 
         @BindView(android.R.id.text1)
@@ -80,14 +89,5 @@ abstract class DicoAdapter extends ArrayAdapter<Preview> {
         private ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
-    }
-
-    protected void spanKanjiKana(SpannableStringBuilder str, int start, int end) {
-        str.setSpan(new RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-    }
-
-    protected void spanMatchRegion(SpannableStringBuilder str, int start, int end) {
-        str.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        str.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 }
