@@ -12,6 +12,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.entities.Details;
 
 public class DetailsAdapter extends ArrayAdapter<Details> {
@@ -30,7 +31,7 @@ public class DetailsAdapter extends ArrayAdapter<Details> {
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(android.R.layout.simple_list_item_2, parent, false);
+            convertView = mInflater.inflate(R.layout.details_list_items, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -39,18 +40,27 @@ public class DetailsAdapter extends ArrayAdapter<Details> {
 
         Details item = getItem(position);
 
-        holder.text1.setText(item.pos);
-        holder.text2.setText(item.glos);
+        holder.pos.setText(item.pos);
+        holder.field.setText(item.field);
+        holder.misc.setText(item.misc);
+        holder.dial.setText(item.dial);
+        holder.gloss.setText(item.glos);
 
         return convertView;
     }
 
     class ViewHolder {
 
-        @BindView(android.R.id.text1)
-        TextView text1;
-        @BindView(android.R.id.text2)
-        TextView text2;
+        @BindView(R.id.details_pos)
+        TextView pos;
+        @BindView(R.id.details_field)
+        TextView field;
+	    @BindView(R.id.details_misc)
+	    TextView misc;
+	    @BindView(R.id.details_dial)
+	    TextView dial;
+	    @BindView(R.id.details_gloss)
+	    TextView gloss;
 
         private ViewHolder(View view) {
             ButterKnife.bind(this, view);
