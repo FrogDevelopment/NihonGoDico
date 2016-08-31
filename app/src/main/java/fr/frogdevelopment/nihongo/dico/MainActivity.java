@@ -184,7 +184,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		List<Preview> previews = new ArrayList<>();
-		Pattern pattern = Pattern.compile(query);
+		Pattern pattern = Pattern.compile(query.toLowerCase());
 		int loaderId = loader.getId();
 		while (data.moveToNext()) {
 			Preview preview = new Preview();
@@ -247,7 +247,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 		}
 
 		// get all regions which match
-		Matcher matcher = pattern.matcher(text);
+		Matcher matcher = pattern.matcher(text.toLowerCase());
 		while (matcher.find()) {
 			preview.matchIndices.add(Pair.of(matcher.start(), matcher.end()));
 		}
