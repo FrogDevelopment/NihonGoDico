@@ -82,10 +82,14 @@ class LoadTask extends AsyncTask<Void, String, Boolean> {
 				ContentValues[] bulkToInsert;
 				List<ContentValues> mValueList = new ArrayList<>();
 				int key = 0;
+				double percent = 0;
 				for (Entry entry : entries) {
 					key++;
-					String percent = percentInstance.format(key / nbEntries);
-					publishProgress("parsing entry " + percent);
+					double percentTmp = ((double) key) / nbEntries;
+					if (percentTmp > percent) {
+						publishProgress("parsing entry " + percentInstance.format(percentTmp));
+						percent = percentTmp;
+					}
 					ContentValues entryValues = new ContentValues();
 					entryValues.put("tag", "entry");
 					entryValues.put("key", key);
