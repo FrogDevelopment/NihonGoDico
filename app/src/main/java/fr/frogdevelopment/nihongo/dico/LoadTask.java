@@ -3,8 +3,10 @@ package fr.frogdevelopment.nihongo.dico;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -140,10 +142,10 @@ class LoadTask extends AsyncTask<Void, String, Boolean> {
 		mWakeLock.release();
 		progressDialog.dismiss();
 
-//		if (result) {
-//			SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
-//			edit.putBoolean("data_saved", true);
-//			edit.apply();
-//		}
+		if (result) {
+			SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
+			edit.putBoolean("data_saved", true);
+			edit.apply();
+		}
 	}
 }
