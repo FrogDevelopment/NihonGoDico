@@ -240,11 +240,17 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 	private void computeSimilarity(Pattern pattern, Preview preview, String text) {
 		// keep max similarity
 		preview.similarity = 0;
-		for (String value : text.split(", ")) {
+		String[] values = text.split(", ");
+		for (String value : values) {
 			double v = InputUtils.computeSimilarity(query, value);
 			if (v > preview.similarity) {
 				preview.similarity = v;
 			}
+		}
+
+		// if only 1 word and match => has to be first multiple values
+		if (values.length == 1 && preview.similarity == 1) {
+			preview.similarity = 2;
 		}
 
 		// get all regions which match
