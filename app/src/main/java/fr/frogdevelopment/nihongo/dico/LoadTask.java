@@ -13,8 +13,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.NumberFormat;
@@ -51,9 +51,8 @@ class LoadTask extends AsyncTask<Void, String, Boolean> {
 
 	@Override
 	protected Boolean doInBackground(Void... voids) {
-		ObjectMapper mapper = new ObjectMapper();
-		TypeReference<List<Entry>> mapType = new TypeReference<List<Entry>>() {
-		};
+		List<Entry> entries;
+
 		HttpURLConnection connection = null;
 		try {
 			URL url = new URL(BASE_URL + "entries_eng.json"); // fixme select language
@@ -67,69 +66,64 @@ class LoadTask extends AsyncTask<Void, String, Boolean> {
 				return false;
 			}
 
-			// this will be useful to display download percentage
-			// might be -1: server did not report the length
-			int fileLength = connection.getContentLength();
-
-			NumberFormat percentInstance = NumberFormat.getPercentInstance();
-
-			try (InputStream is = connection.getInputStream()) {
-				publishProgress("récupération fichier"); // fixme publish progression
-				List<Entry> entries = mapper.readValue(is, mapType);
-
-				int nbEntries = entries.size();
-				publishProgress("parsing fichier : " + nbEntries + " entries");
-				ContentValues[] bulkToInsert;
-				List<ContentValues> mValueList = new ArrayList<>();
-				int key = 0;
-				double percent = 0;
-				for (Entry entry : entries) {
-					key++;
-					double percentTmp = ((double) key) / nbEntries;
-					if (percentTmp > percent) {
-						publishProgress("parsing entry " + percentInstance.format(percentTmp));
-						percent = percentTmp;
-					}
-					ContentValues entryValues = new ContentValues();
-					entryValues.put("tag", "entry");
-					entryValues.put("key", key);
-					entryValues.put(EntryContract.KANJI, entry.kanji);
-					entryValues.put(EntryContract.READING, entry.reading);
-
-					mValueList.add(entryValues);
-
-					for (Sense sense : entry.senses) {
-						ContentValues senseValues = new ContentValues();
-						senseValues.put("tag", "sense");
-						senseValues.put("key", key);
-						senseValues.put(SenseContract.POS, StringUtils.join(sense.pos, ", "));
-						senseValues.put(SenseContract.FIELD, StringUtils.join(sense.field, ", "));
-						senseValues.put(SenseContract.MISC, StringUtils.join(sense.misc, ", "));
-						senseValues.put(SenseContract.DIAL, StringUtils.join(sense.dial, ", "));
-						senseValues.put(SenseContract.GLOSS, StringUtils.join(sense.gloss, ", "));
-
-						mValueList.add(senseValues);
-					}
-
-					if (mValueList.size() > 1000) { // todo find limit before insert
-//						publishProgress("sauvegarde données");
-						bulkToInsert = new ContentValues[mValueList.size()];
-						mValueList.toArray(bulkToInsert);
-						context.getContentResolver().bulkInsert(NihonGoDicoContentProvider.URI_WORD, bulkToInsert);
-
-						mValueList.clear();
-					}
-				}
-
-				publishProgress("Fini");
+			try (BufferedInputStream is = new BufferedInputStream(connection.getInputStream())) {
+				publishProgress("reading value");
+				ObjectMapper mapper = new ObjectMapper();
+				entries = mapper.readValue(is, new TypeReference<List<Entry>>() {
+				});
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace(); // fixme delete data inserted if error
+			e.printStackTrace(); // fixme
 			return false;
 		} finally {
 			if (connection != null) {
 				connection.disconnect();
+			}
+		}
+
+		NumberFormat percentInstance = NumberFormat.getPercentInstance();
+
+		int index = 0;
+		double percent = 0.0;
+		int total = entries.size();
+		ContentValues[] bulkToInsert;
+		ContentValues entryValues;
+		ContentValues senseValues;
+		List<ContentValues> mValueList = new ArrayList<>();
+		for (Entry entry : entries) {
+			index++;
+			double percentTmp = ((double) index) / total;
+			if (percentTmp > percent) {
+				publishProgress("fetching entries " + percentInstance.format(percentTmp));
+				percent = percentTmp;
+			}
+			entryValues = new ContentValues();
+			entryValues.put("tag", "entry");
+			entryValues.put("key", index);
+			entryValues.put(EntryContract.KANJI, entry.kanji);
+			entryValues.put(EntryContract.READING, entry.reading);
+
+			mValueList.add(entryValues);
+
+			for (Sense sense : entry.senses) {
+				senseValues = new ContentValues();
+				senseValues.put("tag", "sense");
+				senseValues.put("key", index);
+				senseValues.put(SenseContract.POS, StringUtils.join(sense.pos, ", "));
+				senseValues.put(SenseContract.FIELD, StringUtils.join(sense.field, ", "));
+				senseValues.put(SenseContract.MISC, StringUtils.join(sense.misc, ", "));
+				senseValues.put(SenseContract.DIAL, StringUtils.join(sense.dial, ", "));
+				senseValues.put(SenseContract.GLOSS, StringUtils.join(sense.gloss, ", "));
+
+				mValueList.add(senseValues);
+			}
+
+			if (mValueList.size() > 4000) { // todo find best limit before insert loop
+				bulkToInsert = mValueList.toArray(new ContentValues[mValueList.size()]);
+				context.getContentResolver().bulkInsert(NihonGoDicoContentProvider.URI_WORD, bulkToInsert); // fixme delete data inserted if error
+
+				mValueList.clear();
 			}
 		}
 
@@ -138,7 +132,7 @@ class LoadTask extends AsyncTask<Void, String, Boolean> {
 
 	@Override
 	protected void onProgressUpdate(String... text) {
-		progressDialog.setMessage(text[0]); // todo progress via % ???
+		progressDialog.setMessage(text[0]);
 	}
 
 	@Override

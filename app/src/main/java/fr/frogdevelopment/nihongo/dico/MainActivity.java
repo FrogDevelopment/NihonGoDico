@@ -143,7 +143,8 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 		} else {
 			boolean data_saved = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("data_saved", false);
 			if (!data_saved) {
-				// fixme
+				// fixme test connection available
+				// fixme warning bid file => use Wifi
 				new AlertDialog.Builder(this)
 						.setMessage("no data found. Download it ?")
 						.setPositiveButton(android.R.string.ok, (dialog, id) -> new LoadTask(MainActivity.this).execute())
