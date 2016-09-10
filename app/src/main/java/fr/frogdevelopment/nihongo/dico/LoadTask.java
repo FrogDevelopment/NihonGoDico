@@ -109,6 +109,7 @@ class LoadTask extends AsyncTask<Void, String, Boolean> {
 						senseValues.put(SenseContract.POS, StringUtils.join(sense.pos, ", "));
 						senseValues.put(SenseContract.FIELD, StringUtils.join(sense.field, ", "));
 						senseValues.put(SenseContract.MISC, StringUtils.join(sense.misc, ", "));
+//						senseValues.put(SenseContract.INFO, sense.info; // fixme
 						senseValues.put(SenseContract.DIAL, StringUtils.join(sense.dial, ", "));
 						senseValues.put(SenseContract.GLOSS, StringUtils.join(sense.gloss, ", "));
 
