@@ -59,7 +59,7 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		String[] columns = {SenseContract.POS, SenseContract.FIELD, SenseContract.MISC, SenseContract.DIAL, SenseContract.GLOSS};
+		String[] columns = {SenseContract.POS, SenseContract.FIELD, SenseContract.MISC, SenseContract.INFO, SenseContract.DIAL, SenseContract.GLOSS};
 		String selection = SenseContract.ENTRY_ID + "=" + args.getLong(SenseContract.ENTRY_ID);
 
 		return new CursorLoader(this, NihonGoDicoContentProvider.URI_WORD, columns, selection, null, null);
@@ -73,8 +73,9 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 			item.pos = data.getString(0);
 			item.field = data.getString(1);
 			item.misc = data.getString(2);
-			item.dial = data.getString(3);
-			item.glos = data.getString(4);
+			item.info = data.getString(3);
+			item.dial = data.getString(4);
+			item.gloss = data.getString(5);
 
 			details.add(item);
 		}
@@ -85,7 +86,6 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 
 		data.close();
 		getLoaderManager().destroyLoader(loader.getId());
-
 	}
 
 	@Override

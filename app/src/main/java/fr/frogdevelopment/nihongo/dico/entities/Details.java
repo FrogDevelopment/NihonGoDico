@@ -8,8 +8,9 @@ public class Details {
 	public String pos;
 	public String field;
 	public String misc;
+	public String info;
 	public String dial;
-	public String glos;
+	public String gloss;
 
 	@Override
 	public String toString() {
@@ -17,8 +18,9 @@ public class Details {
 				.append("pos", pos)
 				.append("field", field)
 				.append("misc", misc)
+				.append("info", info)
 				.append("dial", dial)
-				.append("glos", glos)
+				.append("gloss", gloss)
 				.toString();
 	}
 }

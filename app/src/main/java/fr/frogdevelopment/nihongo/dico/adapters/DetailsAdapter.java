@@ -43,8 +43,9 @@ public class DetailsAdapter extends ArrayAdapter<Details> {
         holder.pos.setText(item.pos);
         holder.field.setText(item.field);
         holder.misc.setText(item.misc);
+//        holder.info.setText(item.info); fixme
         holder.dial.setText(item.dial);
-        holder.gloss.setText(item.glos);
+        holder.gloss.setText(item.gloss);
 
         return convertView;
     }

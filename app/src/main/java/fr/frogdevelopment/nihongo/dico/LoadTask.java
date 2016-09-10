@@ -8,8 +8,6 @@ import android.os.AsyncTask;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -22,8 +20,6 @@ import java.util.Scanner;
 import fr.frogdevelopment.nihongo.dico.contentprovider.EntryContract;
 import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
 import fr.frogdevelopment.nihongo.dico.contentprovider.SenseContract;
-import fr.frogdevelopment.nihongo.dico.entities.Entry;
-import fr.frogdevelopment.nihongo.dico.entities.Sense;
 
 class LoadTask extends AsyncTask<Void, String, Boolean> {
 
@@ -72,21 +68,19 @@ class LoadTask extends AsyncTask<Void, String, Boolean> {
 
 			try (BufferedInputStream is = new BufferedInputStream(connection.getInputStream());
 			     Scanner scanner = new Scanner(is)) {
-				publishProgress("reading value");
 
 				int index = 0;
 				double percent = 0.0;
-				int total = 175236;//fixme
+				int total = scanner.nextInt();
 				ContentValues[] bulkToInsert;
 				ContentValues entryValues;
 				ContentValues senseValues;
 
-				Entry entry;
+				// fixme why empty line ?
+				scanner.nextLine();
+
 				while (scanner.hasNextLine()) {
 					String line = scanner.nextLine();
-
-					// fixme ne pas passer par l'objet => directement en ContentValues
-					entry = Entry.fromString(line);
 
 					index++;
 					double percentTmp = ((double) index) / total;
@@ -94,24 +88,30 @@ class LoadTask extends AsyncTask<Void, String, Boolean> {
 						publishProgress("fetching entries " + percentInstance.format(percentTmp));
 						percent = percentTmp;
 					}
+
+					String[] values = line.split("\\|", 3);
+
 					entryValues = new ContentValues();
 					entryValues.put("tag", "entry");
 					entryValues.put("key", index);
-					entryValues.put(EntryContract.KANJI, entry.kanji);
-					entryValues.put(EntryContract.READING, entry.reading);
+					entryValues.put(EntryContract.KANJI, values[0]);
+					entryValues.put(EntryContract.READING, values[1]);
 
 					mValueList.add(entryValues);
 
-					for (Sense sense : entry.senses) {
+					String[] senses = values[2].split("\\|");
+
+					for (String sense : senses) {
+						String[] values2 = sense.split("/");
 						senseValues = new ContentValues();
 						senseValues.put("tag", "sense");
 						senseValues.put("key", index);
-						senseValues.put(SenseContract.POS, StringUtils.join(sense.pos, ", "));
-						senseValues.put(SenseContract.FIELD, StringUtils.join(sense.field, ", "));
-						senseValues.put(SenseContract.MISC, StringUtils.join(sense.misc, ", "));
-//						senseValues.put(SenseContract.INFO, sense.info; // fixme
-						senseValues.put(SenseContract.DIAL, StringUtils.join(sense.dial, ", "));
-						senseValues.put(SenseContract.GLOSS, StringUtils.join(sense.gloss, ", "));
+						senseValues.put(SenseContract.POS, values2[0].replaceAll(";", ", "));
+						senseValues.put(SenseContract.FIELD, values2[1].replaceAll(";", ", "));
+						senseValues.put(SenseContract.MISC, values2[2].replaceAll(";", ", "));
+						senseValues.put(SenseContract.INFO, values2[3]);
+						senseValues.put(SenseContract.DIAL, values2[4].replaceAll(";", ", "));
+						senseValues.put(SenseContract.GLOSS, values2[5].replaceAll(";", ", "));
 
 						mValueList.add(senseValues);
 					}

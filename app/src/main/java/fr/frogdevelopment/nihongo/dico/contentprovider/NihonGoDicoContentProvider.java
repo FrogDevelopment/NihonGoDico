@@ -184,8 +184,15 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 							sensesStatement.bindString(SenseContract.INDEX_MISC, misc);
 						}
 
+						String info = value.getAsString(SenseContract.INFO);
+						if (info == null) {
+							sensesStatement.bindNull(SenseContract.INDEX_INFO);
+						} else {
+							sensesStatement.bindString(SenseContract.INDEX_INFO, info);
+						}
+
 						String dial = value.getAsString(SenseContract.DIAL);
-						if (misc == null) {
+						if (info == null) {
 							sensesStatement.bindNull(SenseContract.INDEX_DIAL);
 						} else {
 							sensesStatement.bindString(SenseContract.INDEX_DIAL, dial);
