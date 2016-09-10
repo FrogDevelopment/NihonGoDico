@@ -11,7 +11,6 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.Snackbar;
 import android.view.Menu;
@@ -69,13 +68,6 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 
 		// init mToolbar
 		setActionBar(ButterKnife.findById(this, R.id.toolbar));
-
-//		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//			@Override
-//			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//			}
-//		});
 
 		handleIntent(getIntent());
 	}
@@ -141,8 +133,8 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 
 			getLoaderManager().initLoader(loaderId, args, this);
 		} else {
-			boolean data_saved = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("data_saved", false);
-			if (!data_saved) {
+//			boolean data_saved = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("data_saved", false);
+			if (true) {
 				// fixme test connection available
 				// fixme warning bid file => use Wifi
 				new AlertDialog.Builder(this)
