@@ -2,12 +2,16 @@ package fr.frogdevelopment.nihongo.dico.adapters;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -17,55 +21,75 @@ import fr.frogdevelopment.nihongo.dico.entities.Details;
 
 public class DetailsAdapter extends ArrayAdapter<Details> {
 
-    private final LayoutInflater mInflater;
+	private final LayoutInflater mInflater;
 
-    public DetailsAdapter(Activity context, List<Details> items) {
-        super(context, 0, items);
+	public DetailsAdapter(Activity context, List<Details> items) {
+		super(context, 0, items);
 
-        mInflater = context.getLayoutInflater();
-    }
+		mInflater = context.getLayoutInflater();
+	}
 
-    @NonNull
-    @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        ViewHolder holder;
+	@NonNull
+	@Override
+	public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+		ViewHolder holder;
 
-        if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.details_list_items, parent, false);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+		if (convertView == null) {
+			convertView = mInflater.inflate(R.layout.details_list_items, parent, false);
+			holder = new ViewHolder(convertView);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
 
-        Details item = getItem(position);
+		Details item = getItem(position);
 
-        holder.pos.setText(item.pos);
-        holder.field.setText(item.field);
-        holder.misc.setText(item.misc);
-//        holder.info.setText(item.info); fixme
-        holder.dial.setText(item.dial);
-        holder.gloss.setText(item.gloss);
+		List<String> lexicos = new ArrayList<>();
+		if (StringUtils.isNotBlank(item.pos)) {
+			lexicos.add(item.pos);
+		}
+		if (StringUtils.isNotBlank(item.field)) {
+			lexicos.add(item.field);
+		}
+		if (StringUtils.isNotBlank(item.misc)) {
+			lexicos.add(item.misc);
+		}
+		if (StringUtils.isNotBlank(item.dial)) {
+			lexicos.add(item.dial);
+		}
 
-        return convertView;
-    }
+		if (lexicos.isEmpty()) {
+			holder.lexicos.setText("");
+			holder.lexicos.setVisibility(View.GONE);
+		} else {
+			holder.lexicos.setText(TextUtils.join(" / ", lexicos)); // fixme rendre clickable => afficher liste lexique
+			holder.lexicos.setVisibility(View.VISIBLE);
+		}
 
-    class ViewHolder {
+		holder.info.setText(item.info);
+		if (StringUtils.isBlank(item.info)) {
+			holder.info.setVisibility(View.GONE);
+		} else {
+			holder.info.setVisibility(View.VISIBLE);
+		}
 
-        @BindView(R.id.details_pos)
-        TextView pos;
-        @BindView(R.id.details_field)
-        TextView field;
-	    @BindView(R.id.details_misc)
-	    TextView misc;
-	    @BindView(R.id.details_dial)
-	    TextView dial;
-	    @BindView(R.id.details_gloss)
-	    TextView gloss;
+		holder.gloss.setText(item.gloss);
 
-        private ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-    }
+		return convertView;
+	}
+
+	class ViewHolder {
+
+		@BindView(R.id.details_lexicos)
+		TextView lexicos;
+		@BindView(R.id.details_info)
+		TextView info;
+		@BindView(R.id.details_gloss)
+		TextView gloss;
+
+		private ViewHolder(View view) {
+			ButterKnife.bind(this, view);
+		}
+	}
 
 }

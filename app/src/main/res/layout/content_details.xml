@@ -19,21 +19,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:textSize="50sp"
-        android:text="Kanji"/>
+        android:text="Kanji"
+        android:textSize="50sp"/>
 
     <TextView
         android:id="@+id/details_reading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/details_kanji"
-        android:textSize="30sp"
-        android:text="Reading"/>
+        android:text="Reading"
+        android:textSize="30sp"/>
 
     <ListView
         android:id="@+id/details_senses"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/details_reading"/>
+        android:layout_below="@id/details_reading"
+        android:listSelector="@android:color/transparent"/>
 
 </RelativeLayout>

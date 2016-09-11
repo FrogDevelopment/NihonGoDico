@@ -1,6 +1,5 @@
 package fr.frogdevelopment.nihongo.dico;
 
-import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.app.SearchManager;
@@ -11,7 +10,6 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.Snackbar;
 import android.view.Menu;
@@ -41,6 +39,7 @@ import fr.frogdevelopment.nihongo.dico.adapters.ResearchByKanjiAdapter;
 import fr.frogdevelopment.nihongo.dico.contentprovider.EntryContract;
 import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
 import fr.frogdevelopment.nihongo.dico.contentprovider.SenseContract;
+import fr.frogdevelopment.nihongo.dico.downloads.DownloadsActivity;
 import fr.frogdevelopment.nihongo.dico.entities.Preview;
 import fr.frogdevelopment.nihongo.dico.utils.InputUtils;
 
@@ -103,6 +102,18 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 	}
 
 	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.dico_menu_download:
+				startActivity(new Intent(this, DownloadsActivity.class));
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
 	protected void onNewIntent(Intent intent) {
 		setIntent(intent);
 		handleIntent(intent);
@@ -133,18 +144,6 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 			}
 
 			getLoaderManager().initLoader(loaderId, args, this);
-		} else {
-			boolean data_saved = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("data_saved", false);
-			if (data_saved) {
-				// fixme test connection available
-				// fixme warning bid file => use Wifi
-				new AlertDialog.Builder(this)
-						.setMessage("no data found. Download it ?")
-						.setPositiveButton(android.R.string.ok, (dialog, id) -> new LoadTask(MainActivity.this).execute())
-						.setNegativeButton(android.R.string.cancel, null)
-						.create()
-						.show();
-			}
 		}
 	}
 
