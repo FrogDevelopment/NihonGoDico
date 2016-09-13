@@ -40,7 +40,7 @@ class DicoDownLoadTask extends AsyncTask<Void, String, Boolean> {
 		PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 		mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
 		mWakeLock.acquire();
-		progressDialog = ProgressDialog.show(context, "Download data", "Fetching data");
+		progressDialog = ProgressDialog.show(context, "Download entries", "Fetching entries");
 	}
 
 	@Override
@@ -66,13 +66,10 @@ class DicoDownLoadTask extends AsyncTask<Void, String, Boolean> {
 
 				int index = 0;
 				double percent = 0.0;
-				int total = scanner.nextInt();
+				int total = Integer.valueOf(scanner.nextLine());
 				ContentValues[] bulkToInsert;
 				ContentValues entryValues;
 				ContentValues senseValues;
-
-				// fixme why empty line ?
-				scanner.nextLine();
 
 				while (scanner.hasNextLine()) {
 					String line = scanner.nextLine();
