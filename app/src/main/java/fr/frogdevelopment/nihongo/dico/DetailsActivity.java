@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -42,9 +45,11 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
     @BindView(R.id.details_info)
     TextView mInfo;
 
-    @BindView(R.id.details_examples)
-    TextView mExamples;
+    @BindView(R.id.details_show_examples)
+    Button mButtonExamples;
 
+    @BindView(R.id.details_examples)
+    ListView mExamples;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +83,13 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
             return new CursorLoader(this, NihonGoDicoContentProvider.URI_WORD, columns, selection, null, null);
         } else if (id == 2) {
             String[] columns = {ExampleContract.SENTENCE};
-            String[] split = mGloss.getText().toString().split(",");
-            String[] selectionArgs = {split[0].trim()};
+            List<String> words = new ArrayList<>();
+            for (String word : mGloss.getText().toString().split(",")) {
+                words.add(word.trim());
+            }
+
+            String[] selectionArgs = {TextUtils.join(" OR ", words)};
+//            String[] selectionArgs = {mKanji.getText().toString() + " OR " + mReading.getText().toString()};
 
             return new CursorLoader(this, NihonGoDicoContentProvider.URI_SENTENCE, columns, null, selectionArgs, null);
         }
@@ -136,7 +146,10 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
                 examples.add(data.getString(0));
             }
 
-            mExamples.setText(TextUtils.join("\n", examples));
+            mButtonExamples.setVisibility(View.INVISIBLE);
+            mExamples.setVisibility(View.VISIBLE);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, examples);
+            mExamples.setAdapter(adapter);
         }
 
         data.close();

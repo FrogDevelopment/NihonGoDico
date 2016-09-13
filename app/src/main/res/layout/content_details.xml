@@ -58,15 +58,15 @@
         android:id="@+id/details_show_examples"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="show examples"
-        android:layout_below="@id/details_info"/>
+        android:layout_below="@id/details_info"
+        android:text="show examples"/>
 
-    <TextView
+    <ListView
         android:id="@+id/details_examples"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/details_show_examples"
-        android:textStyle="italic"/>
-
+        android:layout_below="@id/details_info"
+        android:listSelector="@android:color/transparent"
+        android:visibility="gone"/>
 
 </RelativeLayout>
