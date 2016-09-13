@@ -23,6 +23,7 @@ public class DictionaryOpenHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		EntryContract.create(db);
 		SenseContract.create(db);
+		ExampleContract.create(db);
 	}
 
 	// Upgrading database

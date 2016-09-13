@@ -78,7 +78,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 		Intent intent = new Intent(this, DetailsActivity.class);
 		intent.putExtra(EntryContract.KANJI, item.kanji);
 		intent.putExtra(EntryContract.READING, item.reading);
-		intent.putExtra(SenseContract.ENTRY_ID, item.entry_id);
+		intent.putExtra(SenseContract._ID, item.sense_id);
 
 		startActivity(intent);
 	}
@@ -151,7 +151,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		String[] columns = {EntryContract.KANJI, EntryContract.READING, SenseContract.GLOSS, SenseContract.ENTRY_ID};
+		String[] columns = {EntryContract.KANJI, EntryContract.READING, SenseContract.GLOSS, "sense._id"};
 		query = args.getString("query");
 
 		Uri uri;
@@ -184,7 +184,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 			preview.kanji = data.getString(0);
 			preview.reading = data.getString(1);
 			preview.gloss = data.getString(2);
-			preview.entry_id = data.getLong(3);
+			preview.sense_id = data.getLong(3);
 
 			switch (loaderId) {
 				case LOADER_DICO_ID_KANJI:

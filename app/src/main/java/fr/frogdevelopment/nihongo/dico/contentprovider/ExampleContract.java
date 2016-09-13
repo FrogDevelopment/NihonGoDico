@@ -30,6 +30,7 @@ public class ExampleContract implements BaseColumns {
 	static final String SQL_REBUILD_FTS = "INSERT INTO FTS_EXAMPLE (FTS_EXAMPLE) VALUES ('rebuild');";
 
 	private static final String SQL_DELETE = "DROP TABLE IF EXISTS EXAMPLE;";
+	private static final String SQL_DELETE_FTS = "DROP TABLE IF EXISTS FTS_EXAMPLE;";
 
 	static void create(SQLiteDatabase db) {
 		db.execSQL(SQL_CREATE);

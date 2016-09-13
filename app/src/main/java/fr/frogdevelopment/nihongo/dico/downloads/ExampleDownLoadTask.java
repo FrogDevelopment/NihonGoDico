@@ -18,32 +18,32 @@ import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvide
 
 class ExampleDownLoadTask extends AsyncTask<Void, String, Boolean> {
 
-	private static final String BASE_URL = "http://legall.benoit.free.fr/nihon_go/";
+    private static final String BASE_URL = "http://legall.benoit.free.fr/nihon_go/";
 
-	private       PowerManager.WakeLock mWakeLock;
-	private       ProgressDialog        progressDialog;
-	private final Context               context;
+    private PowerManager.WakeLock mWakeLock;
+    private ProgressDialog progressDialog;
+    private final Context context;
 
-	public ExampleDownLoadTask(Context context) {
-		this.context = context;
-	}
+    public ExampleDownLoadTask(Context context) {
+        this.context = context;
+    }
 
-	@Override
-	protected void onPreExecute() {
-		// take CPU lock to prevent CPU from going off if the user
-		// presses the power button during download
-		PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-		mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
-		mWakeLock.acquire();
-		progressDialog = ProgressDialog.show(context, "Download data", "Fetching examples");
-	}
+    @Override
+    protected void onPreExecute() {
+        // take CPU lock to prevent CPU from going off if the user
+        // presses the power button during download
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
+        mWakeLock.acquire();
+        progressDialog = ProgressDialog.show(context, "Download data", "Fetching examples");
+    }
 
-	@Override
-	protected Boolean doInBackground(Void... voids) {
-		List<ContentValues> mValueList = new ArrayList<>();
+    @Override
+    protected Boolean doInBackground(Void... voids) {
+        List<ContentValues> mValueList = new ArrayList<>();
 
 //		HttpURLConnection connection = null;
-		try {
+        try {
 //			URL url = new URL(BASE_URL + "entries_fre.txt"); // fixme select language
 //			connection = (HttpURLConnection) url.openConnection();
 //			connection.connect();
@@ -56,59 +56,64 @@ class ExampleDownLoadTask extends AsyncTask<Void, String, Boolean> {
 //			}
 
 //			try (BufferedInputStream is = new BufferedInputStream(connection.getInputStream());
-			try (InputStream is = context.getResources().openRawResource(R.raw.sentences_fra_jpn);
-			     Scanner scanner = new Scanner(is)) {
-				ContentValues[] bulkToInsert;
-				ContentValues contentValues;
-				while (scanner.hasNextLine()) {
-					String line = scanner.nextLine();
-					String[] values = line.split("\\t");
-					contentValues = new ContentValues();
-					contentValues.put(ExampleContract.REF, values[0]);
-					contentValues.put(ExampleContract.LANGUAGE, values[1]);
-					contentValues.put(ExampleContract.SENTENCE, values[2]);
+            try (InputStream is = context.getResources().openRawResource(R.raw.sentences_fra_jpn);
+                 Scanner scanner = new Scanner(is)) {
+                ContentValues[] bulkToInsert;
+                ContentValues contentValues;
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    String[] values = line.split("\\t");
+                    contentValues = new ContentValues();
+                    contentValues.put(ExampleContract.REF, values[0]);
+                    contentValues.put(ExampleContract.LANGUAGE, values[1]);
+                    contentValues.put(ExampleContract.SENTENCE, values[2]);
 
-					mValueList.add(contentValues);
+                    mValueList.add(contentValues);
 
-					if (mValueList.size() > 4000) { // todo find best limit before insert loop
-						bulkToInsert = mValueList.toArray(new ContentValues[mValueList.size()]);
-						context.getContentResolver().bulkInsert(NihonGoDicoContentProvider.URI_SENTENCE, bulkToInsert); // fixme delete data inserted if error
+                    if (mValueList.size() > 4000) { // todo find best limit before insert loop
+                        bulkToInsert = mValueList.toArray(new ContentValues[mValueList.size()]);
+                        context.getContentResolver().bulkInsert(NihonGoDicoContentProvider.URI_SENTENCE, bulkToInsert); // fixme delete data inserted if error
 
-						mValueList.clear();
-					}
+                        mValueList.clear();
+                    }
+                }
 
-				}
+                if (!mValueList.isEmpty()) {
+                    bulkToInsert = mValueList.toArray(new ContentValues[mValueList.size()]);
+                    context.getContentResolver().bulkInsert(NihonGoDicoContentProvider.URI_SENTENCE, bulkToInsert); // fixme delete data inserted if error
+                }
 
-				bulkToInsert = mValueList.toArray(new ContentValues[mValueList.size()]);
-				context.getContentResolver().bulkInsert(NihonGoDicoContentProvider.URI_SENTENCE, bulkToInsert); // fixme delete data inserted if error
-			}
+                // launch SQL_REBUILD_FTS
+                bulkToInsert = new ContentValues[]{};
+                context.getContentResolver().bulkInsert(NihonGoDicoContentProvider.URI_SENTENCE, bulkToInsert);
+            }
 
-		} catch (IOException e) {
-			e.printStackTrace(); // fixme
-			return false;
+        } catch (IOException e) {
+            e.printStackTrace(); // fixme
+            return false;
 //		} finally {
 //			if (connection != null) {
 //				connection.disconnect();
 //			}
-		}
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	protected void onProgressUpdate(String... text) {
-		progressDialog.setMessage(text[0]);
-	}
+    @Override
+    protected void onProgressUpdate(String... text) {
+        progressDialog.setMessage(text[0]);
+    }
 
-	@Override
-	protected void onPostExecute(Boolean result) {
-		mWakeLock.release();
-		progressDialog.dismiss();
+    @Override
+    protected void onPostExecute(Boolean result) {
+        mWakeLock.release();
+        progressDialog.dismiss();
 
 //		if (result) {
 //			SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
 //			edit.putBoolean("data_saved", true);
 //			edit.apply();
 //		}
-	}
+    }
 }
