@@ -85,7 +85,7 @@ class ExampleDownLoadTask extends AsyncTask<Void, String, Boolean> {
 
                     if (mValueList.size() > 4000) { // todo find best limit before insert loop
                         bulkToInsert = mValueList.toArray(new ContentValues[mValueList.size()]);
-                        context.getContentResolver().bulkInsert(NihonGoDicoContentProvider.URI_SENTENCE, bulkToInsert);
+                        context.getContentResolver().bulkInsert(NihonGoDicoContentProvider.URI_EXAMPLE, bulkToInsert);
 
                         mValueList.clear();
                     }
@@ -93,7 +93,7 @@ class ExampleDownLoadTask extends AsyncTask<Void, String, Boolean> {
 
                 if (!mValueList.isEmpty()) {
                     bulkToInsert = mValueList.toArray(new ContentValues[mValueList.size()]);
-                    context.getContentResolver().bulkInsert(NihonGoDicoContentProvider.URI_SENTENCE, bulkToInsert);
+                    context.getContentResolver().bulkInsert(NihonGoDicoContentProvider.URI_EXAMPLE, bulkToInsert);
                 }
 
                 context.getContentResolver().update(NihonGoDicoContentProvider.URI_REBUILD, null, null, null);

@@ -87,9 +87,18 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
             return new CursorLoader(this, NihonGoDicoContentProvider.URI_WORD, columns, selection, null, null);
         } else if (id == 2) {
             String[] columns = {ExampleContract.JAPANESE_SENTENCE, ExampleContract.TRANSLATION_SENTENCE};
-            String[] selectionArgs = {mKanji.getText().toString() + " OR " + mReading.getText().toString()};
+            List<String> tmp = new ArrayList<>();
+            String kanji = mKanji.getText().toString();
+            if (StringUtils.isNotBlank(kanji)) {
+                tmp.add(kanji);
+            }
+            String reading = mReading.getText().toString();
+            if (StringUtils.isNotBlank(reading)) {
+                tmp.add(reading);
+            }
+            String[] selectionArgs = {TextUtils.join(" OR ", tmp)};
 
-            return new CursorLoader(this, NihonGoDicoContentProvider.URI_SENTENCE, columns, null, selectionArgs, null);
+            return new CursorLoader(this, NihonGoDicoContentProvider.URI_EXAMPLE, columns, null, selectionArgs, null);
         }
 
         return null;
@@ -141,12 +150,17 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
         } else if (loader.getId() == 2) {
             List<Example> examples = new ArrayList<>();
 
-            Pattern patternJapanese = Pattern.compile(mKanji.getText().toString());
+            Pattern patternKanji = Pattern.compile(mKanji.getText().toString());
+            Pattern patternReading = Pattern.compile(mReading.getText().toString());
             Matcher matcher;
             while (data.moveToNext()) {
                 String japanese = data.getString(0);
                 Example example = new Example(japanese, data.getString(1));
-                matcher = patternJapanese.matcher(japanese);
+                matcher = patternKanji.matcher(japanese);
+                while (matcher.find()) {
+                    example.matchIndices.add(Pair.of(matcher.start(), matcher.end()));
+                }
+                matcher = patternReading.matcher(japanese);
                 while (matcher.find()) {
                     example.matchIndices.add(Pair.of(matcher.start(), matcher.end()));
                 }

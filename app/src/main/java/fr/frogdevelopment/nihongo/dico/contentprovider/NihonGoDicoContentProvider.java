@@ -48,14 +48,14 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
     private static final String CONTENT_SEARCH_GLOSS_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_SEARCH_GLOSS;
     public static final Uri URI_SEARCH_GLOSS = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_SEARCH_GLOSS);
 
-    private static final int SENTENCE_ID = 50;
-    private static final String BASE_PATH_SENTENCE = "sentence";
-    private static final String CONTENT_SENTENCE_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_SENTENCE;
-    public static final Uri URI_SENTENCE = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_SENTENCE);
+    private static final int EXAMPLE = 50;
+    private static final String BASE_PATH_EXAMPLE = "example";
+    private static final String CONTENT_EXAMPLE_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_EXAMPLE;
+    public static final Uri URI_EXAMPLE = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_EXAMPLE);
 
     private static final int REBUILD = 60;
     private static final String BASE_PATH_REBUILD = "REBUILD";
-    private static final String CONTENT_REBUILD_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_REBUILD;
+    private static final String CONTENT_REBUILD_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_REBUILD;
     public static final Uri URI_REBUILD = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_REBUILD);
 
 
@@ -65,7 +65,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
         sURIMatcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, URI_MATCH_SUGGEST);
 
         sURIMatcher.addURI(AUTHORITY, BASE_PATH_WORD, WORD_ID);
-        sURIMatcher.addURI(AUTHORITY, BASE_PATH_SENTENCE, SENTENCE_ID);
+        sURIMatcher.addURI(AUTHORITY, BASE_PATH_EXAMPLE, EXAMPLE);
         sURIMatcher.addURI(AUTHORITY, BASE_PATH_REBUILD, REBUILD);
 
         sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH_KANJI, SEARCH_KANJI);
@@ -91,8 +91,8 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
             case WORD_ID:
                 return CONTENT_WORD_ITEM_TYPE;
 
-            case SENTENCE_ID:
-                return CONTENT_SENTENCE_ITEM_TYPE;
+            case EXAMPLE:
+                return CONTENT_EXAMPLE_TYPE;
 
             case SEARCH_KANJI:
                 return CONTENT_SEARCH_KANJI_TYPE;
@@ -104,7 +104,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
                 return CONTENT_SEARCH_GLOSS_TYPE;
 
             case REBUILD:
-                return CONTENT_REBUILD_ITEM_TYPE;
+                return CONTENT_REBUILD_TYPE;
 
             default:
                 return super.getType(uri);
@@ -125,7 +125,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
                 queryBuilder.setTables(SenseContract.TABLE_NAME);
                 break;
 
-            case SENTENCE_ID:
+            case EXAMPLE:
 //                queryBuilder.setTables(ExampleContract.FTS_TABLE_NAME);
 //                selection = ExampleContract.SQL_SELECTION;
 
@@ -242,7 +242,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
                     }
                     break;
 
-                case SENTENCE_ID:
+                case EXAMPLE:
                     //standard SQL insert statement, that can be reused
                     SQLiteStatement sentenceStatement = db.compileStatement(ExampleContract.SQL_INSERT);
 
