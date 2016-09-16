@@ -19,242 +19,273 @@ import android.util.SparseLongArray;
 
 public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider {
 
-	private DictionaryOpenHelper mOpenHelper;
+    private DictionaryOpenHelper mOpenHelper;
 
-	public static final String AUTHORITY = ".NihonGoDicoContentProvider";
-	public final static int    MODE      = DATABASE_MODE_QUERIES | DATABASE_MODE_2LINES;
-
-
-	// used for the UriMatcher
-	private static final int URI_MATCH_SUGGEST = 1;
-
-	private static final int    WORD_ID                = 10;
-	private static final String BASE_PATH_WORD         = "word";
-	private static final String CONTENT_WORD_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_WORD;
-	public static final  Uri    URI_WORD               = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_WORD);
-
-	private static final int    SEARCH_KANJI              = 20;
-	private static final String BASE_PATH_SEARCH_KANJI    = "search_kanji";
-	private static final String CONTENT_SEARCH_KANJI_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_SEARCH_KANJI;
-	public static final  Uri    URI_SEARCH_KANJI          = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_SEARCH_KANJI);
-
-	private static final int    SEARCH_KANA              = 30;
-	private static final String BASE_PATH_SEARCH_KANA    = "search_kana";
-	private static final String CONTENT_SEARCH_KANA_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_SEARCH_KANA;
-	public static final  Uri    URI_SEARCH_KANA          = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_SEARCH_KANA);
-
-	private static final int    SEARCH_GLOSS              = 40;
-	private static final String BASE_PATH_SEARCH_GLOSS    = "search_gloss";
-	private static final String CONTENT_SEARCH_GLOSS_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_SEARCH_GLOSS;
-	public static final  Uri    URI_SEARCH_GLOSS          = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_SEARCH_GLOSS);
-
-	private static final int    SENTENCE_ID                = 50;
-	private static final String BASE_PATH_SENTENCE         = "sentence";
-	private static final String CONTENT_SENTENCE_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_SENTENCE;
-	public static final  Uri    URI_SENTENCE               = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_SENTENCE);
+    public static final String AUTHORITY = ".NihonGoDicoContentProvider";
+    public final static int MODE = DATABASE_MODE_QUERIES | DATABASE_MODE_2LINES;
 
 
-	private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    // used for the UriMatcher
+    private static final int URI_MATCH_SUGGEST = 1;
 
-	static {
-		sURIMatcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, URI_MATCH_SUGGEST);
+    private static final int WORD_ID = 10;
+    private static final String BASE_PATH_WORD = "word";
+    private static final String CONTENT_WORD_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_WORD;
+    public static final Uri URI_WORD = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_WORD);
 
-		sURIMatcher.addURI(AUTHORITY, BASE_PATH_WORD, WORD_ID);
-		sURIMatcher.addURI(AUTHORITY, BASE_PATH_SENTENCE, SENTENCE_ID);
+    private static final int SEARCH_KANJI = 20;
+    private static final String BASE_PATH_SEARCH_KANJI = "search_kanji";
+    private static final String CONTENT_SEARCH_KANJI_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_SEARCH_KANJI;
+    public static final Uri URI_SEARCH_KANJI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_SEARCH_KANJI);
 
-		sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH_KANJI, SEARCH_KANJI);
-		sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH_KANA, SEARCH_KANA);
-		sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH_GLOSS, SEARCH_GLOSS);
-	}
+    private static final int SEARCH_KANA = 30;
+    private static final String BASE_PATH_SEARCH_KANA = "search_kana";
+    private static final String CONTENT_SEARCH_KANA_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_SEARCH_KANA;
+    public static final Uri URI_SEARCH_KANA = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_SEARCH_KANA);
 
-	public NihonGoDicoContentProvider() {
-		setupSuggestions(AUTHORITY, MODE);
-	}
+    private static final int SEARCH_GLOSS = 40;
+    private static final String BASE_PATH_SEARCH_GLOSS = "search_gloss";
+    private static final String CONTENT_SEARCH_GLOSS_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_SEARCH_GLOSS;
+    public static final Uri URI_SEARCH_GLOSS = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_SEARCH_GLOSS);
 
-	@Override
-	public boolean onCreate() {
-		mOpenHelper = new DictionaryOpenHelper(getContext());
-		return super.onCreate();
-	}
+    private static final int SENTENCE_ID = 50;
+    private static final String BASE_PATH_SENTENCE = "sentence";
+    private static final String CONTENT_SENTENCE_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_SENTENCE;
+    public static final Uri URI_SENTENCE = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_SENTENCE);
 
-	@Override
-	public String getType(@NonNull Uri uri) {
-		int match = sURIMatcher.match(uri);
-		switch (match) {
+    private static final int REBUILD = 60;
+    private static final String BASE_PATH_REBUILD = "REBUILD";
+    private static final String CONTENT_REBUILD_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_REBUILD;
+    public static final Uri URI_REBUILD = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_REBUILD);
 
-			case WORD_ID:
-				return CONTENT_WORD_ITEM_TYPE;
 
-			case SENTENCE_ID:
-				return CONTENT_SENTENCE_ITEM_TYPE;
+    private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-			case SEARCH_KANJI:
-				return CONTENT_SEARCH_KANJI_TYPE;
+    static {
+        sURIMatcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, URI_MATCH_SUGGEST);
 
-			case SEARCH_KANA:
-				return CONTENT_SEARCH_KANA_TYPE;
+        sURIMatcher.addURI(AUTHORITY, BASE_PATH_WORD, WORD_ID);
+        sURIMatcher.addURI(AUTHORITY, BASE_PATH_SENTENCE, SENTENCE_ID);
+        sURIMatcher.addURI(AUTHORITY, BASE_PATH_REBUILD, REBUILD);
 
-			case SEARCH_GLOSS:
-				return CONTENT_SEARCH_GLOSS_TYPE;
+        sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH_KANJI, SEARCH_KANJI);
+        sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH_KANA, SEARCH_KANA);
+        sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH_GLOSS, SEARCH_GLOSS);
+    }
 
-			default:
-				return super.getType(uri);
-		}
-	}
+    public NihonGoDicoContentProvider() {
+        setupSuggestions(AUTHORITY, MODE);
+    }
 
-	@Override
-	public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+    @Override
+    public boolean onCreate() {
+        mOpenHelper = new DictionaryOpenHelper(getContext());
+        return super.onCreate();
+    }
 
-		switch (sURIMatcher.match(uri)) {
+    @Override
+    public String getType(@NonNull Uri uri) {
+        int match = sURIMatcher.match(uri);
+        switch (match) {
 
-			case URI_MATCH_SUGGEST:
-				return super.query(uri, projection, selection, selectionArgs, sortOrder);
+            case WORD_ID:
+                return CONTENT_WORD_ITEM_TYPE;
 
-			case WORD_ID:
-				queryBuilder.setTables(SenseContract.TABLE_NAME);
-				break;
+            case SENTENCE_ID:
+                return CONTENT_SENTENCE_ITEM_TYPE;
 
-			case SENTENCE_ID:
-				queryBuilder.setTables(ExampleContract.TABLE_NAME);
-				selection = ExampleContract.SQL_SELECTION;
-				break;
+            case SEARCH_KANJI:
+                return CONTENT_SEARCH_KANJI_TYPE;
 
-			case SEARCH_KANJI:
-			case SEARCH_KANA:
-			case SEARCH_GLOSS:
-				queryBuilder.setTables("entry INNER JOIN sense ON (entry._id = sense.entry_id)");
-				break;
+            case SEARCH_KANA:
+                return CONTENT_SEARCH_KANA_TYPE;
 
-			default:
-				throw new IllegalArgumentException("Unknown URI: " + uri);
-		}
+            case SEARCH_GLOSS:
+                return CONTENT_SEARCH_GLOSS_TYPE;
 
-		SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-		Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
-		// make sure that potential listeners are getting notified
-		cursor.setNotificationUri(getContext().getContentResolver(), uri);
+            case REBUILD:
+                return CONTENT_REBUILD_ITEM_TYPE;
 
-		return cursor;
-	}
+            default:
+                return super.getType(uri);
+        }
+    }
 
-	// https://eshyu.wordpress.com/2010/08/15/using-sqlite-transactions-with-your-contentprovider/
-	@Override
-	public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
-		int numInserted = 0;
+    @Override
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
-		SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-		try {
-			db.beginTransaction();
+        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        switch (sURIMatcher.match(uri)) {
 
-			switch (sURIMatcher.match(uri)) {
+            case URI_MATCH_SUGGEST:
+                return super.query(uri, projection, selection, selectionArgs, sortOrder);
 
-				case WORD_ID:
-					//standard SQL insert statement, that can be reused
-					SQLiteStatement entryStatement = db.compileStatement(EntryContract.SQL_INSERT);
-					SQLiteStatement sensesStatement = db.compileStatement(SenseContract.SQL_INSERT);
+            case WORD_ID:
+                queryBuilder.setTables(SenseContract.TABLE_NAME);
+                break;
 
-					SparseLongArray entriesId = new SparseLongArray();
-					for (ContentValues value : values) {
-						Integer key = value.getAsInteger("key");
+            case SENTENCE_ID:
+//                queryBuilder.setTables(ExampleContract.FTS_TABLE_NAME);
+//                selection = ExampleContract.SQL_SELECTION;
 
-						String tag = value.getAsString("tag");
-						switch (tag) {
-							case "entry":
-								entryStatement.clearBindings();
+                String sql = "SELECT japanese_sentence, translation_sentence FROM example WHERE _ID IN " +
+                        " (SELECT docid FROM fts_example WHERE fts_example MATCH ?)";
+                Cursor cursor = db.rawQuery(sql, selectionArgs);
+                cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                return cursor;
 
-								String kanji = value.getAsString(EntryContract.KANJI);
-								if (kanji == null) {
-									entryStatement.bindNull(EntryContract.INDEX_KANJI);
-								} else {
-									entryStatement.bindString(EntryContract.INDEX_KANJI, kanji);
-								}
+            case SEARCH_KANJI:
+            case SEARCH_KANA:
+            case SEARCH_GLOSS:
+                queryBuilder.setTables("entry INNER JOIN sense ON (entry._id = sense.entry_id)");
+                break;
 
-								entryStatement.bindString(EntryContract.INDEX_READING, value.getAsString(EntryContract.READING));
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
 
-								Long entryId = entryStatement.executeInsert();
-								entriesId.put(key, entryId);
-								break;
+        Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+        // make sure that potential listeners are getting notified
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
-							case "sense":
-								sensesStatement.clearBindings();
+        return cursor;
+    }
 
-								sensesStatement.bindLong(SenseContract.INDEX_ENTRY_ID, entriesId.get(key));
+    // https://eshyu.wordpress.com/2010/08/15/using-sqlite-transactions-with-your-contentprovider/
+    @Override
+    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
+        int numInserted = 0;
 
-								String pos = value.getAsString(SenseContract.POS);
-								if (pos == null) {
-									sensesStatement.bindNull(SenseContract.INDEX_POS);
-								} else {
-									sensesStatement.bindString(SenseContract.INDEX_POS, pos);
-								}
+        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        try {
+            db.beginTransaction();
 
-								String field = value.getAsString(SenseContract.FIELD);
-								if (field == null) {
-									sensesStatement.bindNull(SenseContract.INDEX_FIELD);
-								} else {
-									sensesStatement.bindString(SenseContract.INDEX_FIELD, field);
-								}
+            switch (sURIMatcher.match(uri)) {
 
-								String misc = value.getAsString(SenseContract.MISC);
-								if (misc == null) {
-									sensesStatement.bindNull(SenseContract.INDEX_MISC);
-								} else {
-									sensesStatement.bindString(SenseContract.INDEX_MISC, misc);
-								}
+                case WORD_ID:
+                    //standard SQL insert statement, that can be reused
+                    SQLiteStatement entryStatement = db.compileStatement(EntryContract.SQL_INSERT);
+                    SQLiteStatement sensesStatement = db.compileStatement(SenseContract.SQL_INSERT);
 
-								String info = value.getAsString(SenseContract.INFO);
-								if (info == null) {
-									sensesStatement.bindNull(SenseContract.INDEX_INFO);
-								} else {
-									sensesStatement.bindString(SenseContract.INDEX_INFO, info);
-								}
+                    SparseLongArray entriesId = new SparseLongArray();
+                    for (ContentValues value : values) {
+                        Integer key = value.getAsInteger("key");
 
-								String dial = value.getAsString(SenseContract.DIAL);
-								if (info == null) {
-									sensesStatement.bindNull(SenseContract.INDEX_DIAL);
-								} else {
-									sensesStatement.bindString(SenseContract.INDEX_DIAL, dial);
-								}
+                        String tag = value.getAsString("tag");
+                        switch (tag) {
+                            case "entry":
+                                entryStatement.clearBindings();
 
-								sensesStatement.bindString(SenseContract.INDEX_GLOSS, value.getAsString(SenseContract.GLOSS));
+                                String kanji = value.getAsString(EntryContract.KANJI);
+                                if (kanji == null) {
+                                    entryStatement.bindNull(EntryContract.INDEX_KANJI);
+                                } else {
+                                    entryStatement.bindString(EntryContract.INDEX_KANJI, kanji);
+                                }
 
-								sensesStatement.executeInsert();
-								break;
+                                entryStatement.bindString(EntryContract.INDEX_READING, value.getAsString(EntryContract.READING));
 
-							default:
-								// nothing to do
-								break;
-						}
-					}
-					break;
+                                Long entryId = entryStatement.executeInsert();
+                                entriesId.put(key, entryId);
+                                break;
 
-				case SENTENCE_ID:
-					//standard SQL insert statement, that can be reused
-					SQLiteStatement sentenceStatement = db.compileStatement(ExampleContract.SQL_INSERT);
+                            case "sense":
+                                sensesStatement.clearBindings();
 
-					for (ContentValues value : values) {
-						sentenceStatement.clearBindings();
+                                sensesStatement.bindLong(SenseContract.INDEX_ENTRY_ID, entriesId.get(key));
 
-						sentenceStatement.bindString(ExampleContract.INDEX_JAPANESE, value.getAsString(ExampleContract.JAPANESE));
-						sentenceStatement.bindString(ExampleContract.INDEX_TRANSLATION, value.getAsString(ExampleContract.TRANSLATION));
+                                String pos = value.getAsString(SenseContract.POS);
+                                if (pos == null) {
+                                    sensesStatement.bindNull(SenseContract.INDEX_POS);
+                                } else {
+                                    sensesStatement.bindString(SenseContract.INDEX_POS, pos);
+                                }
 
-						sentenceStatement.executeInsert();
-					}
+                                String field = value.getAsString(SenseContract.FIELD);
+                                if (field == null) {
+                                    sensesStatement.bindNull(SenseContract.INDEX_FIELD);
+                                } else {
+                                    sensesStatement.bindString(SenseContract.INDEX_FIELD, field);
+                                }
 
-					break;
+                                String misc = value.getAsString(SenseContract.MISC);
+                                if (misc == null) {
+                                    sensesStatement.bindNull(SenseContract.INDEX_MISC);
+                                } else {
+                                    sensesStatement.bindString(SenseContract.INDEX_MISC, misc);
+                                }
 
-				default:
-					throw new IllegalArgumentException("Unknow URI : " + uri);
-			}
+                                String info = value.getAsString(SenseContract.INFO);
+                                if (info == null) {
+                                    sensesStatement.bindNull(SenseContract.INDEX_INFO);
+                                } else {
+                                    sensesStatement.bindString(SenseContract.INDEX_INFO, info);
+                                }
 
-			db.setTransactionSuccessful();
-			numInserted = values.length;
-		} finally {
-			db.endTransaction();
-		}
+                                String dial = value.getAsString(SenseContract.DIAL);
+                                if (info == null) {
+                                    sensesStatement.bindNull(SenseContract.INDEX_DIAL);
+                                } else {
+                                    sensesStatement.bindString(SenseContract.INDEX_DIAL, dial);
+                                }
 
-		getContext().getContentResolver().notifyChange(uri, null);
+                                sensesStatement.bindString(SenseContract.INDEX_GLOSS, value.getAsString(SenseContract.GLOSS));
 
-		return numInserted;
-	}
+                                sensesStatement.executeInsert();
+                                break;
+
+                            default:
+                                // nothing to do
+                                break;
+                        }
+                    }
+                    break;
+
+                case SENTENCE_ID:
+                    //standard SQL insert statement, that can be reused
+                    SQLiteStatement sentenceStatement = db.compileStatement(ExampleContract.SQL_INSERT);
+
+                    for (ContentValues value : values) {
+                        sentenceStatement.clearBindings();
+
+                        sentenceStatement.bindString(ExampleContract.INDEX_JAPANESE_REF, value.getAsString(ExampleContract.JAPANESE_REF));
+                        sentenceStatement.bindString(ExampleContract.INDEX_TRANSLATION_REF, value.getAsString(ExampleContract.TRANSLATION_REF));
+                        sentenceStatement.bindString(ExampleContract.INDEX_JAPANESE_SENTENCE, value.getAsString(ExampleContract.JAPANESE_SENTENCE));
+                        sentenceStatement.bindString(ExampleContract.INDEX_TRANSLATION_SENTENCE, value.getAsString(ExampleContract.TRANSLATION_SENTENCE));
+                        sentenceStatement.bindString(ExampleContract.INDEX_INDICES, value.getAsString(ExampleContract.INDICES));
+
+                        sentenceStatement.executeInsert();
+                    }
+
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Unknow URI : " + uri);
+            }
+
+            db.setTransactionSuccessful();
+            numInserted = values.length;
+        } finally {
+            db.endTransaction();
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        return numInserted;
+    }
+
+    @Override
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        switch (sURIMatcher.match(uri)) {
+            case REBUILD:
+                SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+                db.execSQL(ExampleContract.SQL_REBUILD);
+                return 0;
+
+            default:
+                return super.update(uri, values, selection, selectionArgs);
+        }
+
+    }
 }

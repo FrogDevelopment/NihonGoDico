@@ -1,12 +1,20 @@
 package fr.frogdevelopment.nihongo.dico.adapters;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
@@ -38,10 +46,19 @@ public class ExampleAdapter extends ArrayAdapter<Example> {
 		}
 
 		Example item = getItem(position);
-		holder.text1.setText(item.japanese);
+		SpannableStringBuilder str = new SpannableStringBuilder(item.japanese);
+		for (Pair<Integer, Integer> indices : item.matchIndices) {
+			spanMatchRegion(str, indices.getLeft(), indices.getRight());
+		}
+		holder.text1.setText(str);
 		holder.text2.setText(item.translation);
 
 		return convertView;
+	}
+
+	protected void spanMatchRegion(SpannableStringBuilder str, int start, int end) {
+		str.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		str.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
 
 	class ViewHolder {
