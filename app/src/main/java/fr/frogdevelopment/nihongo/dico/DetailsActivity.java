@@ -6,7 +6,6 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -73,10 +72,10 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
         getLoaderManager().initLoader(1, args, this);
     }
 
-    @OnClick(R.id.fab)
-    void onFavoriteFabClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-    }
+//    @OnClick(R.id.fab)
+//    void onFavoriteFabClick(View view) {
+//        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+//    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
