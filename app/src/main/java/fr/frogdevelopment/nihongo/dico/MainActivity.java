@@ -10,6 +10,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.Snackbar;
 import android.view.Menu;
@@ -69,7 +70,12 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 		// init mToolbar
 		setActionBar(ButterKnife.findById(this, R.id.toolbar));
 
-		handleIntent(getIntent());
+		boolean data_saved = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("entries_saved", false);
+		if (!data_saved) {
+			startActivity(new Intent(this, DownloadsActivity.class));
+		} else {
+			handleIntent(getIntent());
+		}
 	}
 
 	@OnItemClick(android.R.id.list)

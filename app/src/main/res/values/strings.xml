@@ -16,4 +16,9 @@
         <item quantity="other">%1$d results</item>
     </plurals>
     <string name="title_activity_details">DetailsActivity</string>
+
+
+
+    <string name="download_entries">Fetching entries</string>
+    <string name="download_examples">Fetching examples</string>
 </resources>

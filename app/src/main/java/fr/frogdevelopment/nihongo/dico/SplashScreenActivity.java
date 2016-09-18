@@ -8,36 +8,26 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
-
-import fr.frogdevelopment.nihongo.dico.downloads.DownloadsActivity;
 
 public class SplashScreenActivity extends Activity {
 
-    // Splash screen timer
-    private static final long SPLASH_TIME_OUT = 1000;
+	// Splash screen timer
+	private static final long SPLASH_TIME_OUT = 1000;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_screen);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_splash_screen);
 
-        // This method will be executed once the timer is over
-        new Handler().postDelayed(this::launchActivity, SPLASH_TIME_OUT);
-    }
+		// This method will be executed once the timer is over
+		new Handler().postDelayed(this::launchActivity, SPLASH_TIME_OUT);
+	}
 
-    private void launchActivity() {
-        Intent intent;
-        boolean data_saved = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("data_saved", false);
-        if (data_saved) {
-            intent = new Intent(this, MainActivity.class);
-        }else {
-            intent = new Intent(this, DownloadsActivity.class);
-        }
-        startActivity(intent);
+	private void launchActivity() {
+		startActivity(new Intent(this, MainActivity.class));
 
-        // close this activity
-        finish();
-    }
+		// close this activity
+		finish();
+	}
 
 }

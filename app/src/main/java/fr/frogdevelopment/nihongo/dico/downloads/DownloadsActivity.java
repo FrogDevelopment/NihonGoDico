@@ -24,12 +24,15 @@ public class DownloadsActivity extends Activity {
 
 	@OnClick(R.id.download_dico)
 	void onClickDico() {
-		new DicoDownLoadTask(this).execute();
+		// fixme select language
+		 new DicoDownLoadTask(this, "entries_fre.txt").execute();
 	}
 
 	@OnClick(R.id.download_examples)
 	void onClickExamples() {
-		new ExampleDownLoadTask(this).execute();
+		new TmpExampleDownLoadTask(this).execute();
+		// fixme select language
+//		new ExampleDownLoadTask(this,"examples_jpn_fra.csv").execute();
 	}
 
 //
