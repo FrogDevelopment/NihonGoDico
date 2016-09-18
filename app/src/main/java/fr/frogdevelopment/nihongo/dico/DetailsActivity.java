@@ -67,7 +67,7 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 		mKanji.setText(args.getString(EntryContract.KANJI));
 		String reading = args.getString(EntryContract.READING);
 		mReading.setText(reading);
-		mRomanji.setText(KanaToRomaji.convert(reading));
+		mRomanji.setText("<" + KanaToRomaji.convert(reading) + ">");
 
 		getLoaderManager().initLoader(1, args, this);
 	}

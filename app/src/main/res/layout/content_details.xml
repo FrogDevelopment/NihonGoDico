@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="Kanji"
+        android:text="ただ今"
         android:textSize="50sp"/>
 
     <TextView
@@ -27,41 +27,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/details_kanji"
-        android:text="Reading"
+        android:text="ただいま"
         android:textSize="30sp"/>
 
     <TextView
         android:id="@+id/details_romanji"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/details_reading"
         android:layout_below="@id/details_kanji"
         android:layout_marginStart="15dp"
         android:layout_toEndOf="@id/details_reading"
-        android:text="Romanji"
+        android:text="<tadaima>"
+        android:textStyle="italic"
         android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/details_lexicon"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/details_reading"
-        android:text="lexicos"
+        android:text="(adv, int, n, uk)"
         android:textStyle="italic"/>
 
     <TextView
         android:id="@+id/details_gloss"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/details_lexicon"
-        android:layout_marginStart="15dp"
-        android:layout_toEndOf="@id/details_lexicon"
-        android:text="kqhfkhuf kh"
+        android:layout_below="@id/details_lexicon"
+        android:text="Bonjour (en rentrant chez soi)"
         android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/details_info"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/details_gloss"
         android:text="infos"
