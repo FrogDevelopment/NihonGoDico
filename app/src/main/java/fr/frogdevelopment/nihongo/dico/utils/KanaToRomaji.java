@@ -139,8 +139,10 @@ public class KanaToRomaji {
 		KATAKANAS.put("ジョ", "jo");
 		// column
 		KATAKANAS.put("ティ", "ti");
+		KATAKANAS.put("", "fi");
 		KATAKANAS.put("ディ", "di");
 		// column
+		KATAKANAS.put("", "tsa");
 		KATAKANAS.put("ツィ", "tsi");
 		// column　DYA
 		KATAKANAS.put("ヂャ", "dya");
@@ -154,6 +156,21 @@ public class KanaToRomaji {
 		KATAKANAS.put("ピャ", "pya");
 		KATAKANAS.put("ピュ", "pyu");
 		KATAKANAS.put("ピョ", "pyo");
+
+		KATAKANAS.put("ファ", "fa");
+		KATAKANAS.put("ウィ", "wi");
+		KATAKANAS.put("トゥ", "tu");
+		KATAKANAS.put("ドゥ", "du");
+		KATAKANAS.put("デゥ", "dyu");
+		KATAKANAS.put("ウェ", "we");
+		KATAKANAS.put("シェ", "she");
+		KATAKANAS.put("チェ", "che");
+		KATAKANAS.put("ツェ", "tse");
+		KATAKANAS.put("フェ", "fe");
+		KATAKANAS.put("ジェ", "je");
+		KATAKANAS.put("ウォ", "wo");
+		KATAKANAS.put("ツォ", "tso");
+		KATAKANAS.put("フォ", "fo");
 		// tild
 		KATAKANAS.put("ー", "-");
 
@@ -300,30 +317,8 @@ public class KanaToRomaji {
 		} else if (InputUtils.isOnlyKatakana(value)) {
 			return doConvert(KATAKANAS, value);
 		} else {
-			return value;
 			// fixme handle both together
-//			StringBuilder t = new StringBuilder();
-//			for (int i = 0; i < value.length(); i++) {
-//				if (i <= value.length() - 2) {
-//					if (KATAKANAS.containsKey(value.substring(i, i + 2))) {
-//						t.append(KATAKANAS.get(value.substring(i, i + 2)));
-//						i++;
-//					} else if (KATAKANAS.containsKey(value.substring(i, i + 1))) {
-//						t.append(KATAKANAS.get(value.substring(i, i + 1)));
-//					} else if (value.charAt(i) == 'ッ') {
-//						t.append(KATAKANAS.get(value.substring(i + 1, i + 2)).charAt(0));
-//					} else {
-//						t.append(value.charAt(i));
-//					}
-//				} else {
-//					if (KATAKANAS.containsKey(value.substring(i, i + 1))) {
-//						t.append(KATAKANAS.get(value.substring(i, i + 1)));
-//					} else {
-//						t.append(value.charAt(i));
-//					}
-//				}
-//			}
-//			return t.toString();
+			return value;
 		}
 	}
 
