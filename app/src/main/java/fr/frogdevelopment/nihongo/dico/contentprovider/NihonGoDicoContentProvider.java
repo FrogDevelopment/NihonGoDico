@@ -126,8 +126,6 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
                 break;
 
             case EXAMPLE:
-//                queryBuilder.setTables(ExampleContract.FTS_TABLE_NAME);
-//                selection = ExampleContract.SQL_SELECTION;
 
                 String sql = "SELECT japanese_sentence, translation_sentence FROM example WHERE _ID IN " +
                         " (SELECT docid FROM fts_example WHERE fts_example MATCH ?)";

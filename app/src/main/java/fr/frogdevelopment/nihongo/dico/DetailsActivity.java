@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,14 +21,13 @@ import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.dico.adapters.ExampleAdapter;
 import fr.frogdevelopment.nihongo.dico.contentprovider.EntryContract;
-import fr.frogdevelopment.nihongo.dico.contentprovider.ExampleContract;
 import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
 import fr.frogdevelopment.nihongo.dico.contentprovider.SenseContract;
 import fr.frogdevelopment.nihongo.dico.entities.Details;
 import fr.frogdevelopment.nihongo.dico.entities.Example;
+import fr.frogdevelopment.nihongo.dico.utils.KanaToRomaji;
 
 public class DetailsActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -39,6 +37,9 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 	@BindView(R.id.details_reading)
 	TextView mReading;
 
+	@BindView(R.id.details_romanji)
+	TextView mRomanji;
+
 	@BindView(R.id.details_lexicon)
 	TextView mLexicon;
 
@@ -47,9 +48,6 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 
 	@BindView(R.id.details_info)
 	TextView mInfo;
-
-	@BindView(R.id.details_show_examples)
-	Button mButtonExamples;
 
 	@BindView(R.id.details_examples)
 	ListView mExamples;
@@ -67,7 +65,9 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 		Bundle args = getIntent().getExtras();
 
 		mKanji.setText(args.getString(EntryContract.KANJI));
-		mReading.setText(args.getString(EntryContract.READING));
+		String reading = args.getString(EntryContract.READING);
+		mReading.setText(reading);
+		mRomanji.setText(KanaToRomaji.convert(reading));
 
 		getLoaderManager().initLoader(1, args, this);
 	}
@@ -85,7 +85,6 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 
 			return new CursorLoader(this, NihonGoDicoContentProvider.URI_WORD, columns, selection, null, null);
 		} else if (id == 2) {
-			String[] columns = {ExampleContract.JAPANESE_SENTENCE, ExampleContract.TRANSLATION_SENTENCE};
 			String[] selectionArgs;
 			String kanji = mKanji.getText().toString();
 			if (StringUtils.isNotBlank(kanji)) {
@@ -94,7 +93,7 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 				selectionArgs = new String[]{mReading.getText().toString()};
 			}
 
-			return new CursorLoader(this, NihonGoDicoContentProvider.URI_EXAMPLE, columns, null, selectionArgs, null);
+			return new CursorLoader(this, NihonGoDicoContentProvider.URI_EXAMPLE, null, null, selectionArgs, null);
 		}
 
 		return null;
@@ -131,7 +130,7 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 				mLexicon.setText("");
 				mLexicon.setVisibility(View.GONE);
 			} else {
-				mLexicon.setText(TextUtils.join(" / ", lexicon)); // fixme rendre clickable => afficher liste lexique
+				mLexicon.setText("(" + TextUtils.join(" / ", lexicon) + ")"); // fixme rendre clickable => afficher liste lexique
 				mLexicon.setVisibility(View.VISIBLE);
 			}
 
@@ -143,6 +142,8 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 			}
 
 			mGloss.setText(item.gloss);
+
+			getLoaderManager().initLoader(2, null, this);
 		} else if (loader.getId() == 2) {
 			List<Example> examples = new ArrayList<>();
 
@@ -163,8 +164,6 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 				examples.add(example);
 			}
 
-			mButtonExamples.setVisibility(View.INVISIBLE);
-			mExamples.setVisibility(View.VISIBLE);
 			mExamples.setAdapter(new ExampleAdapter(this, examples));
 		}
 
@@ -175,11 +174,5 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 
-	}
-
-	@OnClick(R.id.details_show_examples)
-	void onShowExamples() {
-
-		getLoaderManager().initLoader(2, null, this);
 	}
 }

@@ -14,9 +14,6 @@ public class ExampleContract implements BaseColumns {
     // indices : cf http://www.edrdg.org/wiki/index.php/Sentence-Dictionary_Linking
     // order : JMDict_word(reading)[sense_number]{form_in_sentence}~
 
-    public static final String TABLE_NAME = "example";
-    public static final String FTS_TABLE_NAME = "fts_example";
-
     public static final String JAPANESE_REF = "japanese_ref";
     public static final String TRANSLATION_REF = "translation_ref";
     public static final String JAPANESE_SENTENCE = "japanese_sentence";
@@ -39,7 +36,6 @@ public class ExampleContract implements BaseColumns {
 
     static final String SQL_INSERT = "INSERT INTO example (japanese_ref,translation_ref,japanese_sentence,translation_sentence,indices) VALUES (?,?,?,?,?)";
     static final String SQL_REBUILD = "INSERT INTO fts_example(fts_example) VALUES('rebuild')";
-    static final String SQL_SELECTION = "fts_example MATCH ?";
 
     static void create(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE);

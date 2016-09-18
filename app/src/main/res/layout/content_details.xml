@@ -24,11 +24,22 @@
 
     <TextView
         android:id="@+id/details_reading"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/details_kanji"
         android:text="Reading"
         android:textSize="30sp"/>
+
+    <TextView
+        android:id="@+id/details_romanji"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/details_reading"
+        android:layout_below="@id/details_kanji"
+        android:layout_marginStart="15dp"
+        android:layout_toEndOf="@id/details_reading"
+        android:text="Romanji"
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/details_lexicon"
@@ -42,7 +53,9 @@
         android:id="@+id/details_gloss"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/details_lexicon"
+        android:layout_alignBaseline="@id/details_lexicon"
+        android:layout_marginStart="15dp"
+        android:layout_toEndOf="@id/details_lexicon"
         android:text="kqhfkhuf kh"
         android:textSize="20sp"/>
 
@@ -54,19 +67,11 @@
         android:text="infos"
         android:textStyle="italic"/>
 
-    <Button
-        android:id="@+id/details_show_examples"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/details_info"
-        android:text="show examples"/>
-
     <ListView
         android:id="@+id/details_examples"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/details_info"
-        android:listSelector="@android:color/transparent"
-        android:visibility="gone"/>
+        android:listSelector="@android:color/transparent"/>
 
 </RelativeLayout>
