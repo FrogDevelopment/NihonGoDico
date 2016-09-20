@@ -128,6 +128,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
             case EXAMPLE:
 
                 String sql = "SELECT japanese_sentence, translation_sentence FROM example WHERE _ID IN " +
+//                String sql = "SELECT japanese_sentence, indices FROM example WHERE _ID IN " +
                         " (SELECT docid FROM fts_example WHERE fts_example MATCH ?)";
                 Cursor cursor = db.rawQuery(sql, selectionArgs);
                 cursor.setNotificationUri(getContext().getContentResolver(), uri);
