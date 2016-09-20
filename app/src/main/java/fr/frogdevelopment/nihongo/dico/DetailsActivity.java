@@ -157,7 +157,7 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 			case 2:
 				List<Example> examples = new ArrayList<>();
 				Pattern pattern;
-				if (StringUtils.isBlank(kanji)) {
+				if (StringUtils.isNotBlank(kanji)) {
 					pattern = Pattern.compile(kanji);
 				} else {
 					pattern = Pattern.compile(reading);
