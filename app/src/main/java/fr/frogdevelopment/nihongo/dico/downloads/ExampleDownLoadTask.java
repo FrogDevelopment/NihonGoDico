@@ -14,8 +14,12 @@ import static fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContent
 
 class ExampleDownLoadTask extends AbstractDownLoadTask {
 
-	public ExampleDownLoadTask(Context context, String fileName) {
-		super(context, R.string.download_examples, fileName, URI_EXAMPLE, "examples_saved");
+	static final String PREFERENCES_NAME = "examples_saved";
+
+	private static final String fileName = "examples_jpn_%s.csv";
+
+	public ExampleDownLoadTask(Context context, String language) {
+		super(context, R.string.download_examples, String.format(fileName, language), URI_EXAMPLE, PREFERENCES_NAME);
 	}
 
 	@Override
