@@ -263,35 +263,35 @@ public class KanaToRomaji {
 		HIRAGANAS.put("ぷ", "pu");
 		HIRAGANAS.put("ぺ", "pe");
 		HIRAGANAS.put("ぽ", "po");
-		// column KYA fixme à vérifier
+		// column KYA
 		HIRAGANAS.put("きゃ", "kya");
 		HIRAGANAS.put("きゅ", "kyu");
 		HIRAGANAS.put("きょ", "kyo");
-		// column SHA　fixme à vérifier
-		HIRAGANAS.put("きゃ", "sha");
+		// column SHA
+		HIRAGANAS.put("しゃ", "sha");
 		HIRAGANAS.put("しゅ", "shu");
 		HIRAGANAS.put("しょ", "sho");
-		// column CHA　fixme à vérifier
+		// column CHA
 		HIRAGANAS.put("ちゃ", "cha");
 		HIRAGANAS.put("ちゅ", "chu");
 		HIRAGANAS.put("ちょ", "cho");
-		// column NYA　fixme à vérifier
+		// column NYA
 		HIRAGANAS.put("にゃ", "nya");
 		HIRAGANAS.put("にゅ", "nyu");
 		HIRAGANAS.put("にょ", "nyo");
-		// column NYA　fixme à vérifier
+		// column NYA
 		HIRAGANAS.put("みゃ", "nya");
 		HIRAGANAS.put("みゅ", "nyu");
 		HIRAGANAS.put("みょ", "nyo");
-		// column HYA　fixme à vérifier
+		// column HYA
 		HIRAGANAS.put("ひゃ", "hya");
 		HIRAGANAS.put("ひゅ", "hyu");
 		HIRAGANAS.put("ひょ", "hyo");
-		// column RYA　fixme à vérifier
+		// column RYA
 		HIRAGANAS.put("りゃ", "rya");
 		HIRAGANAS.put("りゅ", "ryu");
 		HIRAGANAS.put("りょ", "ryo");
-		// column GYA　fixme à vérifier
+		// column GYA
 		HIRAGANAS.put("ぎゃ", "gya");
 		HIRAGANAS.put("ぎゅ", "gyu");
 		HIRAGANAS.put("ぎょ", "gyo");
