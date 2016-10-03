@@ -60,6 +60,18 @@ public class DownloadsActivity extends Activity {
 
 			mLanguages.setSelection(language_saved);
 			mLanguages.setEnabled(!entries_saved && !examples_saved);
+
+			switch (language_saved) {
+				case 1:
+					dicoTag = "eng";
+					exampleTag = "eng";
+					break;
+
+				case 2:
+					dicoTag = "fre";
+					exampleTag = "fra";
+					break;
+			}
 		} else {
 			mLanguages.setEnabled(true);
 		}
@@ -75,12 +87,20 @@ public class DownloadsActivity extends Activity {
 				.show();
 	}
 
+	// FIXME
+	private boolean init = false;
+
 	// fixme better way
 	private String dicoTag;
 	private String exampleTag;
 
 	@OnItemSelected(R.id.download_language)
 	void onLanguageSelected(int pos) {
+		if (!init) {
+			init = true;
+			return;
+		}
+
 		switch (pos) {
 			case 1:
 				dicoTag = "eng";
