@@ -84,11 +84,11 @@ public class DownloadsActivity extends Activity {
 		switch (pos) {
 			case 1:
 				dicoTag = "eng";
-				exampleTag = "fre";
+				exampleTag = "eng";
 				break;
 
 			case 2:
-				dicoTag = "eng";
+				dicoTag = "fre";
 				exampleTag = "fra";
 				break;
 

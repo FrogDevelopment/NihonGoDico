@@ -19,7 +19,9 @@
     </plurals>
 
     <string name="download_entries">Download dictionary</string>
+    <string name="downloading_entries">Downloading dictionary</string>
     <string name="download_examples">Download examples</string>
+    <string name="downloading_examples">Downloading examples</string>
 
     <string name="download_big_file_warning">Beware, the file is big, please use WiFi. Continue ?</string>
 
