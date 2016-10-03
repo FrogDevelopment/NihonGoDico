@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">NihonGoDico</string>
+    <string name="app_name" translatable="false">NihonGoDico</string>
 
     <string name="frog_development" translatable="false">FROG DEVELOPMENT</string>
 
-    <string name="title_activity_details">DetailsActivity</string>
+    <string name="title_activity_details" translatable="false">DetailsActivity</string>
 
     <!-- ****** -->
     <!-- SEARCH -->
