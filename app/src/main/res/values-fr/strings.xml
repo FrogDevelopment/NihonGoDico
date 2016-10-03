@@ -1,0 +1,27 @@
+<resources>
+    <!-- ****** -->
+    <!-- SEARCH -->
+    <!-- ****** -->
+    <string name="menu_search">chercher</string>
+    <string name="search_label">chercher</string>
+    <string name="search_hint">Search a word</string>
+    <string name="no_results">No results</string>
+
+    <plurals name="search_results">
+        <item quantity="one">%1$d résultat</item>
+        <item quantity="other">%1$d résultats</item>
+    </plurals>
+
+
+    <string name="download_entries">Télécharger dictionnaire</string>
+    <string name="download_examples">Télécharger exemples</string>
+
+    <string name="download_big_file_warning">Attention, le fichier étant volumineux, veuillez télécharger via WiFi. Continuer ?</string>
+
+    <string-array name="languages_array">
+        <item>Choisissez un langue</item>
+        <item>Anglais</item>
+        <item>Français</item>
+    </string-array>
+
+</resources>

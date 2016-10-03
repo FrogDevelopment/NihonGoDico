@@ -15,17 +15,24 @@
     tools:mContext="fr.frogdevelopment.nihongo.dico.downloads.DownloadsActivity"
     tools:showIn="@layout/activity_downloads">
 
+    <Spinner
+        android:id="@+id/download_language"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <Button
         android:id="@+id/download_dico"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DICO"/>
+        android:enabled="false"
+        android:text="@string/download_entries"/>
 
     <Button
         android:id="@+id/download_examples"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="EXAMPLES"/>
+        android:enabled="false"
+        android:text="@string/download_examples"/>
 
 
 </LinearLayout>

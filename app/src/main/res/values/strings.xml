@@ -3,6 +3,8 @@
 
     <string name="frog_development" translatable="false">FROG DEVELOPMENT</string>
 
+    <string name="title_activity_details">DetailsActivity</string>
+
     <!-- ****** -->
     <!-- SEARCH -->
     <!-- ****** -->
@@ -15,10 +17,16 @@
         <item quantity="one">%1$d result</item>
         <item quantity="other">%1$d results</item>
     </plurals>
-    <string name="title_activity_details">DetailsActivity</string>
 
+    <string name="download_entries">Download dictionary</string>
+    <string name="download_examples">Download examples</string>
 
+    <string name="download_big_file_warning">Beware, the file is big, please use WiFi. Continue ?</string>
 
-    <string name="download_entries">Fetching entries</string>
-    <string name="download_examples">Fetching examples</string>
+    <string-array name="languages_array">
+        <item>Select a language</item>
+        <item>English</item>
+        <item>French</item>
+    </string-array>
+
 </resources>
