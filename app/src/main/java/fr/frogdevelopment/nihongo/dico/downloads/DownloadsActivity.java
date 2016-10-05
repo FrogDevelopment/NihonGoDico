@@ -63,13 +63,11 @@ public class DownloadsActivity extends Activity {
 
 			switch (language_saved) {
 				case 1:
-					dicoTag = "eng";
-					exampleTag = "eng";
+					languageTag = "eng";
 					break;
 
 				case 2:
-					dicoTag = "fre";
-					exampleTag = "fra";
+					languageTag = "fra";
 					break;
 			}
 		} else {
@@ -91,8 +89,7 @@ public class DownloadsActivity extends Activity {
 	private boolean init = false;
 
 	// fixme better way
-	private String dicoTag;
-	private String exampleTag;
+	private String languageTag;
 
 	@OnItemSelected(R.id.download_language)
 	void onLanguageSelected(int pos) {
@@ -103,13 +100,11 @@ public class DownloadsActivity extends Activity {
 
 		switch (pos) {
 			case 1:
-				dicoTag = "eng";
-				exampleTag = "eng";
+				languageTag = "eng";
 				break;
 
 			case 2:
-				dicoTag = "fre";
-				exampleTag = "fra";
+				languageTag = "fra";
 				break;
 
 			default:
@@ -129,7 +124,7 @@ public class DownloadsActivity extends Activity {
 	@OnClick(R.id.download_dico)
 	void onClickDico() {
 		warningBigFile((dialog, id) -> {
-			new DicoDownLoadTask(this, dicoTag).execute();
+			new DicoDownLoadTask(this, languageTag).execute();
 			mLanguages.setEnabled(false); // todo on finish download
 		});
 	}
@@ -137,7 +132,7 @@ public class DownloadsActivity extends Activity {
 	@OnClick(R.id.download_examples)
 	void onClickExamples() {
 		warningBigFile((dialog, id) -> {
-			new ExampleDownLoadTask(this, exampleTag).execute();
+			new ExampleDownLoadTask(this, languageTag).execute();
 			mLanguages.setEnabled(false); // todo on finish download
 		});
 	}
