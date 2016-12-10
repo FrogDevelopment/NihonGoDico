@@ -1,8 +1,8 @@
 <resources>
+
     <!-- ****** -->
     <!-- SEARCH -->
     <!-- ****** -->
-    <string name="menu_search">chercher</string>
     <string name="search_label">chercher</string>
     <string name="search_hint">Chercher un mot</string>
     <string name="no_results">No results</string>
@@ -13,6 +13,7 @@
     </plurals>
 
 
+    <string name="download_menu">Téléchargements</string>
     <string name="download_entries">Télécharger dictionnaire</string>
     <string name="downloading_entries">Téléchargement dictionnaire</string>
     <string name="download_examples">Télécharger exemples</string>
