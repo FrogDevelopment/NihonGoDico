@@ -1,21 +1,20 @@
 package fr.frogdevelopment.nihongo.dico.downloads;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
 import fr.frogdevelopment.nihongo.dico.R;
 
 // fixme test connection available
-public class DownloadsActivity extends Activity {
+public class DownloadsActivity extends AppCompatActivity {
 
 	private SharedPreferences defaultSharedPreferences;
 
@@ -49,13 +48,6 @@ public class DownloadsActivity extends Activity {
 			new ExampleDownLoadTask(this, languageTag).execute();
 			mLanguages.setEnabled(false); // todo on finish download
 		}));
-
-		// Create an ArrayAdapter using the string array and a default spinner layout
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.languages_array, android.R.layout.simple_spinner_item);
-		// Specify the layout to use when the list of choices appears
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// Apply the adapter to the spinner
-		mLanguages.setAdapter(adapter);
 
 		defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 

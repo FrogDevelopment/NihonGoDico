@@ -21,6 +21,7 @@
         <Spinner
             android:id="@+id/download_language"
             android:layout_width="match_parent"
+            android:entries="@array/languages_array"
             android:layout_height="wrap_content"/>
 
         <Button
