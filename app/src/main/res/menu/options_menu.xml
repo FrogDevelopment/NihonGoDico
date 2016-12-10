@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/dico_menu_search"
-        android:actionViewClass="android.widget.SearchView"
-        android:icon="@drawable/ic_search_white"
-        android:showAsAction="always"
-        android:title="@string/menu_search"/>
-
     <item android:id="@+id/dico_menu_download"
           android:icon="@android:drawable/stat_sys_download"
           android:title="Download"

@@ -19,75 +19,72 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.dico.entities.Preview;
 
-abstract class DicoAdapter extends ArrayAdapter<Preview> {
+public abstract class DicoAdapter extends ArrayAdapter<Preview> {
 
-    private final LayoutInflater mInflater;
+	private final LayoutInflater mInflater;
 
-    protected DicoAdapter(Activity context, List<Preview> items) {
-        super(context, 0, items);
+	DicoAdapter(Activity context, List<Preview> items) {
+		super(context, 0, items);
 
-        mInflater = context.getLayoutInflater();
-    }
+		mInflater = context.getLayoutInflater();
+	}
 
-    @NonNull
-    @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        ViewHolder holder;
+	@NonNull
+	@Override
+	public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+		ViewHolder holder;
 
-        if (convertView == null) {
-            convertView = mInflater.inflate(android.R.layout.simple_list_item_2, parent, false);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+		if (convertView == null) {
+			convertView = mInflater.inflate(android.R.layout.simple_list_item_2, parent, false);
+			holder = new ViewHolder(convertView);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
 
-        Preview item = getItem(position);
+		Preview item = getItem(position);
 
-        handleFirstLine(holder.text1, item);
-        handleSecondLine(holder.text2, item);
+		handleFirstLine(holder.text1, item);
+		handleSecondLine(holder.text2, item);
 
-        return convertView;
-    }
+		return convertView;
+	}
 
-    protected void handleFirstLine(TextView textview, Preview item) {
-        String pre = StringUtils.isBlank(item.kanji) ? " " : item.kanji + " - ";
-        int start = pre.length();
+	protected void handleFirstLine(TextView textview, Preview item) {
+		String pre = StringUtils.isBlank(item.kanji) ? " " : item.kanji + " - ";
+		int start = pre.length();
 
-        String text = pre + item.reading;
-        int end = text.length();
+		String text = pre + item.reading;
+		int end = text.length();
 
-        SpannableStringBuilder str = new SpannableStringBuilder(text);
-        spanKanjiKana(str, start, end);
-        textview.setText(str);
-    }
+		SpannableStringBuilder str = new SpannableStringBuilder(text);
+		spanKanjiKana(str, start, end);
+		textview.setText(str);
+	}
 
-    protected void handleSecondLine(TextView textview, Preview item) {
-        textview.setText(item.gloss);
-    }
+	protected void handleSecondLine(TextView textview, Preview item) {
+		textview.setText(item.gloss);
+	}
 
-    protected void spanKanjiKana(SpannableStringBuilder str, int start, int end) {
-        str.setSpan(new RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-    }
+	void spanKanjiKana(SpannableStringBuilder str, int start, int end) {
+		str.setSpan(new RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+	}
 
-    protected void spanMatchRegion(SpannableStringBuilder str, int start, int end) {
-        str.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        str.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-    }
+	void spanMatchRegion(SpannableStringBuilder str, int start, int end) {
+		str.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		str.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+	}
 
-    class ViewHolder {
+	private class ViewHolder {
 
-        @BindView(android.R.id.text1)
-        TextView text1;
-        @BindView(android.R.id.text2)
-        TextView text2;
+		private final TextView text1;
+		private final TextView text2;
 
-        private ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-    }
+		private ViewHolder(View view) {
+			text1 = (TextView) view.findViewById(android.R.id.text1);
+			text2 = (TextView) view.findViewById(android.R.id.text2);
+		}
+	}
 }

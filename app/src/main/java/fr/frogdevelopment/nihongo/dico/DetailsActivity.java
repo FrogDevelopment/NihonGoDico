@@ -1,11 +1,12 @@
 package fr.frogdevelopment.nihongo.dico;
 
-import android.app.Activity;
+import android.app.ActionBar;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ListView;
@@ -19,8 +20,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.dico.adapters.ExampleAdapter;
 import fr.frogdevelopment.nihongo.dico.contentprovider.EntryContract;
 import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
@@ -29,28 +28,12 @@ import fr.frogdevelopment.nihongo.dico.entities.Details;
 import fr.frogdevelopment.nihongo.dico.entities.Example;
 import fr.frogdevelopment.nihongo.dico.utils.KanaToRomaji;
 
-public class DetailsActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-	@BindView(R.id.details_kanji)
-	TextView mKanji;
-
-	@BindView(R.id.details_reading)
-	TextView mReading;
-
-	@BindView(R.id.details_romanji)
-	TextView mRomanji;
-
-	@BindView(R.id.details_lexicon)
-	TextView mLexicon;
-
-	@BindView(R.id.details_gloss)
-	TextView mGloss;
-
-	@BindView(R.id.details_info)
-	TextView mInfo;
-
-	@BindView(R.id.details_examples)
-	ListView mExamples;
+	private TextView mLexicon;
+	private TextView mGloss;
+	private TextView mInfo;
+	private ListView mExamples;
 
 	private String kanji;
 	private String reading;
@@ -60,10 +43,18 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_details);
 
-		ButterKnife.bind(this);
+		TextView mKanji = (TextView) findViewById(R.id.details_kanji);
+		TextView mReading = (TextView) findViewById(R.id.details_reading);
+		TextView mRomaji = (TextView) findViewById(R.id.details_romaji);
+		mLexicon = (TextView) findViewById(R.id.details_lexicon);
+		mGloss = (TextView) findViewById(R.id.details_gloss);
+		mInfo = (TextView) findViewById(R.id.details_info);
+		mExamples = (ListView) findViewById(R.id.details_examples);
 
-		setActionBar(ButterKnife.findById(this, R.id.toolbar));
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		ActionBar actionBar = getActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
 
 		Bundle args = getIntent().getExtras();
 
@@ -71,15 +62,10 @@ public class DetailsActivity extends Activity implements LoaderManager.LoaderCal
 		mKanji.setText(kanji);
 		reading = args.getString(EntryContract.READING);
 		mReading.setText(reading);
-		mRomanji.setText("<" + KanaToRomaji.convert(reading) + ">");
+		mRomaji.setText("<" + KanaToRomaji.convert(reading) + ">");
 
 		getLoaderManager().initLoader(1, args, this);
 	}
-
-//    @OnClick(R.id.fab)
-//    void onFavoriteFabClick(View view) {
-//        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-//    }
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {

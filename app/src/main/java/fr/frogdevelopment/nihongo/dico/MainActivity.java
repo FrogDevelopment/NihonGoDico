@@ -1,6 +1,5 @@
 package fr.frogdevelopment.nihongo.dico;
 
-import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.Context;
@@ -13,10 +12,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.google.android.gms.appindexing.Action;
@@ -32,8 +32,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import butterknife.ButterKnife;
-import butterknife.OnItemClick;
+import fr.frogdevelopment.nihongo.dico.adapters.DicoAdapter;
 import fr.frogdevelopment.nihongo.dico.adapters.ResearchByGlossAdapter;
 import fr.frogdevelopment.nihongo.dico.adapters.ResearchByKanaAdapter;
 import fr.frogdevelopment.nihongo.dico.adapters.ResearchByKanjiAdapter;
@@ -44,7 +43,7 @@ import fr.frogdevelopment.nihongo.dico.downloads.DownloadsActivity;
 import fr.frogdevelopment.nihongo.dico.entities.Preview;
 import fr.frogdevelopment.nihongo.dico.utils.InputUtils;
 
-public class MainActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
 	private static final int LOADER_DICO_ID_KANJI = 100;
 	private static final int LOADER_DICO_ID_KANA  = 200;
@@ -55,6 +54,8 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 	 * See https://g.co/AppIndexing/AndroidStudio for more information.
 	 */
 	private GoogleApiClient client;
+	private ListView        mListView;
+	private DicoAdapter     mAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,22 +66,27 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 		// See https://g.co/AppIndexing/AndroidStudio for more information.
 		client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-		ButterKnife.bind(this);
-
-		// init mToolbar
-		setActionBar(ButterKnife.findById(this, R.id.toolbar));
-
 		boolean data_saved = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("entries_saved", false);
 		if (!data_saved) {
 			startActivity(new Intent(this, DownloadsActivity.class));
 		} else {
 			handleIntent(getIntent());
 		}
+
+		SearchView searchView = (SearchView) findViewById(R.id.search_field);
+		// Get the SearchView and set the searchable configuration
+		SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
+		// Assumes current activity is the searchable activity
+		searchView.setSearchableInfo(searchManager.getSearchableInfo(this.getComponentName()));
+		searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+		searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+
+		mListView = (ListView) findViewById(R.id.entries_list);
+		mListView.setOnItemClickListener((adapterView, view, i, l) -> onItemClick(i));
 	}
 
-	@OnItemClick(android.R.id.list)
-	void onItemClick(int position) {
-		Preview item = (Preview) getListAdapter().getItem(position);
+	private void onItemClick(int position) {
+		Preview item = mAdapter.getItem(position);
 		Intent intent = new Intent(this, DetailsActivity.class);
 		intent.putExtra(EntryContract.KANJI, item.kanji);
 		intent.putExtra(EntryContract.READING, item.reading);
@@ -93,16 +99,6 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the options menu from XML
 		getMenuInflater().inflate(R.menu.options_menu, menu);
-
-		MenuItem searchMenuItem = menu.findItem(R.id.dico_menu_search);
-
-		SearchView searchView = (SearchView) searchMenuItem.getActionView();
-		// Get the SearchView and set the searchable configuration
-		SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
-		// Assumes current activity is the searchable activity
-		searchView.setSearchableInfo(searchManager.getSearchableInfo(this.getComponentName()));
-		searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-		searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
 
 		return true;
 	}
@@ -213,23 +209,20 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 		data.close();
 		getLoaderManager().destroyLoader(loaderId);
 
-		// set the list adapter
-		ListAdapter adapter;
-
 		// adapter by research type
 		switch (loaderId) {
 			case LOADER_DICO_ID_KANJI:
-				adapter = new ResearchByKanjiAdapter(this, previews);
+				mAdapter = new ResearchByKanjiAdapter(this, previews);
 				break;
 			case LOADER_DICO_ID_KANA:
-				adapter = new ResearchByKanaAdapter(this, previews);
+				mAdapter = new ResearchByKanaAdapter(this, previews);
 				break;
 			case LOADER_DICO_ID_GLOSS:
 			default:
-				adapter = new ResearchByGlossAdapter(this, previews);
+				mAdapter = new ResearchByGlossAdapter(this, previews);
 		}
 
-		setListAdapter(adapter);
+		mListView.setAdapter(mAdapter);
 
 		SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
 		suggestions.saveRecentQuery(query, String.valueOf(previews.size() + " results"));

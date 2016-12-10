@@ -313,9 +313,9 @@ public class KanaToRomaji {
 
     public static String convert(String value) {
         if (InputUtils.isOnlyHiragana(value)) {
-            return doConvert(value, HIRAGANAS, 'っ');
+            return doConvert(value, HIRAGANAS, '\u3063');
         } else if (InputUtils.isOnlyKatakana(value)) {
-            return doConvert(value, KATAKANAS, 'ッ');
+            return doConvert(value, KATAKANAS, '\u30c3');
         } else {
             // fixme handle both together
             return value;

@@ -6,14 +6,12 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnItemSelected;
 import fr.frogdevelopment.nihongo.dico.R;
 
 // fixme test connection available
@@ -21,24 +19,36 @@ public class DownloadsActivity extends Activity {
 
 	private SharedPreferences defaultSharedPreferences;
 
-	@BindView(R.id.download_language)
-	Spinner mLanguages;
-
-	@BindView(R.id.download_dico)
-	Button mDico;
-
-	@BindView(R.id.download_examples)
-	Button mExample;
+	private Button  mDico;
+	private Button  mExample;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_downloads);
 
-		ButterKnife.bind(this);
+		Spinner mLanguages = (Spinner) findViewById(R.id.download_language);
+		mLanguages.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+				onLanguageSelected(i);
+			}
 
-		setActionBar(ButterKnife.findById(this, R.id.toolbar));
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+			@Override
+			public void onNothingSelected(AdapterView<?> adapterView) {
+
+			}
+		});
+		mDico = (Button) findViewById(R.id.download_dico);
+		mDico.setOnClickListener(view -> warningBigFile((dialog, id) -> {
+			new DicoDownLoadTask(this, languageTag).execute();
+			mLanguages.setEnabled(false); // todo on finish download
+		}));
+		mExample = (Button) findViewById(R.id.download_examples);
+		mExample.setOnClickListener(view -> warningBigFile((dialog, id) -> {
+			new ExampleDownLoadTask(this, languageTag).execute();
+			mLanguages.setEnabled(false); // todo on finish download
+		}));
 
 		// Create an ArrayAdapter using the string array and a default spinner layout
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.languages_array, android.R.layout.simple_spinner_item);
@@ -91,8 +101,7 @@ public class DownloadsActivity extends Activity {
 	// fixme better way
 	private String languageTag;
 
-	@OnItemSelected(R.id.download_language)
-	void onLanguageSelected(int pos) {
+	private void onLanguageSelected(int pos) {
 		if (!init) {
 			init = true;
 			return;
@@ -120,21 +129,4 @@ public class DownloadsActivity extends Activity {
 			mExample.setEnabled(true);
 		}
 	}
-
-	@OnClick(R.id.download_dico)
-	void onClickDico() {
-		warningBigFile((dialog, id) -> {
-			new DicoDownLoadTask(this, languageTag).execute();
-			mLanguages.setEnabled(false); // todo on finish download
-		});
-	}
-
-	@OnClick(R.id.download_examples)
-	void onClickExamples() {
-		warningBigFile((dialog, id) -> {
-			new ExampleDownLoadTask(this, languageTag).execute();
-			mLanguages.setEnabled(false); // todo on finish download
-		});
-	}
-
 }

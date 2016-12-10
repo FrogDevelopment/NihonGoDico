@@ -18,8 +18,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.dico.entities.Example;
 
 public class ExampleAdapter extends ArrayAdapter<Example> {
@@ -56,20 +54,19 @@ public class ExampleAdapter extends ArrayAdapter<Example> {
 		return convertView;
 	}
 
-	protected void spanMatchRegion(SpannableStringBuilder str, int start, int end) {
+	private void spanMatchRegion(SpannableStringBuilder str, int start, int end) {
 		str.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		str.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
 
-	class ViewHolder {
+	private class ViewHolder {
 
-		@BindView(android.R.id.text1)
-		TextView text1;
-		@BindView(android.R.id.text2)
-		TextView text2;
+		private final TextView text1;
+		private final TextView text2;
 
 		private ViewHolder(View view) {
-			ButterKnife.bind(this, view);
+			text1 = (TextView) view.findViewById(android.R.id.text1);
+			text2 = (TextView) view.findViewById(android.R.id.text2);
 		}
 	}
 }

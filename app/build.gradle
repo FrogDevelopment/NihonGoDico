@@ -1,17 +1,23 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
+
     defaultConfig {
         applicationId "fr.frogdevelopment.nihongo.dico"
+
         minSdkVersion 21
         targetSdkVersion 25
+
         versionCode 3
         versionName "1.0.1"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        jackOptions {
+            enabled  true
+        }
     }
     buildTypes {
         release {
@@ -22,11 +28,13 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+
     packagingOptions {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -34,7 +42,6 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -42,17 +49,12 @@ dependencies {
 
 //    Android
     compile 'com.android.support:design:25.0.1'
-
-//    injection des views
-    compile 'com.jakewharton:butterknife:8.2.1'
+    compile 'com.android.support:recyclerview-v7:25.0.1'
 
 //    Divers
     compile 'org.apache.commons:commons-lang3:3.4'
-//    compile 'org.apache.commons:commons-collections4:4.1'
 
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.1'
-
-    apt 'com.jakewharton:butterknife-compiler:8.2.1'
 
     compile 'com.google.android.gms:play-services-appindexing:9.8.0'
 }
