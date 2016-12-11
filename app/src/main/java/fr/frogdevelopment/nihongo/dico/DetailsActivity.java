@@ -160,12 +160,13 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 				SpannableStringBuilder str = new SpannableStringBuilder(item.gloss);
 				String[] words = item.gloss.split(",");
 				for (String word : words) {
-					int start = item.gloss.indexOf(word);
-					int end = start + word.length();
+					String trim = word.trim();
+					int start = item.gloss.indexOf(trim);
+					int end = start + trim.length();
 					str.setSpan(new ClickableSpan() {
 						@Override
 						public void onClick(View view) {
-							onClickWord(word);
+							onClickWord(trim);
 						}
 					}, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 				}
