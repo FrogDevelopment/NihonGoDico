@@ -2,13 +2,21 @@ package fr.frogdevelopment.nihongo.dico;
 
 import android.app.ActionBar;
 import android.app.LoaderManager;
+import android.app.SearchManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,6 +25,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +39,10 @@ import fr.frogdevelopment.nihongo.dico.utils.KanaToRomaji;
 
 public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+	private static final int LOADER_ID_DATA = 0;
+	private static final int LOADER_ID_EXAMPLES = 1;
+	public static final String WIKI = "wiki";
+
 	private TextView mLexicon;
 	private TextView mGloss;
 	private TextView mInfo;
@@ -38,14 +51,32 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 	private String kanji;
 	private String reading;
 
+	private TextToSpeech mTextToSpeech;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_details);
 
+		Bundle args = getIntent().getExtras();
+
+		kanji = args.getString(EntryContract.KANJI);
+		reading = args.getString(EntryContract.READING);
+
+		mTextToSpeech = new TextToSpeech(this, i -> mTextToSpeech.setLanguage(Locale.JAPANESE));
+
+		ImageView speakView = (ImageView) findViewById(R.id.details_speak);
+		speakView.setOnClickListener(view -> mTextToSpeech.speak(reading, TextToSpeech.QUEUE_ADD, null, null));
+
 		TextView mKanji = (TextView) findViewById(R.id.details_kanji);
+		mKanji.setText(kanji);
+
 		TextView mReading = (TextView) findViewById(R.id.details_reading);
+		mReading.setText(reading);
+
 		TextView mRomaji = (TextView) findViewById(R.id.details_romaji);
+		mRomaji.setText(KanaToRomaji.convert(reading));
+
 		mLexicon = (TextView) findViewById(R.id.details_lexicon);
 		mGloss = (TextView) findViewById(R.id.details_gloss);
 		mInfo = (TextView) findViewById(R.id.details_info);
@@ -56,26 +87,18 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 			actionBar.setDisplayHomeAsUpEnabled(true);
 		}
 
-		Bundle args = getIntent().getExtras();
-
-		kanji = args.getString(EntryContract.KANJI);
-		mKanji.setText(kanji);
-		reading = args.getString(EntryContract.READING);
-		mReading.setText(reading);
-		mRomaji.setText("<" + KanaToRomaji.convert(reading) + ">");
-
-		getLoaderManager().initLoader(1, args, this);
+		getLoaderManager().initLoader(LOADER_ID_DATA, args, this);
 	}
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		switch (id) {
-			case 1:
+			case LOADER_ID_DATA:
 				String[] columns = {SenseContract.POS, SenseContract.FIELD, SenseContract.MISC, SenseContract.DIAL, SenseContract.GLOSS, SenseContract.INFO};
 				String selection = SenseContract._ID + "=" + args.getLong(SenseContract._ID);
 
 				return new CursorLoader(this, NihonGoDicoContentProvider.URI_WORD, columns, selection, null, null);
-			case 2:
+			case LOADER_ID_EXAMPLES:
 				String[] selectionArgs;
 				if (StringUtils.isNotBlank(kanji)) {
 					selectionArgs = new String[]{kanji};
@@ -94,7 +117,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		int id = loader.getId();
 		switch (id) {
-			case 1:
+			case LOADER_ID_DATA:
 				Details item = new Details();
 				if (data.moveToNext()) {
 					item.pos = data.getString(0);
@@ -134,13 +157,27 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 					mInfo.setVisibility(View.VISIBLE);
 				}
 
-				mGloss.setText(item.gloss);
+				SpannableStringBuilder str = new SpannableStringBuilder(item.gloss);
+				String[] words = item.gloss.split(",");
+				for (String word : words) {
+					int start = item.gloss.indexOf(word);
+					int end = start + word.length();
+					str.setSpan(new ClickableSpan() {
+						@Override
+						public void onClick(View view) {
+							onClickWord(word);
+						}
+					}, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+				}
+
+				mGloss.setText(str);
+				mGloss.setMovementMethod(LinkMovementMethod.getInstance());
 
 				// now fetching examples
-				getLoaderManager().initLoader(2, null, this);
+				getLoaderManager().initLoader(LOADER_ID_EXAMPLES, null, this);
 				break;
 
-			case 2:
+			case LOADER_ID_EXAMPLES:
 				List<Example> examples = new ArrayList<>();
 				Pattern pattern;
 				if (StringUtils.isNotBlank(kanji)) {
@@ -172,6 +209,13 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
+	}
 
+	private void onClickWord(CharSequence word) {
+		Intent intent = new Intent(this, MainActivity.class);
+		intent.setAction(WIKI);
+		intent.putExtra(SearchManager.QUERY, word);
+
+		startActivity(intent);
 	}
 }

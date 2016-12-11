@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -47,10 +48,10 @@ import fr.frogdevelopment.nihongo.dico.utils.InputUtils;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-	private static final int LOADER_DICO_ID_FAVORITE = 000;
-	private static final int LOADER_DICO_ID_KANJI    = 100;
-	private static final int LOADER_DICO_ID_KANA     = 200;
-	private static final int LOADER_DICO_ID_GLOSS    = 300;
+	private static final int RC_DATA_CHECK_CODE   = 735;
+	private static final int LOADER_DICO_ID_KANJI = 100;
+	private static final int LOADER_DICO_ID_KANA  = 200;
+	private static final int LOADER_DICO_ID_GLOSS = 300;
 
 	/**
 	 * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -64,6 +65,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		Intent checkIntent = new Intent();
+		checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+		startActivityForResult(checkIntent, RC_DATA_CHECK_CODE);
 
 		// ATTENTION: This was auto-generated to implement the App Indexing API.
 		// See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -115,6 +120,26 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	}
 
 	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == RC_DATA_CHECK_CODE) {
+			// success, create the TTS instance
+			if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+				// check japanese available
+				ArrayList<String> availableVoices = data.getStringArrayListExtra(TextToSpeech.Engine.EXTRA_AVAILABLE_VOICES);
+				String jpnTag = "jpn-jpn"; // fixme
+				if (!availableVoices.contains(jpnTag)) {
+					// fixme
+				}
+			} else {
+				// missing data, install it
+				Intent installIntent = new Intent();
+				installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+				startActivity(installIntent);
+			}
+		}
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the options menu from XML
 		getMenuInflater().inflate(R.menu.options_menu, menu);
@@ -141,31 +166,40 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	}
 
 	private void handleIntent(Intent intent) {
-		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			// Searches the dictionary and displays results for the given query.
-			String query = intent.getStringExtra(SearchManager.QUERY);
+		String action = intent.getAction();
+		if (action!=null) {
+			switch (action) {
+				case Intent.ACTION_SEARCH:
+				case DetailsActivity.WIKI:
+					// Searches the dictionary and displays results for the given query.
+					String query = intent.getStringExtra(SearchManager.QUERY);
+					launchQueryFor(query);
+					break;
+			}
+		}
+	}
 
-			// https://developer.android.com/guide/topics/search/adding-recent-query-suggestions.html
-			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
-			suggestions.saveRecentQuery(query, null);
+	private void launchQueryFor(String query) {
+		// https://developer.android.com/guide/topics/search/adding-recent-query-suggestions.html
+		SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
+		suggestions.saveRecentQuery(query, null);
 
-			// fixme proposer la possibilité d'effacer l'history
+		// fixme proposer la possibilité d'effacer l'history
 //            suggestions.clearHistory();
 
-			Bundle args = new Bundle();
-			args.putString("query", query.trim());
+		Bundle args = new Bundle();
+		args.putString("query", query.trim());
 
-			int loaderId;
-			if (InputUtils.containsKanji(query)) {
-				loaderId = LOADER_DICO_ID_KANJI;
-			} else if (InputUtils.isOnlyKana(query)) {
-				loaderId = LOADER_DICO_ID_KANA;
-			} else {
-				loaderId = LOADER_DICO_ID_GLOSS;
-			}
-
-			getLoaderManager().initLoader(loaderId, args, this);
+		int loaderId;
+		if (InputUtils.containsKanji(query)) {
+			loaderId = LOADER_DICO_ID_KANJI;
+		} else if (InputUtils.isOnlyKana(query)) {
+			loaderId = LOADER_DICO_ID_KANA;
+		} else {
+			loaderId = LOADER_DICO_ID_GLOSS;
 		}
+
+		getLoaderManager().initLoader(loaderId, args, this);
 	}
 
 	private String query;

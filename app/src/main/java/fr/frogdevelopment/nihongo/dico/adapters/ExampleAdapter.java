@@ -22,7 +22,7 @@ import fr.frogdevelopment.nihongo.dico.entities.Example;
 
 public class ExampleAdapter extends ArrayAdapter<Example> {
 
-	private final LayoutInflater mInflater;
+	private final LayoutInflater      mInflater;
 
 	public ExampleAdapter(Activity context, List<Example> items) {
 		super(context, 0, items);

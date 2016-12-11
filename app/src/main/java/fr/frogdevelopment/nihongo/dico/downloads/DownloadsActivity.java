@@ -16,6 +16,9 @@ import fr.frogdevelopment.nihongo.dico.R;
 // fixme test connection available
 public class DownloadsActivity extends AppCompatActivity {
 
+	public static final int LANGUAGE_ENG = 1;
+	public static final int LANGUAGE_FRA = 2;
+
 	private SharedPreferences defaultSharedPreferences;
 
 	private Button  mDico;
@@ -64,11 +67,11 @@ public class DownloadsActivity extends AppCompatActivity {
 			mLanguages.setEnabled(!entries_saved && !examples_saved);
 
 			switch (language_saved) {
-				case 1:
+				case LANGUAGE_ENG:
 					languageTag = "eng";
 					break;
 
-				case 2:
+				case LANGUAGE_FRA:
 					languageTag = "fra";
 					break;
 			}
@@ -100,11 +103,11 @@ public class DownloadsActivity extends AppCompatActivity {
 		}
 
 		switch (pos) {
-			case 1:
+			case LANGUAGE_ENG:
 				languageTag = "eng";
 				break;
 
-			case 2:
+			case LANGUAGE_FRA:
 				languageTag = "fra";
 				break;
 
