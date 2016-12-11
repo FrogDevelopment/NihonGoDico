@@ -9,22 +9,31 @@
     tools:mContext="fr.frogdevelopment.nihongo.dico.MainActivity">
 
     <!-- The main content view -->
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <SearchView
+        <android.support.v7.widget.SearchView
             android:id="@+id/search_field"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"/>
+
+        <View
+            android:id="@+id/search_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/search_field"
+            android:background="@android:color/darker_gray"/>
 
         <ListView
             android:id="@+id/entries_list"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/search_divider"/>
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
 

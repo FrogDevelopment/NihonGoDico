@@ -13,11 +13,13 @@ import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SearchView;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -45,9 +47,10 @@ import fr.frogdevelopment.nihongo.dico.utils.InputUtils;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-	private static final int LOADER_DICO_ID_KANJI = 100;
-	private static final int LOADER_DICO_ID_KANA  = 200;
-	private static final int LOADER_DICO_ID_GLOSS = 300;
+	private static final int LOADER_DICO_ID_FAVORITE = 000;
+	private static final int LOADER_DICO_ID_KANJI    = 100;
+	private static final int LOADER_DICO_ID_KANA     = 200;
+	private static final int LOADER_DICO_ID_GLOSS    = 300;
 
 	/**
 	 * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -80,6 +83,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(this.getComponentName()));
 		searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
 		searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+		// Find EditText view
+		EditText searchText = (EditText) findViewById(R.id.search_src_text);
+		// Get the search close button image view
+		ImageView closeButton = (ImageView) searchView.findViewById(R.id.search_close_btn);
+		// Set on click listener
+		closeButton.setOnClickListener(view -> {
+			// Clear the text from EditText view
+			searchText.setText(null);
+			// Clear query
+			searchView.setQuery("", false);
+			// Clear the results
+			if (mAdapter != null) {
+				mAdapter.clear();
+				mAdapter.notifyDataSetChanged();
+			}
+		});
 
 		mListView = (ListView) findViewById(R.id.entries_list);
 		mListView.setOnItemClickListener((adapterView, view, i, l) -> onItemClick(i));
@@ -168,9 +187,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				selection = EntryContract.TABLE_NAME + "." + EntryContract.READING + " LIKE '%" + query + "%'";
 				break;
 			case LOADER_DICO_ID_GLOSS:
-			default:
 				uri = NihonGoDicoContentProvider.URI_SEARCH_GLOSS;
 				selection = SenseContract.TABLE_NAME + "." + SenseContract.GLOSS + " LIKE '%" + query + "%'";
+				break;
+			default:
+				return null;
 		}
 
 		return new CursorLoader(this, uri, columns, selection, null, null);
