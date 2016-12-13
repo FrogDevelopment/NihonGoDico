@@ -219,4 +219,13 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
 		startActivity(intent);
 	}
+
+	@Override
+	protected void onDestroy() {
+		if (mTextToSpeech!=null) {
+			mTextToSpeech.shutdown();
+			mTextToSpeech = null;
+		}
+		super.onDestroy();
+	}
 }
