@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 	private void handleIntent(Intent intent) {
 		String action = intent.getAction();
-		if (action!=null) {
+		if (action != null) {
 			switch (action) {
 				case Intent.ACTION_SEARCH:
 				case DetailsActivity.WIKI:
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		String[] columns = {EntryContract.KANJI, EntryContract.READING, SenseContract.GLOSS, "sense._id"};
-		query = args.getString("query");
+		query = args.getString("query", "");
 
 		Uri uri;
 		String selection;
@@ -222,7 +222,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				break;
 			case LOADER_DICO_ID_GLOSS:
 				uri = NihonGoDicoContentProvider.URI_SEARCH_GLOSS;
-				selection = SenseContract.TABLE_NAME + "." + SenseContract.GLOSS + " LIKE '%" + query + "%'";
+				String escapeString = query.replace("'", "''");
+				selection = SenseContract.TABLE_NAME + "." + SenseContract.GLOSS + " LIKE '%" + escapeString + "%'";
 				break;
 			default:
 				return null;
