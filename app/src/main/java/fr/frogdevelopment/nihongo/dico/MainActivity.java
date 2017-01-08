@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		List<Preview> previews = new ArrayList<>();
-		Pattern pattern = Pattern.compile(query.toLowerCase());
+		Pattern pattern = Pattern.compile(Pattern.quote(query.toLowerCase()));
 		int loaderId = loader.getId();
 		while (data.moveToNext()) {
 			Preview preview = new Preview();
