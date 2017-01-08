@@ -39,9 +39,9 @@ import fr.frogdevelopment.nihongo.dico.utils.KanaToRomaji;
 
 public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-	private static final int LOADER_ID_DATA = 0;
-	private static final int LOADER_ID_EXAMPLES = 1;
-	public static final String WIKI = "wiki";
+	private static final int    LOADER_ID_DATA     = 0;
+	private static final int    LOADER_ID_EXAMPLES = 1;
+	public static final  String WIKI               = "wiki";
 
 	private TextView mLexicon;
 	private TextView mGloss;
@@ -159,16 +159,20 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
 				SpannableStringBuilder str = new SpannableStringBuilder(item.gloss);
 				String[] words = item.gloss.split(",");
+				boolean skip = false;
 				for (String word : words) {
-					String trim = word.trim();
-					int start = item.gloss.indexOf(trim);
-					int end = start + trim.length();
-					str.setSpan(new ClickableSpan() {
-						@Override
-						public void onClick(View view) {
-							onClickWord(trim);
-						}
-					}, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+					if (word.contains("(")) {
+						word = word.split("\\(")[0];
+
+						addClickableWord(item, str, word);
+						skip = true; // skip till end of parenthesis
+					} else if (word.endsWith(")")) {
+						skip = false; // en dof parenthesis
+						continue; // skip this one too, but not the next
+					}
+					if (!skip) {
+						addClickableWord(item, str, word);
+					}
 				}
 
 				mGloss.setText(str);
@@ -208,6 +212,18 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 		getLoaderManager().destroyLoader(id);
 	}
 
+	private void addClickableWord(Details item, SpannableStringBuilder str, String word) {
+		String trim = word.trim();
+		int start = item.gloss.indexOf(trim);
+		int end = start + trim.length();
+		str.setSpan(new ClickableSpan() {
+			@Override
+			public void onClick(View view) {
+				onClickWord(trim);
+			}
+		}, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+	}
+
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 	}
@@ -222,7 +238,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
 	@Override
 	protected void onDestroy() {
-		if (mTextToSpeech!=null) {
+		if (mTextToSpeech != null) {
 			mTextToSpeech.shutdown();
 			mTextToSpeech = null;
 		}
