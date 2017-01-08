@@ -18,7 +18,6 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -57,9 +56,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	 * ATTENTION: This was auto-generated to implement the App Indexing API.
 	 * See https://g.co/AppIndexing/AndroidStudio for more information.
 	 */
-	private GoogleApiClient client;
-	private ListView        mListView;
-	private DicoAdapter     mAdapter;
+	private GoogleApiClient               client;
+	private ListView                      mListView;
+	private DicoAdapter                   mAdapter;
+	private SearchView.SearchAutoComplete mSearchAutoComplete;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,13 +89,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
 		searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
 		// Find EditText view
-		EditText searchText = (EditText) findViewById(R.id.search_src_text);
+		mSearchAutoComplete = (SearchView.SearchAutoComplete) findViewById(R.id.search_src_text);
 		// Get the search close button image view
 		ImageView closeButton = (ImageView) searchView.findViewById(R.id.search_close_btn);
 		// Set on click listener
 		closeButton.setOnClickListener(view -> {
 			// Clear the text from EditText view
-			searchText.setText(null);
+			mSearchAutoComplete.setText(null);
 			// Clear query
 			searchView.setQuery("", false);
 			// Clear the results
@@ -173,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				case DetailsActivity.WIKI:
 					// Searches the dictionary and displays results for the given query.
 					String query = intent.getStringExtra(SearchManager.QUERY);
+					mSearchAutoComplete.setText(query, false);
 					launchQueryFor(query);
 					break;
 			}
