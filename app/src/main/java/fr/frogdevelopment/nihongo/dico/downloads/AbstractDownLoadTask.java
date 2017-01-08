@@ -12,6 +12,8 @@ import android.preference.PreferenceManager;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,7 +27,6 @@ abstract class AbstractDownLoadTask extends AsyncTask<Void, Integer, Boolean> {
 	private static final int MAX_VALUES = 4000;
 
 	protected final Context mContext;
-	private final   int     mMessageResource;
 	private final   String  mFileName;
 	private final   Uri     mUri;
 	private final   String  mTag;
@@ -35,9 +36,8 @@ abstract class AbstractDownLoadTask extends AsyncTask<Void, Integer, Boolean> {
 
 	protected List<ContentValues> mValueList = new ArrayList<>();
 
-	public AbstractDownLoadTask(Context context, int messageResource, String fileName, Uri uri, String tag) {
+	protected AbstractDownLoadTask(Context context, String fileName, Uri uri, String tag) {
 		this.mContext = context;
-		this.mMessageResource = messageResource;
 		this.mFileName = fileName;
 		this.mUri = uri;
 		this.mTag = tag;
@@ -50,12 +50,12 @@ abstract class AbstractDownLoadTask extends AsyncTask<Void, Integer, Boolean> {
 		PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 		mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
 		mWakeLock.acquire();
-//		mProgressDialog = ProgressDialog.show(mContext, "Downloading", "Downloading");
 		mProgressDialog = new ProgressDialog(mContext);
 		mProgressDialog.setTitle("Downloading"); //fixme
 		mProgressDialog.setCancelable(false);
 		mProgressDialog.setCanceledOnTouchOutside(false);
-		mProgressDialog.setIndeterminate(true);
+		mProgressDialog.setIndeterminate(false);
+		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 //		mProgressDialog.setCancelMessage() fixme
 		mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, mContext.getString(android.R.string.cancel), (dialog, which) -> {
 			cancel(true);
@@ -95,12 +95,24 @@ abstract class AbstractDownLoadTask extends AsyncTask<Void, Integer, Boolean> {
 	}
 
 	protected void loopOnLines(HttpURLConnection connection) throws IOException {
+		int fileLength = connection.getContentLength();
 		try (BufferedInputStream is = new BufferedInputStream(connection.getInputStream());
+		     LineNumberReader lineNumberReader = new LineNumberReader(new InputStreamReader(is));
 		     Scanner scanner = new Scanner(is)) {
 
-			publishProgress(mMessageResource);
+			is.mark(fileLength); //avoid IOException on reset
+
+			int nbLines = 0;
+
+			while (lineNumberReader.readLine() != null) {
+				nbLines++;
+			}
+
+			is.reset();
+			is.mark(fileLength);
 
 			int nbValues = 0;
+			int currentLine = 0;
 			while (scanner.hasNextLine()) {
 				fillValues(scanner.nextLine());
 				nbValues++;
@@ -112,6 +124,14 @@ abstract class AbstractDownLoadTask extends AsyncTask<Void, Integer, Boolean> {
 					nbValues = 0;
 					mValueList.clear();
 				}
+
+				// allow canceling with back button
+				if (isCancelled()) {
+					break;
+				}
+				currentLine++;
+
+				publishProgress(currentLine * 100 / nbLines);
 			}
 
 			if (!mValueList.isEmpty()) {
@@ -124,7 +144,7 @@ abstract class AbstractDownLoadTask extends AsyncTask<Void, Integer, Boolean> {
 
 	@Override
 	protected void onProgressUpdate(Integer... text) {
-		mProgressDialog.setMessage(mContext.getString(text[0]));
+		mProgressDialog.setProgress(text[0]);
 	}
 
 	@Override
