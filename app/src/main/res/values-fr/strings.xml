@@ -15,9 +15,7 @@
 
     <string name="download_menu">Téléchargements</string>
     <string name="download_entries">Télécharger dictionnaire</string>
-    <string name="downloading_entries">Téléchargement dictionnaire</string>
     <string name="download_examples">Télécharger exemples</string>
-    <string name="downloading_examples">Téléchargement exemples</string>
 
     <string name="download_big_file_warning">Attention, le fichier étant volumineux, veuillez télécharger via WiFi. Continuer ?</string>
 

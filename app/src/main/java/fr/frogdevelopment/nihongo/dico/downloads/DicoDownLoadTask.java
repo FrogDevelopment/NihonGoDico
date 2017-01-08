@@ -6,7 +6,6 @@ import android.content.Context;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
-import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.contentprovider.EntryContract;
 import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
 import fr.frogdevelopment.nihongo.dico.contentprovider.SenseContract;
@@ -21,13 +20,13 @@ class DicoDownLoadTask extends AbstractDownLoadTask {
 
 	DicoDownLoadTask(Context context, String language) {
 		// fixme select language
-		super(context, R.string.downloading_entries, String.format(fileName, language), NihonGoDicoContentProvider.URI_WORD, PREFERENCES_NAME);
+		super(context, String.format(fileName, language), NihonGoDicoContentProvider.URI_WORD, PREFERENCES_NAME);
 	}
 
 	@Override
 	protected void loopOnLines(HttpURLConnection connection) throws IOException {
 		super.loopOnLines(connection);
-		mContext.getContentResolver().update(NihonGoDicoContentProvider.URI_REBUILD, null, null, null);
+//		mContext.getContentResolver().update(NihonGoDicoContentProvider.URI_REBUILD, null, null, null);
 	}
 
 	@Override

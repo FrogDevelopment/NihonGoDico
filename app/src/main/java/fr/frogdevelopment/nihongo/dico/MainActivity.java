@@ -210,6 +210,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		String[] columns = {EntryContract.KANJI, EntryContract.READING, SenseContract.GLOSS, "sense._id"};
 		query = args.getString("query", "");
 
+		// FIXME enabled query by word1+word2+...
+		// => LIKE '%word1%' AND LIKE '%word2%'....
+
 		Uri uri;
 		String selection;
 		switch (id) {

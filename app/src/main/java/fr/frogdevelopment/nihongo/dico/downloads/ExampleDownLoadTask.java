@@ -6,7 +6,6 @@ import android.content.Context;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
-import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.contentprovider.ExampleContract;
 import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
 
@@ -19,7 +18,7 @@ class ExampleDownLoadTask extends AbstractDownLoadTask {
 	private static final String fileName = "examples_jpn_%s.csv";
 
 	public ExampleDownLoadTask(Context context, String language) {
-		super(context, R.string.downloading_examples, String.format(fileName, language), URI_EXAMPLE, PREFERENCES_NAME);
+		super(context, String.format(fileName, language), URI_EXAMPLE, PREFERENCES_NAME);
 	}
 
 	@Override
