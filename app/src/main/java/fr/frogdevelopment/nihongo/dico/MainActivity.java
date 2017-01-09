@@ -47,18 +47,18 @@ import fr.frogdevelopment.nihongo.dico.utils.InputUtils;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-	private static final int RC_DATA_CHECK_CODE   = 735;
+	private static final int RC_DATA_CHECK_CODE = 735;
 	private static final int LOADER_DICO_ID_KANJI = 100;
-	private static final int LOADER_DICO_ID_KANA  = 200;
+	private static final int LOADER_DICO_ID_KANA = 200;
 	private static final int LOADER_DICO_ID_GLOSS = 300;
 
 	/**
 	 * ATTENTION: This was auto-generated to implement the App Indexing API.
 	 * See https://g.co/AppIndexing/AndroidStudio for more information.
 	 */
-	private GoogleApiClient               client;
-	private ListView                      mListView;
-	private DicoAdapter                   mAdapter;
+	private GoogleApiClient client;
+	private ListView mListView;
+	private DicoAdapter mAdapter;
 	private SearchView.SearchAutoComplete mSearchAutoComplete;
 
 	@Override
@@ -207,34 +207,75 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		String[] columns = {EntryContract.KANJI, EntryContract.READING, SenseContract.GLOSS, "sense._id"};
-		query = args.getString("query", "");
-
-		// FIXME enabled query by word1+word2+...
-		// => LIKE '%word1%' AND LIKE '%word2%'....
-
-		Uri uri;
-		String selection;
+		final Uri uri;
+		final String format;
+		final String formatNot;
 		switch (id) {
 			case LOADER_DICO_ID_KANJI:
 				uri = NihonGoDicoContentProvider.URI_SEARCH_KANJI;
-				selection = EntryContract.TABLE_NAME + "." + EntryContract.KANJI + " LIKE '%" + query + "%'";
+				format = QUERY_KANJI;
+				formatNot = QUERY_KANJI_NOT;
 				break;
 			case LOADER_DICO_ID_KANA:
 				uri = NihonGoDicoContentProvider.URI_SEARCH_KANA;
-				selection = EntryContract.TABLE_NAME + "." + EntryContract.READING + " LIKE '%" + query + "%'";
+				format = QUERY_READING;
+				formatNot = QUERY_KANJI_NOT;
 				break;
 			case LOADER_DICO_ID_GLOSS:
 				uri = NihonGoDicoContentProvider.URI_SEARCH_GLOSS;
-				String escapeString = query.replace("'", "''");
-				selection = SenseContract.TABLE_NAME + "." + SenseContract.GLOSS + " LIKE '%" + escapeString + "%'";
+				format = QUERY_GLOSS;
+				formatNot = QUERY_GLOSS_NOT;
 				break;
 			default:
 				return null;
 		}
 
+		String[] columns = {EntryContract.KANJI, EntryContract.READING, SenseContract.GLOSS, "sense._id"};
+		query = args.getString("query", "");
+
+
+		// query by word1+word2+...
+		// => LIKE '%word1%' AND LIKE '%word2%'....
+		String[] split = query.split("\\W+");
+
+		// 1st word always first position :p
+		String firstWord = split[0];
+		String selection = String.format(format, cleanWord(firstWord));
+
+		// if other words, check either include (+) or exclude (-) from query
+		for (int i = 1, max = split.length; i < max; i++) { // start 1, as first word already proceed
+			String word = split[i];
+
+			// check the character in front of word to know if inclusion or exclusion
+			char charAt = query.charAt(query.indexOf(word) - 1);
+
+			switch (charAt) {
+				case '+': // inclusion
+					selection += " AND " + String.format(format, cleanWord(word));
+					break;
+				case '-': // exclusion
+					selection += " AND " + String.format(formatNot, cleanWord(word));
+					break;
+			}
+		}
+
 		return new CursorLoader(this, uri, columns, selection, null, null);
 	}
+
+	private static String cleanWord(String word) {
+		return word
+				.trim() // remove leading and trailing spaces
+				.replace("'", "''") // replace ['] by [''] for sql syntax
+				; // todo other ?
+	}
+
+	private static final String QUERY_KANJI = EntryContract.TABLE_NAME + "." + EntryContract.KANJI + " LIKE '%%%s%%'";
+	private static final String QUERY_KANJI_NOT = EntryContract.TABLE_NAME + "." + EntryContract.KANJI + " NOT LIKE '%%%s%%'";
+	private static final String QUERY_READING = EntryContract.TABLE_NAME + "." + EntryContract.READING + " LIKE '%%%s%%'";
+	private static final String QUERY_READING_NOT = EntryContract.TABLE_NAME + "." + EntryContract.READING + " NOT LIKE '%%%s%%'";
+	private static final String QUERY_GLOSS = SenseContract.TABLE_NAME + "." + SenseContract.GLOSS + " LIKE '%%%s%%'";
+	private static final String QUERY_GLOSS_NOT = SenseContract.TABLE_NAME + "." + SenseContract.GLOSS + " NOT LIKE '%%%s%%'";
+
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
