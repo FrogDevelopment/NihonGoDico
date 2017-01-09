@@ -74,13 +74,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		// See https://g.co/AppIndexing/AndroidStudio for more information.
 		client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-		boolean data_saved = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("entries_saved", false);
-		if (!data_saved) {
-			startActivity(new Intent(this, DownloadsActivity.class));
-		} else {
-			handleIntent(getIntent());
-		}
-
 		SearchView searchView = (SearchView) findViewById(R.id.search_field);
 		// Get the SearchView and set the searchable configuration
 		SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
@@ -107,6 +100,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 		mListView = (ListView) findViewById(R.id.entries_list);
 		mListView.setOnItemClickListener((adapterView, view, i, l) -> onItemClick(i));
+
+		boolean data_saved = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("entries_saved", false);
+		if (!data_saved) {
+			startActivity(new Intent(this, DownloadsActivity.class));
+		} else {
+			handleIntent(getIntent());
+		}
 	}
 
 	private void onItemClick(int position) {
