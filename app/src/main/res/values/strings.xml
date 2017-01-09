@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">NihonGoDico</string>
+    <string name="app_name">Nihon Go! Dictionary</string>
 
     <string name="frog_development" translatable="false">FROG DEVELOPMENT</string>
 
