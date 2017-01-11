@@ -17,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -182,9 +181,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.dico_menu_tune:
-				mRadioGroup.setVisibility(mRadioGroup.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-				return true;
+//			case R.id.dico_menu_tune:
+//				mRadioGroup.setVisibility(mRadioGroup.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+//				return true;
 
 			case R.id.dico_menu_download:
 				startActivity(new Intent(this, DownloadsActivity.class));
@@ -310,7 +309,31 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		List<Preview> previews = new ArrayList<>();
-		Pattern pattern = Pattern.compile(Pattern.quote(query.toLowerCase()));
+
+		String[] split = query.split("\\W+");
+
+		// 1st word always first position :p
+		String firstWord = split[0];
+
+		List<Pattern> patterns = new ArrayList<>();
+		patterns.add(Pattern.compile(Pattern.quote(firstWord.toLowerCase())));
+
+
+		for (int i = 1, max = split.length; i < max; i++) { // start 1, as first word already proceed
+			String word = split[i];
+
+			// check the character in front of word to know if inclusion or exclusion
+			int indexOfWord = query.indexOf(word);
+			char charAt;
+			do {
+				charAt = query.charAt(--indexOfWord);
+			} while (Character.isWhitespace(charAt));
+
+			if (charAt == '+') {
+				patterns.add(Pattern.compile(Pattern.quote(word.toLowerCase())));
+			}
+		}
+
 		int loaderId = loader.getId();
 		while (data.moveToNext()) {
 			Preview preview = new Preview();
@@ -319,17 +342,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			preview.gloss = data.getString(2);
 			preview.sense_id = data.getLong(3);
 
+			String text;
 			switch (loaderId) {
 				case LOADER_DICO_ID_KANJI:
-					computeSimilarity(pattern, preview, preview.kanji);
+					text = preview.kanji;
 					break;
 				case LOADER_DICO_ID_KANA:
-					computeSimilarity(pattern, preview, preview.reading);
+					text = preview.reading;
 					break;
 				case LOADER_DICO_ID_GLOSS:
 				default:
-					computeSimilarity(pattern, preview, preview.gloss);
+					text = preview.gloss;
 			}
+
+			computeSimilarity(patterns, preview, text);
 
 			previews.add(preview);
 		}
@@ -359,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		suggestions.saveRecentQuery(query, String.valueOf(previews.size() + " results"));
 	}
 
-	private void computeSimilarity(Pattern pattern, Preview preview, String text) {
+	private void computeSimilarity(List<Pattern> patterns, Preview preview, String text) {
 		// keep max similarity
 		preview.similarity = 0;
 		String[] values = text.split(", ");
@@ -376,9 +402,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		}
 
 		// get all regions which match
-		Matcher matcher = pattern.matcher(text.toLowerCase());
-		while (matcher.find()) {
-			preview.matchIndices.add(Pair.of(matcher.start(), matcher.end()));
+		for (Pattern pattern : patterns) {
+			Matcher matcher = pattern.matcher(text.toLowerCase());
+			while (matcher.find()) {
+				preview.matchIndices.add(Pair.of(matcher.start(), matcher.end()));
+			}
 		}
 	}
 
