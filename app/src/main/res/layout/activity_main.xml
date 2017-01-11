@@ -20,11 +20,45 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"/>
 
+        <RadioGroup
+            android:id="@+id/search_tune"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/search_field"
+            android:checkedButton="@+id/search_tune_contains"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <RadioButton
+                android:id="@id/search_tune_contains"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="contains"/>
+
+            <RadioButton
+                android:id="@+id/search_tune_start"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="start with"/>
+
+            <RadioButton
+                android:id="@+id/search_tune_end"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="end with"/>
+
+            <RadioButton
+                android:id="@+id/search_tune_exact"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="exact"/>
+        </RadioGroup>
+
         <View
             android:id="@+id/search_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@id/search_field"
+            android:layout_below="@id/search_tune"
             android:background="@android:color/darker_gray"/>
 
         <ListView

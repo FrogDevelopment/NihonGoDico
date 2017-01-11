@@ -17,9 +17,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -52,6 +54,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	private static final int LOADER_DICO_ID_KANA = 200;
 	private static final int LOADER_DICO_ID_GLOSS = 300;
 
+	private static final String SEARCH_TYPE_CONTAINS = "%%%s%%";
+	private static final String SEARCH_TYPE_START = "%s%%";
+	private static final String SEARCH_TYPE_END = "%%%s";
+	private static final String SEARCH_TYPE_EXACT = "%s";
+
+	private static final String QUERY_LIKE = "%s.%s LIKE '%s'";
+	private static final String QUERY_LIKE_NOT = "%s.%s NOT LIKE '%s'";
+
 	/**
 	 * ATTENTION: This was auto-generated to implement the App Indexing API.
 	 * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -60,6 +70,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	private ListView mListView;
 	private DicoAdapter mAdapter;
 	private SearchView.SearchAutoComplete mSearchAutoComplete;
+	private RadioGroup mRadioGroup;
+
+	private String currentSearchType = SEARCH_TYPE_CONTAINS;
+	private String query;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +109,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			if (mAdapter != null) {
 				mAdapter.clear();
 				mAdapter.notifyDataSetChanged();
+			}
+		});
+
+		mRadioGroup = (RadioGroup) findViewById(R.id.search_tune);
+		mRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+			switch (checkedId) {
+				case R.id.search_tune_contains:
+					currentSearchType = SEARCH_TYPE_CONTAINS;
+					break;
+				case R.id.search_tune_start:
+					currentSearchType = SEARCH_TYPE_START;
+					break;
+				case R.id.search_tune_end:
+					currentSearchType = SEARCH_TYPE_END;
+					break;
+				case R.id.search_tune_exact:
+					currentSearchType = SEARCH_TYPE_EXACT;
+					break;
 			}
 		});
 
@@ -150,6 +182,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+			case R.id.dico_menu_tune:
+				mRadioGroup.setVisibility(mRadioGroup.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+				return true;
+
 			case R.id.dico_menu_download:
 				startActivity(new Intent(this, DownloadsActivity.class));
 				return true;
@@ -203,8 +239,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		getLoaderManager().initLoader(loaderId, args, this);
 	}
 
-	private String query;
-
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		final Uri uri;
@@ -213,18 +247,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		switch (id) {
 			case LOADER_DICO_ID_KANJI:
 				uri = NihonGoDicoContentProvider.URI_SEARCH_KANJI;
-				format = QUERY_KANJI;
-				formatNot = QUERY_KANJI_NOT;
+				format = String.format(QUERY_LIKE, EntryContract.TABLE_NAME, EntryContract.KANJI, currentSearchType);
+				formatNot = String.format(QUERY_LIKE_NOT, EntryContract.TABLE_NAME, EntryContract.KANJI, currentSearchType);
 				break;
 			case LOADER_DICO_ID_KANA:
 				uri = NihonGoDicoContentProvider.URI_SEARCH_KANA;
-				format = QUERY_READING;
-				formatNot = QUERY_READING_NOT;
+				format = String.format(QUERY_LIKE, EntryContract.TABLE_NAME, EntryContract.READING, currentSearchType);
+				formatNot = String.format(QUERY_LIKE_NOT, EntryContract.TABLE_NAME, EntryContract.READING, currentSearchType);
 				break;
 			case LOADER_DICO_ID_GLOSS:
 				uri = NihonGoDicoContentProvider.URI_SEARCH_GLOSS;
-				format = QUERY_GLOSS;
-				formatNot = QUERY_GLOSS_NOT;
+				format = String.format(QUERY_LIKE, SenseContract.TABLE_NAME, SenseContract.GLOSS, currentSearchType);
+				formatNot = String.format(QUERY_LIKE_NOT, SenseContract.TABLE_NAME, SenseContract.GLOSS, currentSearchType);
 				break;
 			default:
 				return null;
@@ -272,14 +306,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				.replace("'", "''") // replace ['] by [''] for sql syntax
 				; // todo other ?
 	}
-
-	private static final String QUERY_KANJI = EntryContract.TABLE_NAME + "." + EntryContract.KANJI + " LIKE '%%%s%%'";
-	private static final String QUERY_KANJI_NOT = EntryContract.TABLE_NAME + "." + EntryContract.KANJI + " NOT LIKE '%%%s%%'";
-	private static final String QUERY_READING = EntryContract.TABLE_NAME + "." + EntryContract.READING + " LIKE '%%%s%%'";
-	private static final String QUERY_READING_NOT = EntryContract.TABLE_NAME + "." + EntryContract.READING + " NOT LIKE '%%%s%%'";
-	private static final String QUERY_GLOSS = SenseContract.TABLE_NAME + "." + SenseContract.GLOSS + " LIKE '%%%s%%'";
-	private static final String QUERY_GLOSS_NOT = SenseContract.TABLE_NAME + "." + SenseContract.GLOSS + " NOT LIKE '%%%s%%'";
-
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
