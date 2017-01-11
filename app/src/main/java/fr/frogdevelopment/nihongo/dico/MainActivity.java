@@ -247,7 +247,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			String word = split[i];
 
 			// check the character in front of word to know if inclusion or exclusion
-			char charAt = query.charAt(query.indexOf(word) - 1);
+			int indexOfWord = query.indexOf(word);
+			char charAt;
+			do {
+				charAt = query.charAt(--indexOfWord);
+			} while (Character.isWhitespace(charAt));
 
 			switch (charAt) {
 				case '+': // inclusion
