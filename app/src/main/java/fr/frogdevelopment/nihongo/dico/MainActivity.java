@@ -455,9 +455,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	public void onBackPressed() {
 		if (isTaskRoot()) {
 			new AlertDialog.Builder(this)
-					.setMessage("Quitter l'application ?")
-					.setPositiveButton("Quitter", (dialog, which) -> finish())
-					.setNegativeButton("Rester", null)
+					.setMessage(R.string.exit_message)
+					.setPositiveButton(R.string.exit_yes, (dialog, which) -> finish())
+					.setNegativeButton(R.string.exit_no, null)
 					.show();
 		} else {
 			super.onBackPressed();

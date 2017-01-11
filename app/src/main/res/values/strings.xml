@@ -1,9 +1,7 @@
 <resources>
-    <string name="app_name">Nihon Go! Dictionary</string>
-
     <string name="frog_development" translatable="false">FROG DEVELOPMENT</string>
 
-    <string name="title_activity_details" translatable="false">DetailsActivity</string>
+    <string name="app_name">Nihon Go! Dictionary</string>
 
     <!-- ****** -->
     <!-- SEARCH -->
@@ -20,8 +18,11 @@
     <string name="download_menu">Downloads</string>
     <string name="download_entries">Download dictionary</string>
     <string name="download_examples">Download examples</string>
-
     <string name="download_big_file_warning">Beware, the file is big, please use WiFi. Continue ?</string>
+
+    <string name="exit_message">Quit application ?</string>
+    <string name="exit_yes">Quit</string>
+    <string name="exit_no">Stay</string>
 
     <string-array name="languages_array">
         <item>Select a language</item>
