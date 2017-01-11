@@ -1,5 +1,6 @@
 package fr.frogdevelopment.nihongo.dico;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.Context;
@@ -12,7 +13,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.speech.tts.TextToSpeech;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
@@ -453,9 +453,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 	@Override
 	public void onBackPressed() {
-		Snackbar.make(findViewById(R.id.activity_main), "Are you sure you want to exit ?", Snackbar.LENGTH_LONG)
-				.setAction(android.R.string.ok, v -> finish())
-				.show();
+		if (isTaskRoot()) {
+			new AlertDialog.Builder(this)
+					.setMessage("Quitter l'application ?")
+					.setPositiveButton("Quitter", (dialog, which) -> finish())
+					.setNegativeButton("Rester", null)
+					.show();
+		} else {
+			super.onBackPressed();
+		}
 	}
 
 }
