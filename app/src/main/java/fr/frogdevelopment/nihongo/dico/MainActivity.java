@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			case LOADER_DICO_ID_KANA:
 				uri = NihonGoDicoContentProvider.URI_SEARCH_KANA;
 				format = QUERY_READING;
-				formatNot = QUERY_KANJI_NOT;
+				formatNot = QUERY_READING_NOT;
 				break;
 			case LOADER_DICO_ID_GLOSS:
 				uri = NihonGoDicoContentProvider.URI_SEARCH_GLOSS;
