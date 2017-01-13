@@ -17,9 +17,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 
 import com.google.android.gms.appindexing.Action;
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	 * See https://g.co/AppIndexing/AndroidStudio for more information.
 	 */
 	private GoogleApiClient client;
+	private ProgressBar mProgressBar;
 	private ListView mListView;
 	private DicoAdapter mAdapter;
 	private SearchView.SearchAutoComplete mSearchAutoComplete;
@@ -128,6 +131,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 					break;
 			}
 		});
+
+		mProgressBar = (ProgressBar) findViewById(R.id.search_progress);
 
 		mListView = (ListView) findViewById(R.id.entries_list);
 		mListView.setOnItemClickListener((adapterView, view, i, l) -> onItemClick(i));
@@ -240,6 +245,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		mProgressBar.setVisibility(View.VISIBLE);
+		mListView.setVisibility(View.INVISIBLE);
+
 		final Uri uri;
 		final String format;
 		final String formatNot;
@@ -383,6 +391,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 		SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
 		suggestions.saveRecentQuery(query, String.valueOf(previews.size() + " results"));
+
+		mProgressBar.setVisibility(View.INVISIBLE);
+		mListView.setVisibility(View.VISIBLE);
 	}
 
 	private void computeSimilarity(List<Pattern> patterns, Preview preview, String text) {
