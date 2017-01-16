@@ -3,7 +3,6 @@ package fr.frogdevelopment.nihongo.dico.downloads;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -56,11 +55,6 @@ abstract class AbstractDownLoadTask extends AsyncTask<Void, Integer, Boolean> {
 		mProgressDialog.setCanceledOnTouchOutside(false);
 		mProgressDialog.setIndeterminate(false);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//		mProgressDialog.setCancelMessage() fixme
-		mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, mContext.getString(android.R.string.cancel), (dialog, which) -> {
-			cancel(true);
-		});
-
 		mProgressDialog.show();
 	}
 

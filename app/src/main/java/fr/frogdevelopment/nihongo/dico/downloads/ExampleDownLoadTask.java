@@ -24,7 +24,7 @@ class ExampleDownLoadTask extends AbstractDownLoadTask {
 	@Override
 	protected void loopOnLines(HttpURLConnection connection) throws IOException {
 		super.loopOnLines(connection);
-		mContext.getContentResolver().update(NihonGoDicoContentProvider.URI_REBUILD, null, null, null);
+		mContext.getContentResolver().update(NihonGoDicoContentProvider.URI_REBUILD_EXAMPLE, null, null, null);
 	}
 
 	@Override

@@ -16,7 +16,7 @@ class DicoDownLoadTask extends AbstractDownLoadTask {
 
 	private static final String fileName = "entries_%s.txt";
 
-	private int index = 0;
+	private int key = 0;
 
 	DicoDownLoadTask(Context context, String language) {
 		// fixme select language
@@ -26,14 +26,14 @@ class DicoDownLoadTask extends AbstractDownLoadTask {
 	@Override
 	protected void loopOnLines(HttpURLConnection connection) throws IOException {
 		super.loopOnLines(connection);
-//		mContext.getContentResolver().update(NihonGoDicoContentProvider.URI_REBUILD, null, null, null);
+		mContext.getContentResolver().update(NihonGoDicoContentProvider.URI_REBUILD_DICO, null, null, null);
 	}
 
 	@Override
 	protected void fillValues(String currentLine) {
 
 		// fixme delete first line with total lines
-		if (index++ == 0) {
+		if (key++ == 0) {
 			return;
 		}
 
@@ -41,7 +41,7 @@ class DicoDownLoadTask extends AbstractDownLoadTask {
 
 		ContentValues entryValues = new ContentValues();
 		entryValues.put("tag", "entry");
-		entryValues.put("key", index);
+		entryValues.put("key", key);
 		entryValues.put(EntryContract.KANJI, values[0]);
 		entryValues.put(EntryContract.READING, values[1]);
 
@@ -53,7 +53,7 @@ class DicoDownLoadTask extends AbstractDownLoadTask {
 			if (values2.length == 6) { // fixme voir pourquoi
 				ContentValues senseValues = new ContentValues();
 				senseValues.put("tag", "sense");
-				senseValues.put("key", index);
+				senseValues.put("key", key);
 				senseValues.put(SenseContract.POS, values2[0].replaceAll(";", ", "));
 				senseValues.put(SenseContract.FIELD, values2[1].replaceAll(";", ", "));
 				senseValues.put(SenseContract.MISC, values2[2].replaceAll(";", ", "));

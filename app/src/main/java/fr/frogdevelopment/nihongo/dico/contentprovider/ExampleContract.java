@@ -20,7 +20,6 @@ public class ExampleContract implements BaseColumns {
     public static final String TRANSLATION_SENTENCE = "translation_sentence";
     public static final String INDICES = "indices";
 
-    public static final int INDEX_ID = 0;
     public static final int INDEX_JAPANESE_REF = 1;
     public static final int INDEX_TRANSLATION_REF = 2;
     public static final int INDEX_JAPANESE_SENTENCE = 3;
@@ -31,8 +30,8 @@ public class ExampleContract implements BaseColumns {
     private static final String SQL_CREATE = "CREATE TABLE example (_id INTEGER PRIMARY KEY, japanese_ref INTEGER,translation_ref INTEGER,japanese_sentence TEXT NOT NULL,translation_sentence TEXT NOT NULL,indices TEXT NOT NULL);";
     private static final String SQL_CREATE_FTS = "CREATE VIRTUAL TABLE fts_example USING fts4 (content='example', indices)";
 
-    private static final String SQL_DELETE = "DROP TABLE IF EXISTS example;";
-    private static final String SQL_DELETE_FTS = "DROP TABLE IF EXISTS fts_example;";
+    private static final String SQL_DROP = "DROP TABLE IF EXISTS example;";
+    private static final String SQL_DROP_FTS = "DROP TABLE IF EXISTS fts_example;";
 
     static final String SQL_INSERT = "INSERT INTO example (japanese_ref,translation_ref,japanese_sentence,translation_sentence,indices) VALUES (?,?,?,?,?)";
     static final String SQL_REBUILD = "INSERT INTO fts_example(fts_example) VALUES('rebuild')";
@@ -42,9 +41,9 @@ public class ExampleContract implements BaseColumns {
         db.execSQL(SQL_CREATE_FTS);
     }
 
-    static void delete(SQLiteDatabase db) {
-        db.execSQL(SQL_DELETE);
-        db.execSQL(SQL_DELETE_FTS);
+    static void drop(SQLiteDatabase db) {
+        db.execSQL(SQL_DROP);
+        db.execSQL(SQL_DROP_FTS);
     }
 
 }

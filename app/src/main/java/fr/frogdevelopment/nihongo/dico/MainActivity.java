@@ -15,6 +15,7 @@ import android.provider.SearchRecentSuggestions;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +23,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RadioGroup;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -55,14 +55,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	private static final int LOADER_DICO_ID_KANA = 200;
 	private static final int LOADER_DICO_ID_GLOSS = 300;
 
-	private static final String SEARCH_TYPE_CONTAINS = "%%%s%%";
-	private static final String SEARCH_TYPE_START = "%s%%";
-	private static final String SEARCH_TYPE_END = "%%%s";
-	private static final String SEARCH_TYPE_EXACT = "%s";
-
-	private static final String QUERY_LIKE = "%s.%s LIKE '%s'";
-	private static final String QUERY_LIKE_NOT = "%s.%s NOT LIKE '%s'";
-
 	/**
 	 * ATTENTION: This was auto-generated to implement the App Indexing API.
 	 * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -72,9 +64,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	private ListView mListView;
 	private DicoAdapter mAdapter;
 	private SearchView.SearchAutoComplete mSearchAutoComplete;
-	private RadioGroup mRadioGroup;
 
-	private String currentSearchType = SEARCH_TYPE_CONTAINS;
 	private String query;
 
 	@Override
@@ -111,24 +101,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			if (mAdapter != null) {
 				mAdapter.clear();
 				mAdapter.notifyDataSetChanged();
-			}
-		});
-
-		mRadioGroup = (RadioGroup) findViewById(R.id.search_tune);
-		mRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-			switch (checkedId) {
-				case R.id.search_tune_contains:
-					currentSearchType = SEARCH_TYPE_CONTAINS;
-					break;
-				case R.id.search_tune_start:
-					currentSearchType = SEARCH_TYPE_START;
-					break;
-				case R.id.search_tune_end:
-					currentSearchType = SEARCH_TYPE_END;
-					break;
-				case R.id.search_tune_exact:
-					currentSearchType = SEARCH_TYPE_EXACT;
-					break;
 			}
 		});
 
@@ -186,10 +158,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-//			case R.id.dico_menu_tune:
-//				mRadioGroup.setVisibility(mRadioGroup.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-//				return true;
-
 			case R.id.dico_menu_download:
 				startActivity(new Intent(this, DownloadsActivity.class));
 				return true;
@@ -249,62 +217,66 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		mListView.setVisibility(View.INVISIBLE);
 
 		final Uri uri;
-		final String format;
-		final String formatNot;
 		switch (id) {
 			case LOADER_DICO_ID_KANJI:
 				uri = NihonGoDicoContentProvider.URI_SEARCH_KANJI;
-				format = String.format(QUERY_LIKE, EntryContract.TABLE_NAME, EntryContract.KANJI, currentSearchType);
-				formatNot = String.format(QUERY_LIKE_NOT, EntryContract.TABLE_NAME, EntryContract.KANJI, currentSearchType);
 				break;
 			case LOADER_DICO_ID_KANA:
 				uri = NihonGoDicoContentProvider.URI_SEARCH_KANA;
-				format = String.format(QUERY_LIKE, EntryContract.TABLE_NAME, EntryContract.READING, currentSearchType);
-				formatNot = String.format(QUERY_LIKE_NOT, EntryContract.TABLE_NAME, EntryContract.READING, currentSearchType);
 				break;
 			case LOADER_DICO_ID_GLOSS:
 				uri = NihonGoDicoContentProvider.URI_SEARCH_GLOSS;
-				format = String.format(QUERY_LIKE, SenseContract.TABLE_NAME, SenseContract.GLOSS, currentSearchType);
-				formatNot = String.format(QUERY_LIKE_NOT, SenseContract.TABLE_NAME, SenseContract.GLOSS, currentSearchType);
 				break;
 			default:
 				return null;
 		}
 
-		String[] columns = {EntryContract.KANJI, EntryContract.READING, SenseContract.GLOSS, "sense._id"};
 		query = args.getString("query", "");
 
-
-		// query by word1+word2+...
-		// => LIKE '%word1%' AND LIKE '%word2%'....
+		// query by word1+word2+... fixme keep * char ?
 		String[] split = query.split("\\W+");
 
-		// 1st word always first position :p
-		String firstWord = split[0];
-		String selection = String.format(format, cleanWord(firstWord));
-
+		char charAt;
+		String selection = "";
 		// if other words, check either include (+) or exclude (-) from query
-		for (int i = 1, max = split.length; i < max; i++) { // start 1, as first word already proceed
-			String word = split[i];
+		for (String word : split) { // start 1, as first word already proceed
+			if (TextUtils.isEmpty(word)) {
+				continue;
+			}
 
 			// check the character in front of word to know if inclusion or exclusion
-			int indexOfWord = query.indexOf(word);
-			char charAt;
-			do {
-				charAt = query.charAt(--indexOfWord);
-			} while (Character.isWhitespace(charAt));
+			int startOfWord = query.indexOf(word);
 
-			switch (charAt) {
-				case '+': // inclusion
-					selection += " AND " + String.format(format, cleanWord(word));
-					break;
-				case '-': // exclusion
-					selection += " AND " + String.format(formatNot, cleanWord(word));
-					break;
+			if (startOfWord > 0) {
+				do {
+					charAt = query.charAt(--startOfWord);
+				} while (Character.isWhitespace(charAt));
+
+				switch (charAt) {
+					case '+': // AND implicit
+						selection += " ";
+						break;
+					case '?': // OR
+						selection += " OR ";
+						break;
+					case '-': // NOT
+						selection += " -";
+						break;
+				}
+			}
+
+			selection += cleanWord(word);
+
+			int endOfWord = startOfWord + word.length();
+			if (query.length() >= endOfWord + 1) {
+				char tmp = query.charAt(endOfWord);
+				if (tmp == '*') {
+					selection += "*";
+				}
 			}
 		}
 
-		return new CursorLoader(this, uri, columns, selection, null, null);
+		return new CursorLoader(this, uri, null, selection, null, null);
 	}
 
 	private static String cleanWord(String word) {
@@ -318,27 +290,26 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		List<Preview> previews = new ArrayList<>();
 
-		String[] split = query.split("\\W+");
-
-		// 1st word always first position :p
-		String firstWord = split[0];
+		String[] searches = query.split("\\W+");
 
 		List<Pattern> patterns = new ArrayList<>();
-		patterns.add(Pattern.compile(Pattern.quote(firstWord.toLowerCase())));
-
-
-		for (int i = 1, max = split.length; i < max; i++) { // start 1, as first word already proceed
-			String word = split[i];
-
+		for (String search : searches) {
 			// check the character in front of word to know if inclusion or exclusion
-			int indexOfWord = query.indexOf(word);
-			char charAt;
-			do {
-				charAt = query.charAt(--indexOfWord);
-			} while (Character.isWhitespace(charAt));
+			int indexOfWord = query.indexOf(search);
+			if (indexOfWord > 0) {
+				char charAt;
+				do {
+					charAt = query.charAt(--indexOfWord);
+				} while (Character.isWhitespace(charAt));
 
-			if (charAt == '+') {
-				patterns.add(Pattern.compile(Pattern.quote(word.toLowerCase())));
+				switch (charAt) {
+					case '+':
+					case '?':
+						patterns.add(Pattern.compile(Pattern.quote(search.toLowerCase())));
+						break;
+				}
+			} else {
+				patterns.add(Pattern.compile(Pattern.quote(search.toLowerCase())));
 			}
 		}
 
