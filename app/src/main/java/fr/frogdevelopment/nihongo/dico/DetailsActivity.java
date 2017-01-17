@@ -254,12 +254,12 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
 		@Override
 		public void onStart(String utteranceId) {
-			mSpeakView.setEnabled(false);
+			mSpeakView.setClickable(false);
 		}
 
 		@Override
 		public void onDone(String utteranceId) {
-			mSpeakView.setEnabled(true);
+			mSpeakView.setClickable(true);
 		}
 
 		@Override
