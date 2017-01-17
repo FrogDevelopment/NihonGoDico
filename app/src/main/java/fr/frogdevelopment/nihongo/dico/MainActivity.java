@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	private static final int LOADER_DICO_ID_KANA = 200;
 	private static final int LOADER_DICO_ID_GLOSS = 300;
 
+	private static final String REGEX_SEARCH_SPLIT = "\\+|-|\\?";
+
 	/**
 	 * ATTENTION: This was auto-generated to implement the App Indexing API.
 	 * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -233,19 +235,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 		query = args.getString("query", "");
 
-		// query by word1+word2+... fixme keep * char ?
-		String[] split = query.split("\\W+");
+		// query by word1+word2+...
+		String[] searches = query.split(REGEX_SEARCH_SPLIT);
 
 		char charAt;
 		String selection = "";
 		// if other words, check either include (+) or exclude (-) from query
-		for (String word : split) { // start 1, as first word already proceed
-			if (TextUtils.isEmpty(word)) {
+		for (String search : searches) { // start 1, as first word already proceed
+			if (TextUtils.isEmpty(search)) {
 				continue;
 			}
 
+			search = search.trim();
+
 			// check the character in front of word to know if inclusion or exclusion
-			int startOfWord = query.indexOf(word);
+			int startOfWord = query.indexOf(search);
 
 			if (startOfWord > 0) {
 				do {
@@ -265,14 +269,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				}
 			}
 
-			selection += cleanWord(word);
-
-			int endOfWord = startOfWord + word.length();
-			if (query.length() >= endOfWord + 1) {
-				char tmp = query.charAt(endOfWord);
-				if (tmp == '*') {
-					selection += "*";
-				}
+			if (search.split("\\s").length > 1) { // phrase query => enclosing in double quotes
+				selection += "\"" + cleanWord(search) + "\"";
+			} else {
+				selection += cleanWord(search);
 			}
 		}
 
@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		List<Preview> previews = new ArrayList<>();
 
-		String[] searches = query.split("\\W+");
+		String[] searches = query.split(REGEX_SEARCH_SPLIT);
 
 		List<Pattern> patterns = new ArrayList<>();
 		for (String search : searches) {
@@ -305,11 +305,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				switch (charAt) {
 					case '+':
 					case '?':
-						patterns.add(Pattern.compile(Pattern.quote(search.toLowerCase())));
+						patterns.add(Pattern.compile(Pattern.quote(search.trim().toLowerCase())));
 						break;
 				}
 			} else {
-				patterns.add(Pattern.compile(Pattern.quote(search.toLowerCase())));
+				patterns.add(Pattern.compile(Pattern.quote(search.trim().toLowerCase())));
 			}
 		}
 
