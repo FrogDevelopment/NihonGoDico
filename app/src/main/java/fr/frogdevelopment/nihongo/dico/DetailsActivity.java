@@ -1,6 +1,5 @@
 package fr.frogdevelopment.nihongo.dico;
 
-import android.app.ActionBar;
 import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.CursorLoader;
@@ -9,6 +8,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -16,7 +16,6 @@ import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,14 +38,15 @@ import fr.frogdevelopment.nihongo.dico.utils.KanaToRomaji;
 
 public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-	private static final int    LOADER_ID_DATA     = 0;
-	private static final int    LOADER_ID_EXAMPLES = 1;
-	public static final  String WIKI               = "wiki";
+	private static final int LOADER_ID_DATA = 0;
+	private static final int LOADER_ID_EXAMPLES = 1;
+	public static final String WIKI = "wiki";
 
 	private TextView mLexicon;
 	private TextView mGloss;
 	private TextView mInfo;
 	private ListView mExamples;
+	private View mSpeakView;
 
 	private String kanji;
 	private String reading;
@@ -63,10 +63,20 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 		kanji = args.getString(EntryContract.KANJI);
 		reading = args.getString(EntryContract.READING);
 
-		mTextToSpeech = new TextToSpeech(this, i -> mTextToSpeech.setLanguage(Locale.JAPANESE));
+		mSpeakView = findViewById(R.id.details_speak);
+		mSpeakView.setOnClickListener(view -> {
+			Bundle params = new Bundle();
+			params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "");
+			mTextToSpeech.speak(reading, TextToSpeech.QUEUE_ADD, params, "UniqueID");
+		});
 
-		ImageView speakView = (ImageView) findViewById(R.id.details_speak);
-		speakView.setOnClickListener(view -> mTextToSpeech.speak(reading, TextToSpeech.QUEUE_ADD, null, null));
+		mTextToSpeech = new TextToSpeech(this, status -> {
+			if (status == TextToSpeech.SUCCESS) {
+				mTextToSpeech.setLanguage(Locale.JAPAN);
+				mSpeakView.setVisibility(View.VISIBLE);
+				mTextToSpeech.setOnUtteranceProgressListener(mSpeakProgressListener);
+			}
+		});
 
 		TextView mKanji = (TextView) findViewById(R.id.details_kanji);
 		mKanji.setText(kanji);
@@ -81,11 +91,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 		mGloss = (TextView) findViewById(R.id.details_gloss);
 		mInfo = (TextView) findViewById(R.id.details_info);
 		mExamples = (ListView) findViewById(R.id.details_examples);
-
-		ActionBar actionBar = getActionBar();
-		if (actionBar != null) {
-			actionBar.setDisplayHomeAsUpEnabled(true);
-		}
 
 		getLoaderManager().initLoader(LOADER_ID_DATA, args, this);
 	}
@@ -244,4 +249,22 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 		}
 		super.onDestroy();
 	}
+
+	private final UtteranceProgressListener mSpeakProgressListener = new UtteranceProgressListener() {
+
+		@Override
+		public void onStart(String utteranceId) {
+			mSpeakView.setEnabled(false);
+		}
+
+		@Override
+		public void onDone(String utteranceId) {
+			mSpeakView.setEnabled(true);
+		}
+
+		@Override
+		public void onError(String utteranceId) {
+
+		}
+	};
 }
