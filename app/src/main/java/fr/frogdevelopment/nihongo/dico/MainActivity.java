@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.speech.tts.TextToSpeech;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
@@ -116,6 +117,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			startActivity(new Intent(this, DownloadsActivity.class));
 		} else {
 			handleIntent(getIntent());
+		}
+
+		if (!isTaskRoot()) {
+			ActionBar actionBar = getSupportActionBar();
+			if (actionBar != null) {
+				actionBar.setDisplayHomeAsUpEnabled(true);
+			}
 		}
 	}
 
