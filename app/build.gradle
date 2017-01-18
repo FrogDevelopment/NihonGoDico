@@ -49,7 +49,6 @@ dependencies {
 
 //    Android
     compile 'com.android.support:design:25.1.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
 
 //    Divers
     compile 'org.apache.commons:commons-lang3:3.4'
