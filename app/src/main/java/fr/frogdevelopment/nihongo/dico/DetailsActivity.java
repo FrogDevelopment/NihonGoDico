@@ -15,6 +15,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -238,6 +239,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 		intent.putExtra(SearchManager.QUERY, word);
 
 		startActivity(intent);
+		overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
 	}
 
 	@Override
@@ -247,6 +249,23 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 			mTextToSpeech = null;
 		}
 		super.onDestroy();
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				finish();
+				overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private final UtteranceProgressListener mSpeakProgressListener = new UtteranceProgressListener() {

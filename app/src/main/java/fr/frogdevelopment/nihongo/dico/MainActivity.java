@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	private SearchView.SearchAutoComplete mSearchAutoComplete;
 
 	private String query;
+	private SearchView mSearchView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,23 +84,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		// See https://g.co/AppIndexing/AndroidStudio for more information.
 		client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-		SearchView searchView = (SearchView) findViewById(R.id.search_field);
+		mSearchView = (SearchView) findViewById(R.id.search_field);
 		// Get the SearchView and set the searchable configuration
 		SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
 		// Assumes current activity is the searchable activity
-		searchView.setSearchableInfo(searchManager.getSearchableInfo(this.getComponentName()));
-		searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-		searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+		mSearchView.setSearchableInfo(searchManager.getSearchableInfo(this.getComponentName()));
+		mSearchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+		mSearchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
 		// Find EditText view
 		mSearchAutoComplete = (SearchView.SearchAutoComplete) findViewById(R.id.search_src_text);
 		// Get the search close button image view
-		ImageView closeButton = (ImageView) searchView.findViewById(R.id.search_close_btn);
+		ImageView closeButton = (ImageView) mSearchView.findViewById(R.id.search_close_btn);
 		// Set on click listener
 		closeButton.setOnClickListener(view -> {
 			// Clear the text from EditText view
 			mSearchAutoComplete.setText(null);
 			// Clear query
-			searchView.setQuery("", false);
+			mSearchView.setQuery("", false);
 			// Clear the results
 			if (mAdapter != null) {
 				mAdapter.clear();
@@ -136,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		intent.putExtra(SenseContract._ID, item.sense_id);
 
 		startActivity(intent);
+		overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
 	}
 
 	@Override
@@ -172,6 +174,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			case R.id.dico_menu_download:
 				startActivity(new Intent(this, DownloadsActivity.class));
 				return true;
+
+			case android.R.id.home:
+				finish();
+				overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
 
 			default:
 				return super.onOptionsItemSelected(item);
@@ -374,6 +380,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 		mProgressBar.setVisibility(View.INVISIBLE);
 		mListView.setVisibility(View.VISIBLE);
+
+		mSearchView.clearFocus();
 	}
 
 	private void computeSimilarity(List<Pattern> patterns, Preview preview, String text) {
@@ -452,6 +460,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 					.show();
 		} else {
 			super.onBackPressed();
+			overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
 		}
 	}
 
