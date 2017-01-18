@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		Intent intent = new Intent(this, DetailsActivity.class);
 		intent.putExtra(EntryContract.KANJI, item.kanji);
 		intent.putExtra(EntryContract.READING, item.reading);
+		intent.putExtra(SenseContract.GLOSS, item.gloss);
 		intent.putExtra(SenseContract._ID, item.sense_id);
 
 		startActivity(intent);

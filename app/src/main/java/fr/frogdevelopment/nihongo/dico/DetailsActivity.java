@@ -43,7 +43,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 	public static final String WIKI = "wiki";
 
 	private TextView mLexicon;
-	private TextView mGloss;
 	private TextView mInfo;
 	private ListView mExamples;
 	private View mSpeakView;
@@ -88,9 +87,31 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 		mRomaji.setText(KanaToRomaji.convert(reading));
 
 		mLexicon = (TextView) findViewById(R.id.details_lexicon);
-		mGloss = (TextView) findViewById(R.id.details_gloss);
 		mInfo = (TextView) findViewById(R.id.details_info);
 		mExamples = (ListView) findViewById(R.id.details_examples);
+
+		TextView mGloss = (TextView) findViewById(R.id.details_gloss);
+		String gloss = args.getString(SenseContract.GLOSS);
+		SpannableStringBuilder str = new SpannableStringBuilder(gloss);
+		String[] words = gloss.split(",");
+		boolean skip = false;
+		for (String word : words) {
+			if (word.contains("(")) {
+				word = word.split("\\(")[0];
+
+				addClickableWord(gloss, str, word);
+				skip = true; // skip till end of parenthesis
+			} else if (word.endsWith(")")) {
+				skip = false; // en dof parenthesis
+				continue; // skip this one too, but not the next
+			}
+			if (!skip) {
+				addClickableWord(gloss, str, word);
+			}
+		}
+
+		mGloss.setText(str);
+		mGloss.setMovementMethod(LinkMovementMethod.getInstance());
 
 		getLoaderManager().initLoader(LOADER_ID_DATA, args, this);
 	}
@@ -99,7 +120,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		switch (id) {
 			case LOADER_ID_DATA:
-				String[] columns = {SenseContract.POS, SenseContract.FIELD, SenseContract.MISC, SenseContract.DIAL, SenseContract.GLOSS, SenseContract.INFO};
+				String[] columns = {SenseContract.POS, SenseContract.FIELD, SenseContract.MISC, SenseContract.DIAL, SenseContract.INFO};
 				String selection = SenseContract._ID + "=" + args.getLong(SenseContract._ID);
 
 				return new CursorLoader(this, NihonGoDicoContentProvider.URI_WORD, columns, selection, null, null);
@@ -129,8 +150,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 					item.field = data.getString(1);
 					item.misc = data.getString(2);
 					item.dial = data.getString(3);
-					item.gloss = data.getString(4);
-					item.info = data.getString(5);
+					item.info = data.getString(4);
 				}
 
 				List<String> lexicon = new ArrayList<>();
@@ -161,27 +181,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 				} else {
 					mInfo.setVisibility(View.VISIBLE);
 				}
-
-				SpannableStringBuilder str = new SpannableStringBuilder(item.gloss);
-				String[] words = item.gloss.split(",");
-				boolean skip = false;
-				for (String word : words) {
-					if (word.contains("(")) {
-						word = word.split("\\(")[0];
-
-						addClickableWord(item, str, word);
-						skip = true; // skip till end of parenthesis
-					} else if (word.endsWith(")")) {
-						skip = false; // en dof parenthesis
-						continue; // skip this one too, but not the next
-					}
-					if (!skip) {
-						addClickableWord(item, str, word);
-					}
-				}
-
-				mGloss.setText(str);
-				mGloss.setMovementMethod(LinkMovementMethod.getInstance());
 
 				// now fetching examples
 				getLoaderManager().initLoader(LOADER_ID_EXAMPLES, null, this);
@@ -217,9 +216,9 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 		getLoaderManager().destroyLoader(id);
 	}
 
-	private void addClickableWord(Details item, SpannableStringBuilder str, String word) {
+	private void addClickableWord(String gloss, SpannableStringBuilder str, String word) {
 		String trim = word.trim();
-		int start = item.gloss.indexOf(trim);
+		int start = gloss.indexOf(trim);
 		int end = start + trim.length();
 		str.setSpan(new ClickableSpan() {
 			@Override
