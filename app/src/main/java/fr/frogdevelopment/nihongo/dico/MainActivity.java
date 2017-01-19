@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	 */
 	private GoogleApiClient client;
 	private ProgressBar mProgressBar;
+	private WebView mTipsView;
 	private ListView mListView;
 	private DicoAdapter mAdapter;
 	private SearchView.SearchAutoComplete mSearchAutoComplete;
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		// See https://g.co/AppIndexing/AndroidStudio for more information.
 		client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-		mSearchView = (SearchView) findViewById(R.id.search_field);
+		mSearchView = (SearchView) findViewById(R.id.main_search_field);
 		// Get the SearchView and set the searchable configuration
 		SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
 		// Assumes current activity is the searchable activity
@@ -106,11 +108,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				mAdapter.clear();
 				mAdapter.notifyDataSetChanged();
 			}
+			mTipsView.setVisibility(View.VISIBLE);
 		});
 
-		mProgressBar = (ProgressBar) findViewById(R.id.search_progress);
+		mProgressBar = (ProgressBar) findViewById(R.id.main_progress);
 
-		mListView = (ListView) findViewById(R.id.entries_list);
+		mTipsView = (WebView) findViewById(R.id.main_tips);
+		mTipsView.loadDataWithBaseURL(null, getString(R.string.tips), "text/html", "utf-8", null);
+
+		mListView = (ListView) findViewById(R.id.main_entries);
 		mListView.setOnItemClickListener((adapterView, view, i, l) -> onItemClick(i));
 
 		boolean data_saved = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("entries_saved", false);
@@ -231,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		mProgressBar.setVisibility(View.VISIBLE);
+		mTipsView.setVisibility(View.VISIBLE);
 		mListView.setVisibility(View.INVISIBLE);
 
 		final Uri uri;
@@ -303,84 +310,90 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		List<Preview> previews = new ArrayList<>();
-
-		String[] searches = query.split(REGEX_SEARCH_SPLIT);
-
-		List<Pattern> patterns = new ArrayList<>();
-		for (String search : searches) {
-			// check the character in front of word to know if inclusion or exclusion
-			int indexOfWord = query.indexOf(search);
-			if (indexOfWord > 0) {
-				char charAt;
-				do {
-					charAt = query.charAt(--indexOfWord);
-				} while (Character.isWhitespace(charAt));
-
-				switch (charAt) {
-					case '+':
-					case '?':
-						patterns.add(Pattern.compile(Pattern.quote(search.trim().toLowerCase())));
-						break;
-				}
-			} else {
-				patterns.add(Pattern.compile(Pattern.quote(search.trim().toLowerCase())));
-			}
-		}
-
 		int loaderId = loader.getId();
-		while (data.moveToNext()) {
-			Preview preview = new Preview();
-			preview.kanji = data.getString(0);
-			preview.reading = data.getString(1);
-			preview.gloss = data.getString(2);
-			preview.sense_id = data.getLong(3);
+		if (data.getCount() > 0) {
+			List<Preview> previews = new ArrayList<>();
 
-			String text;
+			String[] searches = query.split(REGEX_SEARCH_SPLIT);
+
+			List<Pattern> patterns = new ArrayList<>();
+			for (String search : searches) {
+				search = search.replace("*",""); // pattern without the * char
+				// check the character in front of word to know if inclusion or exclusion
+				int indexOfWord = query.indexOf(search);
+				if (indexOfWord > 0) {
+					char charAt;
+					do {
+						charAt = query.charAt(--indexOfWord);
+					} while (Character.isWhitespace(charAt));
+
+					switch (charAt) {
+						case '+':
+						case '?':
+							patterns.add(Pattern.compile(Pattern.quote(search.trim().toLowerCase())));
+							break;
+					}
+				} else {
+					patterns.add(Pattern.compile(Pattern.quote(search.trim().toLowerCase())));
+				}
+			}
+
+			while (data.moveToNext()) {
+				Preview preview = new Preview();
+				preview.kanji = data.getString(0);
+				preview.reading = data.getString(1);
+				preview.gloss = data.getString(2);
+				preview.sense_id = data.getLong(3);
+
+				String text;
+				switch (loaderId) {
+					case LOADER_DICO_ID_KANJI:
+						text = preview.kanji;
+						break;
+					case LOADER_DICO_ID_KANA:
+						text = preview.reading;
+						break;
+					case LOADER_DICO_ID_GLOSS:
+					default:
+						text = preview.gloss;
+				}
+
+				computeSimilarity(patterns, preview, text);
+
+				previews.add(preview);
+			}
+
+			// sort by descending similarity score
+			Collections.sort(previews, (p1, p2) -> Double.compare(p2.similarity, p1.similarity));
+
+			// adapter by research type
 			switch (loaderId) {
 				case LOADER_DICO_ID_KANJI:
-					text = preview.kanji;
+					mAdapter = new ResearchByKanjiAdapter(this, previews);
 					break;
 				case LOADER_DICO_ID_KANA:
-					text = preview.reading;
+					mAdapter = new ResearchByKanaAdapter(this, previews);
 					break;
 				case LOADER_DICO_ID_GLOSS:
 				default:
-					text = preview.gloss;
+					mAdapter = new ResearchByGlossAdapter(this, previews);
 			}
 
-			computeSimilarity(patterns, preview, text);
+			mListView.setAdapter(mAdapter);
 
-			previews.add(preview);
+			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
+			suggestions.saveRecentQuery(query, String.valueOf(previews.size() + " results"));
+
+			mTipsView.setVisibility(View.INVISIBLE);
+			mListView.setVisibility(View.VISIBLE);
+		} else {
+			// fixme message no results
 		}
-
-		// sort by descending similarity score
-		Collections.sort(previews, (p1, p2) -> Double.compare(p2.similarity, p1.similarity));
 
 		data.close();
 		getLoaderManager().destroyLoader(loaderId);
 
-		// adapter by research type
-		switch (loaderId) {
-			case LOADER_DICO_ID_KANJI:
-				mAdapter = new ResearchByKanjiAdapter(this, previews);
-				break;
-			case LOADER_DICO_ID_KANA:
-				mAdapter = new ResearchByKanaAdapter(this, previews);
-				break;
-			case LOADER_DICO_ID_GLOSS:
-			default:
-				mAdapter = new ResearchByGlossAdapter(this, previews);
-		}
-
-		mListView.setAdapter(mAdapter);
-
-		SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
-		suggestions.saveRecentQuery(query, String.valueOf(previews.size() + " results"));
-
 		mProgressBar.setVisibility(View.INVISIBLE);
-		mListView.setVisibility(View.VISIBLE);
-
 		mSearchView.clearFocus();
 	}
 

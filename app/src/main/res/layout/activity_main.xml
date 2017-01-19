@@ -15,24 +15,24 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.SearchView
-            android:id="@+id/search_field"
+            android:id="@+id/main_search_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"/>
 
         <View
-            android:id="@+id/search_divider"
+            android:id="@+id/main_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@id/search_field"
+            android:layout_below="@id/main_search_field"
             android:background="@android:color/darker_gray"/>
 
         <ProgressBar
-            android:id="@+id/search_progress"
+            android:id="@+id/main_progress"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/search_divider"
+            android:layout_below="@id/main_divider"
             android:layout_centerInParent="true"
             android:indeterminate="true"
             android:indeterminateTint="@color/apptheme_color"
@@ -40,12 +40,19 @@
             android:visibility="gone"/>
 
         <ListView
-            android:id="@+id/entries_list"
+            android:id="@+id/main_entries"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_below="@id/search_divider"
+            android:layout_below="@id/main_divider"
             android:visibility="gone"/>
+
+        <WebView
+            android:id="@+id/main_tips"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/main_divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </RelativeLayout>
 
