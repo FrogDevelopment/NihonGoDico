@@ -6,7 +6,7 @@
     <!-- ****** -->
     <string name="search_label">chercher</string>
     <string name="search_hint">Chercher un mot</string>
-    <string name="no_results">No results</string>
+    <string name="no_results">Aucun résultats</string>
 
     <plurals name="search_results">
         <item quantity="one">%1$d résultat</item>

@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.speech.tts.TextToSpeech;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -388,6 +389,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			mListView.setVisibility(View.VISIBLE);
 		} else {
 			// fixme message no results
+			Snackbar.make(findViewById(R.id.activity_main), R.string.no_results, Snackbar.LENGTH_LONG).show();
 		}
 
 		data.close();
