@@ -319,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 			List<Pattern> patterns = new ArrayList<>();
 			for (String search : searches) {
-				search = search.replace("*",""); // pattern without the * char
+				search = search.replace("*", ""); // pattern without the * char
 				// check the character in front of word to know if inclusion or exclusion
 				int indexOfWord = query.indexOf(search);
 				if (indexOfWord > 0) {
@@ -387,8 +387,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 			mTipsView.setVisibility(View.INVISIBLE);
 			mListView.setVisibility(View.VISIBLE);
+
+			Snackbar.make(findViewById(R.id.activity_main), getResources().getQuantityString(R.plurals.search_results, previews.size(), previews.size()), Snackbar.LENGTH_SHORT).show();
 		} else {
-			// fixme message no results
 			Snackbar.make(findViewById(R.id.activity_main), R.string.no_results, Snackbar.LENGTH_LONG).show();
 		}
 
