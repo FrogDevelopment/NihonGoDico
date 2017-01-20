@@ -22,8 +22,8 @@ public class DownloadsActivity extends AppCompatActivity {
 
 	private SharedPreferences defaultSharedPreferences;
 
-	private Button  mDico;
-	private Button  mExample;
+	private Button mDico;
+	private Button mExample;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +43,16 @@ public class DownloadsActivity extends AppCompatActivity {
 			}
 		});
 		mDico = (Button) findViewById(R.id.download_dico);
-		mDico.setOnClickListener(view -> warningBigFile((dialog, id) -> {
-			new DicoDownLoadTask(this, languageTag).execute();
-			mLanguages.setEnabled(false); // todo on finish download
-		}));
+		mDico.setOnClickListener(view -> warningBigFile((dialog, id) -> new DicoDownLoadTask(this, languageTag, () -> {
+			mDico.setEnabled(false);
+			mLanguages.setEnabled(false);
+		}).execute()));
+
 		mExample = (Button) findViewById(R.id.download_examples);
-		mExample.setOnClickListener(view -> warningBigFile((dialog, id) -> {
-			new ExampleDownLoadTask(this, languageTag).execute();
-			mLanguages.setEnabled(false); // todo on finish download
-		}));
+		mExample.setOnClickListener(view -> warningBigFile((dialog, id) -> new ExampleDownLoadTask(this, languageTag, () -> {
+			mExample.setEnabled(false);
+			mLanguages.setEnabled(false);
+		}).execute()));
 
 		defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 

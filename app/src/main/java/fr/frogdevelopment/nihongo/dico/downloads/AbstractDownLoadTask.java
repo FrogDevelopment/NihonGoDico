@@ -21,6 +21,10 @@ import java.util.Scanner;
 
 abstract class AbstractDownLoadTask extends AsyncTask<Void, Integer, Boolean> {
 
+	interface DownloadListener {
+		void downloadDone();
+	}
+
 	private static final String BASE_URL = "http://legall.benoit.free.fr/nihon_go/";
 
 	private static final int MAX_VALUES = 4000;
@@ -29,17 +33,19 @@ abstract class AbstractDownLoadTask extends AsyncTask<Void, Integer, Boolean> {
 	private final   String  mFileName;
 	private final   Uri     mUri;
 	private final   String  mTag;
+	private final DownloadListener mListener;
 
 	private PowerManager.WakeLock mWakeLock;
 	private ProgressDialog        mProgressDialog;
 
 	protected List<ContentValues> mValueList = new ArrayList<>();
 
-	protected AbstractDownLoadTask(Context context, String fileName, Uri uri, String tag) {
+	protected AbstractDownLoadTask(Context context, String fileName, Uri uri, String tag, DownloadListener listener) {
 		this.mContext = context;
 		this.mFileName = fileName;
 		this.mUri = uri;
 		this.mTag = tag;
+		this.mListener = listener;
 	}
 
 	@Override

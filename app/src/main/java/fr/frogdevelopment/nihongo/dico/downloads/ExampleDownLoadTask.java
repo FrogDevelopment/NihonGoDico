@@ -17,8 +17,8 @@ class ExampleDownLoadTask extends AbstractDownLoadTask {
 
 	private static final String fileName = "examples_jpn_%s.csv";
 
-	public ExampleDownLoadTask(Context context, String language) {
-		super(context, String.format(fileName, language), URI_EXAMPLE, PREFERENCES_NAME);
+	public ExampleDownLoadTask(Context context, String language, DownloadListener listener) {
+		super(context, String.format(fileName, language), URI_EXAMPLE, PREFERENCES_NAME, listener);
 	}
 
 	@Override

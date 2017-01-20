@@ -13,7 +13,7 @@
         <item quantity="other">%1$d résultats</item>
     </plurals>
 
-    <string name="download_menu">Téléchargements</string>
+    <string name="downloads_title">Téléchargements</string>
     <string name="download_entries">Télécharger dictionnaire</string>
     <string name="download_examples">Télécharger exemples</string>
     <string name="download_big_file_warning">Attention, le fichier étant volumineux, veuillez télécharger via WiFi. Continuer ?</string>
@@ -24,7 +24,7 @@
 
     <string-array name="languages_array">
         <item>Choisissez un langue</item>
-        <item>Anglais</item>
+        <item>English</item>
         <item>Français</item>
     </string-array>
 

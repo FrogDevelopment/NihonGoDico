@@ -18,9 +18,9 @@ class DicoDownLoadTask extends AbstractDownLoadTask {
 
 	private int key = 0;
 
-	DicoDownLoadTask(Context context, String language) {
+	DicoDownLoadTask(Context context, String language, DownloadListener listener) {
 		// fixme select language
-		super(context, String.format(fileName, language), NihonGoDicoContentProvider.URI_WORD, PREFERENCES_NAME);
+		super(context, String.format(fileName, language), NihonGoDicoContentProvider.URI_WORD, PREFERENCES_NAME,listener);
 	}
 
 	@Override

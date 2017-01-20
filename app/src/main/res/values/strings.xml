@@ -15,7 +15,7 @@
         <item quantity="other">%1$d results</item>
     </plurals>
 
-    <string name="download_menu">Downloads</string>
+    <string name="downloads_title">Downloads</string>
     <string name="download_entries">Download dictionary</string>
     <string name="download_examples">Download examples</string>
     <string name="download_big_file_warning">Beware, the file is big, please use WiFi. Continue ?</string>
@@ -27,7 +27,7 @@
     <string-array name="languages_array">
         <item>Select a language</item>
         <item>English</item>
-        <item>French</item>
+        <item>Français</item>
     </string-array>
 
     <string name="tips"><![CDATA[
@@ -40,5 +40,6 @@
         <li>combine all (ex : hot ? wa*)</li>
         </ul></p>
     ]]></string>
+
 
 </resources>
