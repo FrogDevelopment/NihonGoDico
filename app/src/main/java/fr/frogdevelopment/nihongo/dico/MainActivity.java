@@ -180,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		switch (item.getItemId()) {
 			case R.id.dico_menu_download:
 				startActivity(new Intent(this, DownloadsActivity.class));
+				overridePendingTransition(R.anim.enter_from_top, R.anim.exit_to_bottom);
 				return true;
 
 			case android.R.id.home:

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -123,5 +124,22 @@ public class DownloadsActivity extends AppCompatActivity {
 			mDico.setEnabled(true);
 			mExample.setEnabled(true);
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_to_top);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				finish();
+				overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_to_top);
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }
