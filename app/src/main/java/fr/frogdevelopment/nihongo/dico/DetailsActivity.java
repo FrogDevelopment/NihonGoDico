@@ -98,12 +98,12 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 		boolean skip = false;
 		for (String word : words) {
 			if (word.contains("(")) {
-				word = word.split("\\(")[0];
-
-				addClickableWord(gloss, str, word);
+				addClickableWord(gloss, str, word.split("\\(")[0]);
 				skip = true; // skip till end of parenthesis
-			} else if (word.endsWith(")")) {
-				skip = false; // en dof parenthesis
+			}
+
+			if (word.endsWith(")")) {
+				skip = false; // end of parenthesis
 				continue; // skip this one too, but not the next
 			}
 			if (!skip) {
