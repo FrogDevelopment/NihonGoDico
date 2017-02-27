@@ -85,7 +85,7 @@ public class DownloadsActivity extends AppCompatActivity {
 	private void warningBigFile(DialogInterface.OnClickListener onClickListener) {
 		// todo force WiFi ?
 		new AlertDialog.Builder(this)
-				.setMessage(R.string.download_big_file_warning)
+				.setMessage(R.string.downloads_big_file_warning)
 				.setPositiveButton(android.R.string.ok, onClickListener)
 				.setNegativeButton(android.R.string.cancel, null)
 				.create()
