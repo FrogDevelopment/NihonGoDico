@@ -323,7 +323,7 @@ public class KanaToRomaji {
     }
 
     private static String doConvert(String value, Map<String, String> map, char littleTsu) {
-        StringBuilder romanji = new StringBuilder();
+        StringBuilder romaji = new StringBuilder();
 
         int length = value.length();
         int minus1Character = length - 2;
@@ -334,24 +334,24 @@ public class KanaToRomaji {
                 // KYA, SHA, NYA ...
                 substring = value.substring(i, i + 2);
                 if (map.containsKey(substring)) {
-                    romanji.append(map.get(substring));
+                    romaji.append(map.get(substring));
                     // increment 1 more as we take 2 characters
                     i++;
                 } else {
                     // A, KA, SA, TA ...
                     substring = value.substring(i, i + 1);
                     if (map.containsKey(substring)) {
-                        romanji.append(map.get(substring));
+                        romaji.append(map.get(substring));
                     } else {
                         // LITTLE TSU
                         if (value.charAt(i) == littleTsu) {
                             // skip little tsu and take next character
                             substring = value.substring(i + 1, i + 2);
                             // add only consonant
-                            romanji.append(map.get(substring).charAt(0));
+                            romaji.append(map.get(substring).charAt(0));
                         } else {
                             // UNKNOWN
-                            romanji.append(value.charAt(i));
+                            romaji.append(value.charAt(i));
                         }
                     }
                 }
@@ -359,15 +359,15 @@ public class KanaToRomaji {
                 // A, KA, SA, TA ...
                 substring = value.substring(i, i + 1);
                 if (map.containsKey(substring)) {
-                    romanji.append(map.get(substring));
+                    romaji.append(map.get(substring));
                 } else {
                     // UNKNOWN
-                    romanji.append(value.charAt(i));
+                    romaji.append(value.charAt(i));
                 }
             }
         }
 
-        return romanji.toString();
+        return romaji.toString();
     }
 
 }
