@@ -39,8 +39,7 @@
         <p><b>Search tips :</b><ul>
         <li>default : exactly match words (e.g. : hot water)</li>
         <li>start with: suffix with * (e.g. : wa*)</li>
-        <li>AND : separate by + (e.g. : hot + water)</li>
-        <li>NOT : prefix by - (e.g. : hot - water)</li>
+        <li>NOT : prefix by ! (e.g. : hot ! water)</li>
         <li>OR : prefix by ? (e.g. : hot ? water)</li>
         <li>combine all (ex : hot ? wa*)</li>
         </ul></p>

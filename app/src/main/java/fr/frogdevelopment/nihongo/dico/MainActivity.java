@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	private static final int LOADER_DICO_ID_KANA = 200;
 	private static final int LOADER_DICO_ID_GLOSS = 300;
 
-	private static final String REGEX_SEARCH_SPLIT = "\\+|-|\\?";
+	private static final String REGEX_SEARCH_SPLIT = "\\+|!|\\?";
 
 	/**
 	 * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -281,19 +281,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				} while (Character.isWhitespace(charAt));
 
 				switch (charAt) {
-					case '+': // AND implicit
-						selection += " ";
-						break;
 					case '?': // OR
 						selection += " OR ";
 						break;
-					case '-': // NOT
+					case '!': // NOT
 						selection += " -";
 						break;
 				}
 			}
 
-			if (search.split("\\s").length > 1) { // phrase query => enclosing in double quotes
+			if (search.split("\\s").length > 1 || search.contains("-")) { // phrase query or double-word => enclosing in double quotes
 				selection += "\"" + cleanWord(search) + "\"";
 			} else {
 				selection += cleanWord(search);
@@ -329,11 +326,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 						charAt = query.charAt(--indexOfWord);
 					} while (Character.isWhitespace(charAt));
 
-					switch (charAt) {
-						case '+':
-						case '?':
-							patterns.add(Pattern.compile(Pattern.quote(search.trim().toLowerCase())));
-							break;
+					if (charAt == '?') {
+						patterns.add(Pattern.compile(Pattern.quote(search.trim().toLowerCase())));
 					}
 				} else {
 					patterns.add(Pattern.compile(Pattern.quote(search.trim().toLowerCase())));

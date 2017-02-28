@@ -35,8 +35,7 @@
         <p><b>Astuces de recherche :</b><ul>
         <li>par défaut : match exactement les mots saisis (ex : eau chaude)</li>
         <li>commence par : suffixer avec un * (ex : cha*)</li>
-        <li>AND : les séparer par un + (ex : eau + chaude)</li>
-        <li>NOT : le préfixer par un - (ex : eau - chaude)</li>
+        <li>NOT : le préfixer par un ! (ex : eau ! chaude)</li>
         <li>OR : préfixer par un ? (ex : eau ? chaude)</li>
         <li>et tout peut se combiner (ex : eau ? cha*)</li>
         </ul></p>
