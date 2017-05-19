@@ -18,6 +18,7 @@
     <!-- DOWNLOADS -->
     <string name="downloads_title">Downloads</string>
     <string name="downloads_language_title">Language</string>
+    <string name="downloads_entries_hint">Select a language</string>
     <string name="downloads_entries_title">Download dictionary</string>
     <string name="downloads_entries_info" translatable="false">Copyright JMdict/EDICT &amp; EDRDG\nwww.edrdg.org/jmdict/edict_doc.html</string>
     <string name="downloads_entries">Download dictionary</string>
@@ -25,11 +26,6 @@
     <string name="downloads_examples_info" translatable="false">CC-BY 2.0 Tatoeba\ntatoeba.org</string>
     <string name="downloads_examples">Download examples</string>
     <string name="downloads_big_file_warning">Beware, the file is big, please use WiFi. Continue ?</string>
-    <string-array name="downloads_languages_array">
-        <item>Select a language</item>
-        <item>English</item>
-        <item>Français</item>
-    </string-array>
 
     <string name="exit_message">Quit application ?</string>
     <string name="exit_yes">Quit</string>

@@ -6,19 +6,27 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.TextView;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import fr.frogdevelopment.nihongo.dico.R;
 
 // fixme test connection available
 public class DownloadsActivity extends AppCompatActivity {
 
-	public static final int LANGUAGE_ENG = 1;
-	public static final int LANGUAGE_FRA = 2;
+	private static final List<String> AVAILABLE_LANG = Arrays.asList("eng", "fra", "dut", "ger", "rus", "hun", "ita", "esp", "slv", "swe");
+
+	private String languageTag;
 
 	private SharedPreferences defaultSharedPreferences;
 
@@ -30,56 +38,60 @@ public class DownloadsActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_downloads);
 
-		Spinner mLanguages = (Spinner) findViewById(R.id.download_language);
-		mLanguages.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-				onLanguageSelected(i);
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> adapterView) {
-
-			}
-		});
 		mDico = (Button) findViewById(R.id.download_dico);
-		mDico.setOnClickListener(view -> warningBigFile((dialog, id) -> new DicoDownLoadTask(this, languageTag, () -> {
-			mDico.setEnabled(false);
-			mLanguages.setEnabled(false);
-		}).execute()));
+		mDico.setOnClickListener(view -> warningBigFile((dialog, id) -> new DicoDownLoadTask(this, languageTag, () -> mDico.setEnabled(false)).execute()));
 
 		mExample = (Button) findViewById(R.id.download_examples);
-		mExample.setOnClickListener(view -> warningBigFile((dialog, id) -> new ExampleDownLoadTask(this, languageTag, () -> {
-			mExample.setEnabled(false);
-			mLanguages.setEnabled(false);
-		}).execute()));
+		mExample.setOnClickListener(view -> warningBigFile((dialog, id) -> new ExampleDownLoadTask(this, languageTag, () -> mExample.setEnabled(false)).execute()));
+
 
 		defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-		int language_saved = defaultSharedPreferences.getInt("language", 0);
-		if (language_saved != 0) {
-
+		languageTag = defaultSharedPreferences.getString("languageTag", "");
+		if (!TextUtils.isEmpty(languageTag)) {
 			boolean entries_saved = defaultSharedPreferences.getBoolean(DicoDownLoadTask.PREFERENCES_NAME, false);
 			mDico.setEnabled(!entries_saved);
 
 			boolean examples_saved = defaultSharedPreferences.getBoolean(ExampleDownLoadTask.PREFERENCES_NAME, false);
 			mExample.setEnabled(!examples_saved);
-
-			mLanguages.setSelection(language_saved);
-			mLanguages.setEnabled(!entries_saved && !examples_saved);
-
-			switch (language_saved) {
-				case LANGUAGE_ENG:
-					languageTag = "eng";
-					break;
-
-				case LANGUAGE_FRA:
-					languageTag = "fra";
-					break;
-			}
-		} else {
-			mLanguages.setEnabled(true);
 		}
+
+		TextView selectedLanguageView = (TextView) findViewById(R.id.download_selected_language);
+
+
+		String[] languages = Locale.getISOLanguages();
+		final String[] items = new String[AVAILABLE_LANG.size()];
+		int i = 0;
+		Map<String, Locale> localeMap = new HashMap<>(languages.length);
+		for (String language : languages) {
+			Locale locale = new Locale(language);
+			if (AVAILABLE_LANG.contains(locale.getISO3Language())) {
+				String lang = StringUtils.capitalize(locale.getDisplayLanguage());
+				localeMap.put(lang, locale);
+				items[i++] = lang;
+
+				if (locale.getISO3Language().equals(languageTag)) {
+					selectedLanguageView.setText(lang);
+				}
+			}
+		}
+
+		Button button = (Button) findViewById(R.id.download_change_language);
+		button.setOnClickListener(v -> new AlertDialog.Builder(getApplicationContext())
+				.setTitle(R.string.downloads_entries_hint)
+				.setItems(items, (dialog, which) -> {
+					Locale locale = localeMap.get(items[which]);
+					languageTag = locale.getISO3Language();
+
+					SharedPreferences.Editor editor = defaultSharedPreferences.edit();
+					editor.putString("languageTag", languageTag);
+					if (editor.commit()) {
+						mDico.setEnabled(true);
+						mExample.setEnabled(true);
+					}
+				})
+				.show());
+
 	}
 
 	private void warningBigFile(DialogInterface.OnClickListener onClickListener) {
@@ -90,41 +102,6 @@ public class DownloadsActivity extends AppCompatActivity {
 				.setNegativeButton(android.R.string.cancel, null)
 				.create()
 				.show();
-	}
-
-	// FIXME
-	private boolean init = false;
-
-	// fixme better way
-	private String languageTag;
-
-	private void onLanguageSelected(int pos) {
-		if (!init) {
-			init = true;
-			return;
-		}
-
-		switch (pos) {
-			case LANGUAGE_ENG:
-				languageTag = "eng";
-				break;
-
-			case LANGUAGE_FRA:
-				languageTag = "fra";
-				break;
-
-			default:
-				mDico.setEnabled(false);
-				mExample.setEnabled(false);
-				return;
-		}
-
-		SharedPreferences.Editor editor = defaultSharedPreferences.edit();
-		editor.putInt("language", pos);
-		if (editor.commit()) {
-			mDico.setEnabled(true);
-			mExample.setEnabled(true);
-		}
 	}
 
 	@Override

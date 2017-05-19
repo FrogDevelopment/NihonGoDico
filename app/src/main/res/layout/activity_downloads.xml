@@ -24,11 +24,17 @@
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"/>
 
-    <Spinner
-        android:id="@+id/download_language"
+    <TextView
+        android:id="@+id/download_selected_language"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/downloads_languages_array"/>
+        android:text="@string/downloads_entries_hint"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/download_change_language"
+        android:layout_width="match_parent"
+        android:text="change language"
+        android:layout_height="wrap_content"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -65,7 +71,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:linksClickable="true" android:autoLink="web"
+            android:autoLink="web"
+            android:linksClickable="true"
             android:text="@string/downloads_entries_info"/>
     </LinearLayout>
 
@@ -111,7 +118,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:linksClickable="true" android:autoLink="web"
+            android:autoLink="web"
+            android:linksClickable="true"
             android:text="@string/downloads_examples_info"/>
     </LinearLayout>
 
