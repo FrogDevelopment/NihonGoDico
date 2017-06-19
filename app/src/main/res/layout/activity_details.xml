@@ -18,14 +18,14 @@
         android:paddingTop="@dimen/activity_vertical_margin">
 
         <ImageView
-            android:id="@+id/details_speak"
+            android:id="@+id/details_favorite"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:visibility="invisible"
-            android:src="@drawable/ic_speak"/>
+            android:src="@drawable/ic_favorite_black_24dp"
+            android:tint="@android:color/darker_gray"/>
 
         <TextView
             android:id="@+id/details_kanji"
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_toStartOf="@id/details_speak"
+            android:layout_toStartOf="@id/details_favorite"
             android:text="ただ今"
             android:textSize="50sp"/>
 

@@ -39,20 +39,19 @@
             android:indeterminateTintMode="src_atop"
             android:visibility="gone"/>
 
+        <WebView
+            android:id="@+id/main_tips"
+            android:layout_below="@id/main_divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <ListView
             android:id="@+id/main_entries"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_below="@id/main_divider"
+            android:layout_below="@id/main_tips"
             android:visibility="gone"/>
-
-        <WebView
-            android:id="@+id/main_tips"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@id/main_divider"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
     </RelativeLayout>
 

@@ -2,13 +2,14 @@ package fr.frogdevelopment.nihongo.dico;
 
 import android.app.LoaderManager;
 import android.app.SearchManager;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -25,12 +26,12 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import fr.frogdevelopment.nihongo.dico.adapters.ExampleAdapter;
 import fr.frogdevelopment.nihongo.dico.contentprovider.EntryContract;
+import fr.frogdevelopment.nihongo.dico.contentprovider.FavoritesContract;
 import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
 import fr.frogdevelopment.nihongo.dico.contentprovider.SenseContract;
 import fr.frogdevelopment.nihongo.dico.entities.Details;
@@ -46,12 +47,12 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 	private TextView mLexicon;
 	private TextView mInfo;
 	private ListView mExamples;
-	private View mSpeakView;
+	private View mFavorite;
 
 	private String kanji;
 	private String reading;
-
-	private TextToSpeech mTextToSpeech;
+	private long senseId;
+	private Long favoriteId = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,18 +64,12 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 		kanji = args.getString(EntryContract.KANJI);
 		reading = args.getString(EntryContract.READING);
 
-		mSpeakView = findViewById(R.id.details_speak);
-		mSpeakView.setOnClickListener(view -> {
-			Bundle params = new Bundle();
-			params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "");
-			mTextToSpeech.speak(reading, TextToSpeech.QUEUE_ADD, params, "UniqueID");
-		});
-
-		mTextToSpeech = new TextToSpeech(this, status -> {
-			if (status == TextToSpeech.SUCCESS) {
-				mTextToSpeech.setLanguage(Locale.JAPAN);
-				mSpeakView.setVisibility(View.VISIBLE);
-				mTextToSpeech.setOnUtteranceProgressListener(mSpeakProgressListener);
+		mFavorite = findViewById(R.id.details_favorite);
+		mFavorite.setOnClickListener(view -> {
+			if (favoriteId != null) {
+				deleteFavorite();
+			} else {
+				insertFavorite();
 			}
 		});
 
@@ -119,14 +114,15 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		String[] selectionArgs;
 		switch (id) {
 			case LOADER_ID_DATA:
 				String[] columns = {SenseContract.POS, SenseContract.FIELD, SenseContract.MISC, SenseContract.DIAL, SenseContract.INFO};
-				String selection = SenseContract._ID + "=" + args.getLong(SenseContract._ID);
+				senseId = args.getLong(SenseContract._ID);
+				selectionArgs = new String[]{String.valueOf(senseId)};
 
-				return new CursorLoader(this, NihonGoDicoContentProvider.URI_WORD, columns, selection, null, null);
+				return new CursorLoader(this, NihonGoDicoContentProvider.URI_WORD, columns, null, selectionArgs, null);
 			case LOADER_ID_EXAMPLES:
-				String[] selectionArgs;
 				if (StringUtils.isNotBlank(kanji)) {
 					selectionArgs = new String[]{kanji};
 				} else {
@@ -152,6 +148,10 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 					item.misc = data.getString(2);
 					item.dial = data.getString(3);
 					item.info = data.getString(4);
+					if (!data.isNull(5)) {
+						favoriteId = data.getLong(5);
+					}
+					handleFavoriteResource();
 				}
 
 				List<String> lexicon = new ArrayList<>();
@@ -243,15 +243,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 	}
 
 	@Override
-	protected void onDestroy() {
-		if (mTextToSpeech != null) {
-			mTextToSpeech.shutdown();
-			mTextToSpeech = null;
-		}
-		super.onDestroy();
-	}
-
-	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
 		overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
@@ -268,21 +259,31 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 		return super.onOptionsItemSelected(item);
 	}
 
-	private final UtteranceProgressListener mSpeakProgressListener = new UtteranceProgressListener() {
+	private void insertFavorite() {
+		final ContentValues values = new ContentValues();
+		values.put(FavoritesContract.SENSE_ID, senseId);
 
-		@Override
-		public void onStart(String utteranceId) {
-			mSpeakView.setClickable(false);
+		Uri uri = getContentResolver().insert(NihonGoDicoContentProvider.URI_FAVORITE, values);
+
+		favoriteId = ContentUris.parseId(uri);
+		handleFavoriteResource();
+	}
+
+	private void deleteFavorite() {
+		final String where = FavoritesContract.SENSE_ID + " = ?";
+		final String[] selectionArgs = {String.valueOf(senseId)};
+
+		getContentResolver().delete(NihonGoDicoContentProvider.URI_FAVORITE, where, selectionArgs);
+
+		favoriteId = null;
+		handleFavoriteResource();
+	}
+
+	private void handleFavoriteResource() {
+		if (favoriteId == null) {
+			mFavorite.setBackgroundResource(R.drawable.ic_favorite_border_black_24dp);
+		} else {
+			mFavorite.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
 		}
-
-		@Override
-		public void onDone(String utteranceId) {
-			mSpeakView.setClickable(true);
-		}
-
-		@Override
-		public void onError(String utteranceId) {
-
-		}
-	};
+	}
 }

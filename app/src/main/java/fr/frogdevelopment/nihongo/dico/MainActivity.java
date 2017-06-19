@@ -47,6 +47,7 @@ import fr.frogdevelopment.nihongo.dico.utils.InputUtils;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+	private static final int LOADER_INIT = 0;
 	private static final int LOADER_DICO_ID_KANJI = 100;
 	private static final int LOADER_DICO_ID_KANA  = 200;
 	private static final int LOADER_DICO_ID_GLOSS = 300;
@@ -85,13 +86,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			// Clear the text from EditText view
 			mSearchAutoComplete.setText(null);
 			// Clear query
+			query = null;
 			mSearchView.setQuery("", false);
 			// Clear the results
+
 			if (mAdapter != null) {
 				mAdapter.clear();
 				mAdapter.notifyDataSetChanged();
 			}
+
 			mTipsView.setVisibility(View.VISIBLE);
+			getLoaderManager().restartLoader(LOADER_INIT, null, this);
 		});
 
 		mProgressBar = findViewById(R.id.main_progress);
@@ -115,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				actionBar.setDisplayHomeAsUpEnabled(true);
 			}
 		}
+
+		getLoaderManager().initLoader(LOADER_INIT, null, this);
 	}
 
 	private void onItemClick(int position) {
@@ -198,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			loaderId = LOADER_DICO_ID_GLOSS;
 		}
 
-		getLoaderManager().initLoader(loaderId, args, this);
+		getLoaderManager().restartLoader(loaderId, args, this);
 	}
 
 	@Override
@@ -206,6 +213,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		mProgressBar.setVisibility(View.VISIBLE);
 		mTipsView.setVisibility(View.VISIBLE);
 		mListView.setVisibility(View.INVISIBLE);
+
+		if (id == LOADER_INIT) {
+			return new CursorLoader(this, NihonGoDicoContentProvider.URI_FAVORITE, null, null, null, null);
+		}
 
 		final Uri uri;
 		switch (id) {
@@ -276,29 +287,32 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		int loaderId = loader.getId();
 		if (data.getCount() > 0) {
-			List<Preview> previews = new ArrayList<>();
-
-			String[] searches = query.split(REGEX_SEARCH_SPLIT);
 
 			List<Pattern> patterns = new ArrayList<>();
-			for (String search : searches) {
-				search = search.replace("*", ""); // pattern without the * char
-				// check the character in front of word to know if inclusion or exclusion
-				int indexOfWord = query.indexOf(search);
-				if (indexOfWord > 0) {
-					char charAt;
-					do {
-						charAt = query.charAt(--indexOfWord);
-					} while (Character.isWhitespace(charAt));
+			boolean isSearch = !TextUtils.isEmpty(query);
+			if (isSearch) {
+				String[] searches = query.split(REGEX_SEARCH_SPLIT);
 
-					if (charAt == '?') {
+				for (String search : searches) {
+					search = search.replace("*", ""); // pattern without the * char
+					// check the character in front of word to know if inclusion or exclusion
+					int indexOfWord = query.indexOf(search);
+					if (indexOfWord > 0) {
+						char charAt;
+						do {
+							charAt = query.charAt(--indexOfWord);
+						} while (Character.isWhitespace(charAt));
+
+						if (charAt == '?') {
+							patterns.add(Pattern.compile(Pattern.quote(search.trim().toLowerCase())));
+						}
+					} else {
 						patterns.add(Pattern.compile(Pattern.quote(search.trim().toLowerCase())));
 					}
-				} else {
-					patterns.add(Pattern.compile(Pattern.quote(search.trim().toLowerCase())));
 				}
 			}
 
+			List<Preview> previews = new ArrayList<>();
 			while (data.moveToNext()) {
 				Preview preview = new Preview();
 				preview.kanji = data.getString(0);
@@ -319,13 +333,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 						text = preview.gloss;
 				}
 
-				computeSimilarity(patterns, preview, text);
+				if (isSearch) {
+					computeSimilarity(patterns, preview, text);
+				}
 
 				previews.add(preview);
 			}
 
-			// sort by descending similarity score
-			Collections.sort(previews, (p1, p2) -> Double.compare(p2.similarity, p1.similarity));
+			if (isSearch) {
+				// sort by descending similarity score
+				Collections.sort(previews, (p1, p2) -> Double.compare(p2.similarity, p1.similarity));
+			}
 
 			// adapter by research type
 			switch (loaderId) {
@@ -345,10 +363,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
 			suggestions.saveRecentQuery(query, String.valueOf(previews.size() + " results"));
 
-			mTipsView.setVisibility(View.INVISIBLE);
 			mListView.setVisibility(View.VISIBLE);
-
-			Snackbar.make(findViewById(R.id.activity_main), getResources().getQuantityString(R.plurals.search_results, previews.size(), previews.size()), Snackbar.LENGTH_SHORT).show();
+			if (isSearch) {
+				mTipsView.setVisibility(View.GONE);
+				Snackbar.make(findViewById(R.id.activity_main), getResources().getQuantityString(R.plurals.search_results, previews.size(), previews.size()), Snackbar.LENGTH_SHORT).show();
+			}
 		} else {
 			Snackbar.make(findViewById(R.id.activity_main), R.string.no_results, Snackbar.LENGTH_LONG).show();
 		}

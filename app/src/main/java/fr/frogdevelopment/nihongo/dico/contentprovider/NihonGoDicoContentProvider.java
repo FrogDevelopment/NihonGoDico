@@ -14,7 +14,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -26,7 +25,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 	private class DictionaryOpenHelper extends SQLiteOpenHelper {
 
 		// When changing the database schema, increment the database version.
-		private static final int DATABASE_VERSION = 2;
+		private static final int DATABASE_VERSION = 3;
 		private static final String DATABASE_NAME = "NIHON_GO_DICO";
 
 		private DictionaryOpenHelper(Context context) {
@@ -39,26 +38,37 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 			EntryContract.create(db);
 			SenseContract.create(db);
 			ExampleContract.create(db);
+			FavoritesContract.create(db);
 		}
 
 		// Upgrading database
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			if (newVersion == 2) {
+			switch (newVersion) {
+				case 2:
 
-				EntryContract.drop(db);
-				SenseContract.drop(db);
-				ExampleContract.drop(db);
+					EntryContract.drop(db);
+					SenseContract.drop(db);
+					ExampleContract.drop(db);
 
-				EntryContract.create(db);
-				SenseContract.create(db);
-				ExampleContract.create(db);
+					EntryContract.create(db);
+					SenseContract.create(db);
+					ExampleContract.create(db);
 
-				// reset
-				SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
-				edit.putBoolean("entries_saved", false);
-				edit.putBoolean("examples_saved", false);
-				edit.apply();
+					// reset
+					SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
+					edit.putBoolean("entries_saved", false);
+					edit.putBoolean("examples_saved", false);
+					edit.apply();
+					break;
+
+				case 3:
+					FavoritesContract.create(db);
+					break;
+
+				default:
+					// nothing to do
+					break;
 			}
 		}
 	}
@@ -107,6 +117,10 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 	private static final String CONTENT_REBUILD_EXAMPLE_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_REBUILD_EXAMPLE;
 	public static final Uri URI_REBUILD_EXAMPLE = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_REBUILD_EXAMPLE);
 
+	private static final int FAVORITE_ID = 80;
+	private static final String BASE_PATH_FAVORITE = "favorite";
+	private static final String CONTENT_FAVORITE_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_FAVORITE;
+	public static final Uri URI_FAVORITE = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_FAVORITE);
 
 	private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -117,6 +131,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_EXAMPLE, EXAMPLE);
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_REBUILD_DICO, REBUILD_DICO);
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_REBUILD_EXAMPLE, REBUILD_EXAMPLE);
+		sURIMatcher.addURI(AUTHORITY, BASE_PATH_FAVORITE, FAVORITE_ID);
 
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH_KANJI, SEARCH_KANJI);
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH_KANA, SEARCH_KANA);
@@ -137,6 +152,9 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 	public String getType(@NonNull Uri uri) {
 		int match = sURIMatcher.match(uri);
 		switch (match) {
+
+			case FAVORITE_ID:
+				return CONTENT_FAVORITE_ITEM_TYPE;
 
 			case WORD_ID:
 				return CONTENT_WORD_ITEM_TYPE;
@@ -166,8 +184,6 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 
 	@Override
 	public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-
 		SQLiteDatabase db = mOpenHelper.getReadableDatabase();
 		Cursor cursor;
 		switch (sURIMatcher.match(uri)) {
@@ -175,14 +191,25 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 			case URI_MATCH_SUGGEST:
 				return super.query(uri, projection, selection, selectionArgs, sortOrder);
 
+			case FAVORITE_ID:
+				String sql_favorites = "SELECT entry.kanji, entry.reading, sense.gloss, sense._id" +
+						" FROM entry" +
+						" INNER JOIN sense ON (entry._id = sense.entry_id)" +
+						" INNER JOIN favorites ON (sense._id = favorites.sense_id)" +
+						" ORDER BY sense.gloss";
+				cursor = db.rawQuery(sql_favorites, null);
+				break;
+
 			case WORD_ID:
-				queryBuilder.setTables(SenseContract.TABLE_NAME);
-				cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+				String sql_word = "SELECT sense.pos, sense.field, sense.misc, sense.dial, sense.info, favorites._ID" +
+						" FROM sense " +
+						" LEFT OUTER JOIN favorites ON (sense._id = favorites.sense_id)" +
+						" WHERE sense._ID = ?";
+				cursor = db.rawQuery(sql_word, selectionArgs);
 				break;
 
 			case EXAMPLE:
 				String sql = "SELECT japanese_sentence, translation_sentence FROM example WHERE _ID IN " +
-//                String sql = "SELECT japanese_sentence, indices FROM example WHERE _ID IN " +
 						" (SELECT docid FROM fts_example WHERE fts_example MATCH ?)";
 				cursor = db.rawQuery(sql, selectionArgs);
 				break;
@@ -224,7 +251,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 	// https://eshyu.wordpress.com/2010/08/15/using-sqlite-transactions-with-your-contentprovider/
 	@Override
 	public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
-		int numInserted = 0;
+		int numInserted;
 
 		SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 		try {
@@ -239,7 +266,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 
 					SparseLongArray entriesId = new SparseLongArray();
 					for (ContentValues value : values) {
-                        Integer key = value.getAsInteger("key");
+						Integer key = value.getAsInteger("key");
 
 						String tag = value.getAsString("tag");
 						switch (tag) {
@@ -256,13 +283,13 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 								entryStatement.bindString(EntryContract.INDEX_READING, value.getAsString(EntryContract.READING));
 
 								Long entryId = entryStatement.executeInsert();
-                                entriesId.put(key, entryId);
+								entriesId.put(key, entryId);
 								break;
 
 							case "sense":
 								sensesStatement.clearBindings();
 
-                                sensesStatement.bindLong(SenseContract.INDEX_ENTRY_ID, entriesId.get(key));
+								sensesStatement.bindLong(SenseContract.INDEX_ENTRY_ID, entriesId.get(key));
 
 								String pos = value.getAsString(SenseContract.POS);
 								if (pos == null) {
@@ -299,9 +326,9 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 									sensesStatement.bindString(SenseContract.INDEX_DIAL, dial);
 								}
 
-                                sensesStatement.bindString(SenseContract.INDEX_GLOSS, value.getAsString(SenseContract.GLOSS));
+								sensesStatement.bindString(SenseContract.INDEX_GLOSS, value.getAsString(SenseContract.GLOSS));
 
-                                sensesStatement.executeInsert();
+								sensesStatement.executeInsert();
 								break;
 
 							default:
@@ -362,5 +389,39 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 				return super.update(uri, values, selection, selectionArgs);
 		}
 
+	}
+
+	@Override
+	public Uri insert(Uri uri, ContentValues values) {
+		switch (sURIMatcher.match(uri)) {
+
+			case FAVORITE_ID:
+				SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+				long rowID = db.insert(FavoritesContract.TABLE_NAME, null, values);
+				Uri newUri = Uri.withAppendedPath(uri, String.valueOf(rowID));
+				getContext().getContentResolver().notifyChange(newUri, null);
+
+				return newUri;
+
+			default:
+				return super.insert(uri, values);
+		}
+	}
+
+	@Override
+	public int delete(Uri uri, String selection, String[] selectionArgs) {
+		switch (sURIMatcher.match(uri)) {
+
+			case FAVORITE_ID:
+				SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+
+				int count = db.delete(FavoritesContract.TABLE_NAME, selection, selectionArgs);
+				getContext().getContentResolver().notifyChange(uri, null);
+
+				return count;
+
+			default:
+				return super.delete(uri, selection, selectionArgs);
+		}
 	}
 }
