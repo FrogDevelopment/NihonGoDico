@@ -39,8 +39,11 @@
         <li>OR : prefix by ? (e.g. : hot ? water)</li>
         <li>combine all (ex : hot ? wa*)</li>
         </ul></p>
-        <p><b>Favorites :</b></p>
     ]]></string>
+
+    <!-- FAVORITES -->
+    <string name="favorites_title">Favorites</string>
+    <string name="no_favorites">No favorites</string>
 
 
 </resources>

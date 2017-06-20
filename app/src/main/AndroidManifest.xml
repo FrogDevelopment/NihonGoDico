@@ -120,6 +120,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.frogdevelopment.nihongo.dico.MainActivity"/>
         </activity>
-    </application>
-
+        <activity
+            android:name=".FavoritesActivity"
+            android:label="@string/favorites_title"
+            android:launchMode="singleInstance"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.frogdevelopment.nihongo.dico.MainActivity"/>
+        </activity>
 </manifest>

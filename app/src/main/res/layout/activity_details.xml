@@ -24,7 +24,6 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_favorite_black_24dp"
             android:tint="@android:color/darker_gray"/>
 
         <TextView

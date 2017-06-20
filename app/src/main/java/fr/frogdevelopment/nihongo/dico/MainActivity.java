@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			}
 
 			mTipsView.setVisibility(View.VISIBLE);
-			getLoaderManager().restartLoader(LOADER_INIT, null, this);
 		});
 
 		mProgressBar = findViewById(R.id.main_progress);
@@ -120,8 +119,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				actionBar.setDisplayHomeAsUpEnabled(true);
 			}
 		}
-
-		getLoaderManager().initLoader(LOADER_INIT, null, this);
 	}
 
 	private void onItemClick(int position) {
@@ -133,10 +130,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			intent.putExtra(EntryContract.READING, item.reading);
 			intent.putExtra(SenseContract.GLOSS, item.gloss);
 			intent.putExtra(SenseContract._ID, item.sense_id);
-
-			startActivity(intent);
-			overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
 		}
+
+		startActivity(intent);
+		overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
 	}
 
 	@Override
@@ -150,6 +147,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+			case R.id.dico_menu_favorites:
+				startActivity(new Intent(this, FavoritesActivity.class));
+				return true;
+
 			case R.id.dico_menu_download:
 				startActivity(new Intent(this, DownloadsActivity.class));
 				overridePendingTransition(R.anim.enter_from_top, R.anim.exit_to_bottom);
@@ -213,10 +214,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		mProgressBar.setVisibility(View.VISIBLE);
 		mTipsView.setVisibility(View.VISIBLE);
 		mListView.setVisibility(View.INVISIBLE);
-
-		if (id == LOADER_INIT) {
-			return new CursorLoader(this, NihonGoDicoContentProvider.URI_FAVORITE, null, null, null, null);
-		}
 
 		final Uri uri;
 		switch (id) {
@@ -289,26 +286,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		if (data.getCount() > 0) {
 
 			List<Pattern> patterns = new ArrayList<>();
-			boolean isSearch = !TextUtils.isEmpty(query);
-			if (isSearch) {
-				String[] searches = query.split(REGEX_SEARCH_SPLIT);
+			String[] searches = query.split(REGEX_SEARCH_SPLIT);
 
-				for (String search : searches) {
-					search = search.replace("*", ""); // pattern without the * char
-					// check the character in front of word to know if inclusion or exclusion
-					int indexOfWord = query.indexOf(search);
-					if (indexOfWord > 0) {
-						char charAt;
-						do {
-							charAt = query.charAt(--indexOfWord);
-						} while (Character.isWhitespace(charAt));
+			for (String search : searches) {
+				search = search.replace("*", ""); // pattern without the * char
+				// check the character in front of word to know if inclusion or exclusion
+				int indexOfWord = query.indexOf(search);
+				if (indexOfWord > 0) {
+					char charAt;
+					do {
+						charAt = query.charAt(--indexOfWord);
+					} while (Character.isWhitespace(charAt));
 
-						if (charAt == '?') {
-							patterns.add(Pattern.compile(Pattern.quote(search.trim().toLowerCase())));
-						}
-					} else {
+					if (charAt == '?') {
 						patterns.add(Pattern.compile(Pattern.quote(search.trim().toLowerCase())));
 					}
+				} else {
+					patterns.add(Pattern.compile(Pattern.quote(search.trim().toLowerCase())));
 				}
 			}
 
@@ -333,17 +327,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 						text = preview.gloss;
 				}
 
-				if (isSearch) {
-					computeSimilarity(patterns, preview, text);
-				}
+				computeSimilarity(patterns, preview, text);
 
 				previews.add(preview);
 			}
 
-			if (isSearch) {
-				// sort by descending similarity score
-				Collections.sort(previews, (p1, p2) -> Double.compare(p2.similarity, p1.similarity));
-			}
+			// sort by descending similarity score
+			Collections.sort(previews, (p1, p2) -> Double.compare(p2.similarity, p1.similarity));
 
 			// adapter by research type
 			switch (loaderId) {
@@ -364,10 +354,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			suggestions.saveRecentQuery(query, String.valueOf(previews.size() + " results"));
 
 			mListView.setVisibility(View.VISIBLE);
-			if (isSearch) {
-				mTipsView.setVisibility(View.GONE);
-				Snackbar.make(findViewById(R.id.activity_main), getResources().getQuantityString(R.plurals.search_results, previews.size(), previews.size()), Snackbar.LENGTH_SHORT).show();
-			}
+			mTipsView.setVisibility(View.GONE);
 		} else {
 			Snackbar.make(findViewById(R.id.activity_main), R.string.no_results, Snackbar.LENGTH_LONG).show();
 		}

@@ -18,6 +18,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -47,7 +48,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 	private TextView mLexicon;
 	private TextView mInfo;
 	private ListView mExamples;
-	private View mFavorite;
+	private ImageView mFavorite;
 
 	private String kanji;
 	private String reading;
@@ -64,7 +65,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 		kanji = args.getString(EntryContract.KANJI);
 		reading = args.getString(EntryContract.READING);
 
-		mFavorite = findViewById(R.id.details_favorite);
+		mFavorite = (ImageView) findViewById(R.id.details_favorite);
 		mFavorite.setOnClickListener(view -> {
 			if (favoriteId != null) {
 				deleteFavorite();
@@ -281,9 +282,9 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
 	private void handleFavoriteResource() {
 		if (favoriteId == null) {
-			mFavorite.setBackgroundResource(R.drawable.ic_favorite_border_black_24dp);
+			mFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
 		} else {
-			mFavorite.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
+			mFavorite.setImageResource(R.drawable.ic_favorite_black_24dp);
 		}
 	}
 }

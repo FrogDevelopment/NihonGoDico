@@ -35,7 +35,10 @@
         <li>OR : préfixer par un ? (ex : eau ? chaude)</li>
         <li>et tout peut se combiner (ex : eau ? cha*)</li>
         </ul></p>
-        <p><b>Favoris :</b></p>
     ]]></string>
+
+    <!-- FAVORITES -->
+    <string name="favorites_title">Favoris</string>
+    <string name="no_favorites">Aucun favoris</string>
 
 </resources>
