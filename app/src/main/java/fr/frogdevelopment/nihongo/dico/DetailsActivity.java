@@ -65,7 +65,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 		kanji = args.getString(EntryContract.KANJI);
 		reading = args.getString(EntryContract.READING);
 
-		mFavorite = (ImageView) findViewById(R.id.details_favorite);
+		mFavorite = findViewById(R.id.details_favorite);
 		mFavorite.setOnClickListener(view -> {
 			if (favoriteId != null) {
 				deleteFavorite();
