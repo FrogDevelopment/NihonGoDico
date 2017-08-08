@@ -47,7 +47,7 @@ import fr.frogdevelopment.nihongo.dico.utils.InputUtils;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-	private static final int LOADER_INIT = 0;
+	private static final int LOADER_INIT          = 0;
 	private static final int LOADER_DICO_ID_KANJI = 100;
 	private static final int LOADER_DICO_ID_KANA  = 200;
 	private static final int LOADER_DICO_ID_GLOSS = 300;
@@ -130,10 +130,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			intent.putExtra(EntryContract.READING, item.reading);
 			intent.putExtra(SenseContract.GLOSS, item.gloss);
 			intent.putExtra(SenseContract._ID, item.sense_id);
-		}
 
-		startActivity(intent);
-		overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+			startActivity(intent);
+			overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+		}
 	}
 
 	@Override
