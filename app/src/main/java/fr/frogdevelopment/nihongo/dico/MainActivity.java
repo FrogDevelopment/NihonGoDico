@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
-import android.speech.tts.TextToSpeech;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -26,11 +25,6 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -53,25 +47,19 @@ import fr.frogdevelopment.nihongo.dico.utils.InputUtils;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-	private static final int RC_DATA_CHECK_CODE = 735;
 	private static final int LOADER_DICO_ID_KANJI = 100;
-	private static final int LOADER_DICO_ID_KANA = 200;
+	private static final int LOADER_DICO_ID_KANA  = 200;
 	private static final int LOADER_DICO_ID_GLOSS = 300;
 
 	private static final String REGEX_SEARCH_SPLIT = "\\+|!|\\?";
 
-	/**
-	 * ATTENTION: This was auto-generated to implement the App Indexing API.
-	 * See https://g.co/AppIndexing/AndroidStudio for more information.
-	 */
-	private GoogleApiClient client;
-	private ProgressBar mProgressBar;
-	private WebView mTipsView;
-	private ListView mListView;
-	private DicoAdapter mAdapter;
+	private ProgressBar                   mProgressBar;
+	private WebView                       mTipsView;
+	private ListView                      mListView;
+	private DicoAdapter                   mAdapter;
 	private SearchView.SearchAutoComplete mSearchAutoComplete;
 
-	private String query;
+	private String     query;
 	private SearchView mSearchView;
 
 	@Override
@@ -79,25 +67,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Intent checkIntent = new Intent();
-		checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-		startActivityForResult(checkIntent, RC_DATA_CHECK_CODE);
-
-		// ATTENTION: This was auto-generated to implement the App Indexing API.
-		// See https://g.co/AppIndexing/AndroidStudio for more information.
-		client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-
-		mSearchView = (SearchView) findViewById(R.id.main_search_field);
+		mSearchView = findViewById(R.id.main_search_field);
 		// Get the SearchView and set the searchable configuration
 		SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
 		// Assumes current activity is the searchable activity
-		mSearchView.setSearchableInfo(searchManager.getSearchableInfo(this.getComponentName()));
-		mSearchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-		mSearchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+		if (searchManager != null) {
+			mSearchView.setSearchableInfo(searchManager.getSearchableInfo(this.getComponentName()));
+			mSearchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+			mSearchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+		}
 		// Find EditText view
-		mSearchAutoComplete = (SearchView.SearchAutoComplete) findViewById(R.id.search_src_text);
+		mSearchAutoComplete = findViewById(R.id.search_src_text);
 		// Get the search close button image view
-		ImageView closeButton = (ImageView) mSearchView.findViewById(R.id.search_close_btn);
+		ImageView closeButton = mSearchView.findViewById(R.id.search_close_btn);
 		// Set on click listener
 		closeButton.setOnClickListener(view -> {
 			// Clear the text from EditText view
@@ -112,12 +94,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			mTipsView.setVisibility(View.VISIBLE);
 		});
 
-		mProgressBar = (ProgressBar) findViewById(R.id.main_progress);
+		mProgressBar = findViewById(R.id.main_progress);
 
-		mTipsView = (WebView) findViewById(R.id.main_tips);
+		mTipsView = findViewById(R.id.main_tips);
 		mTipsView.loadDataWithBaseURL(null, getString(R.string.tips), "text/html", "utf-8", null);
 
-		mListView = (ListView) findViewById(R.id.main_entries);
+		mListView = findViewById(R.id.main_entries);
 		mListView.setOnItemClickListener((adapterView, view, i, l) -> onItemClick(i));
 
 		boolean data_saved = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("entries_saved", false);
@@ -137,33 +119,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 	private void onItemClick(int position) {
 		Preview item = mAdapter.getItem(position);
-		Intent intent = new Intent(this, DetailsActivity.class);
-		intent.putExtra(EntryContract.KANJI, item.kanji);
-		intent.putExtra(EntryContract.READING, item.reading);
-		intent.putExtra(SenseContract.GLOSS, item.gloss);
-		intent.putExtra(SenseContract._ID, item.sense_id);
 
-		startActivity(intent);
-		overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
-	}
+		if (item != null) {
+			Intent intent = new Intent(this, DetailsActivity.class);
+			intent.putExtra(EntryContract.KANJI, item.kanji);
+			intent.putExtra(EntryContract.READING, item.reading);
+			intent.putExtra(SenseContract.GLOSS, item.gloss);
+			intent.putExtra(SenseContract._ID, item.sense_id);
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == RC_DATA_CHECK_CODE) {
-			// success, create the TTS instance
-			if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-				// check japanese available
-				ArrayList<String> availableVoices = data.getStringArrayListExtra(TextToSpeech.Engine.EXTRA_AVAILABLE_VOICES);
-				String jpnTag = "jpn-jpn"; // fixme
-				if (!availableVoices.contains(jpnTag)) {
-					// fixme
-				}
-			} else {
-				// missing data, install it
-				Intent installIntent = new Intent();
-				installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-				startActivity(installIntent);
-			}
+			startActivity(intent);
+			overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
 		}
 	}
 
@@ -263,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		String[] searches = query.split(REGEX_SEARCH_SPLIT);
 
 		char charAt;
-		String selection = "";
+		StringBuilder selection = new StringBuilder();
 		// if other words, check either include (+) or exclude (-) from query
 		for (String search : searches) { // start 1, as first word already proceed
 			if (TextUtils.isEmpty(search)) {
@@ -282,22 +247,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 				switch (charAt) {
 					case '?': // OR
-						selection += " OR ";
+						selection.append(" OR ");
 						break;
 					case '!': // NOT
-						selection += " -";
+						selection.append(" -");
 						break;
 				}
 			}
 
 			if (search.split("\\s").length > 1 || search.contains("-")) { // phrase query or double-word => enclosing in double quotes
-				selection += "\"" + cleanWord(search) + "\"";
+				selection.append("\"").append(cleanWord(search)).append("\"");
 			} else {
-				selection += cleanWord(search);
+				selection.append(cleanWord(search));
 			}
 		}
 
-		return new CursorLoader(this, uri, null, selection, null, null);
+		return new CursorLoader(this, uri, null, selection.toString(), null, null);
 	}
 
 	private static String cleanWord(String word) {
@@ -423,42 +388,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 
-	}
-
-	/**
-	 * ATTENTION: This was auto-generated to implement the App Indexing API.
-	 * See https://g.co/AppIndexing/AndroidStudio for more information.
-	 */
-	public Action getIndexApiAction() {
-		Thing object = new Thing.Builder()
-				.setName("Main Page") // TODO: Define a title for the content shown.
-				// TODO: Make sure this auto-generated URL is correct.
-				.setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-				.build();
-		return new Action.Builder(Action.TYPE_VIEW)
-				.setObject(object)
-				.setActionStatus(Action.STATUS_TYPE_COMPLETED)
-				.build();
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-
-		// ATTENTION: This was auto-generated to implement the App Indexing API.
-		// See https://g.co/AppIndexing/AndroidStudio for more information.
-		client.connect();
-		AppIndex.AppIndexApi.start(client, getIndexApiAction());
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
-
-		// ATTENTION: This was auto-generated to implement the App Indexing API.
-		// See https://g.co/AppIndexing/AndroidStudio for more information.
-		AppIndex.AppIndexApi.end(client, getIndexApiAction());
-		client.disconnect();
 	}
 
 	@Override

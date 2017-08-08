@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion '26.0.1'
 
     defaultConfig {
         applicationId "fr.frogdevelopment.nihongo.dico"
 
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 26
 
         versionCode 9
         versionName "1.3.0"
@@ -39,19 +39,25 @@ android {
 }
 
 dependencies {
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    // Test
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 
-//    Android
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:support-v4:25.3.1'
+    // Android
+    implementation 'com.android.support:design:26.0.0'
+    implementation 'com.android.support:support-v4:26.0.0'
 
-    // google
-    compile 'com.google.android.gms:play-services-appindexing:9.8.0'
+    // Divers
+    implementation 'org.apache.commons:commons-lang3:3.5'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.7'
 
-//    Divers
-    compile 'org.apache.commons:commons-lang3:3.5'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.7'
+    // logback
+    implementation 'org.slf4j:slf4j-api:1.7.21'
+    implementation 'com.github.tony19:logback-android-core:1.1.1-6'
+    implementation('com.github.tony19:logback-android-classic:1.1.1-6') {
+        // workaround issue #73
+        exclude group: 'com.google.android', module: 'android'
+    }
 }

@@ -78,20 +78,20 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 			}
 		});
 
-		TextView mKanji = (TextView) findViewById(R.id.details_kanji);
+		TextView mKanji = findViewById(R.id.details_kanji);
 		mKanji.setText(kanji);
 
-		TextView mReading = (TextView) findViewById(R.id.details_reading);
+		TextView mReading = findViewById(R.id.details_reading);
 		mReading.setText(reading);
 
-		TextView mRomaji = (TextView) findViewById(R.id.details_romaji);
+		TextView mRomaji = findViewById(R.id.details_romaji);
 		mRomaji.setText(KanaToRomaji.convert(reading));
 
-		mLexicon = (TextView) findViewById(R.id.details_lexicon);
-		mInfo = (TextView) findViewById(R.id.details_info);
-		mExamples = (ListView) findViewById(R.id.details_examples);
+		mLexicon = findViewById(R.id.details_lexicon);
+		mInfo = findViewById(R.id.details_info);
+		mExamples = findViewById(R.id.details_examples);
 
-		TextView mGloss = (TextView) findViewById(R.id.details_gloss);
+		TextView mGloss = findViewById(R.id.details_gloss);
 		String gloss = args.getString(SenseContract.GLOSS);
 		SpannableStringBuilder str = new SpannableStringBuilder(gloss);
 		String[] words = gloss.split(",");

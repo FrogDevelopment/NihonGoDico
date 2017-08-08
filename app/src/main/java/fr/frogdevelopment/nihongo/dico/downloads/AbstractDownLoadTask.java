@@ -29,11 +29,11 @@ abstract class AbstractDownLoadTask extends AsyncTask<Void, Integer, Boolean> {
 
 	private static final int MAX_VALUES = 4000;
 
-	protected final Context mContext;
-	private final   String  mFileName;
-	private final   Uri     mUri;
-	private final   String  mTag;
-	private final DownloadListener mListener;
+	protected final Context          mContext;
+	private final   String           mFileName;
+	private final   Uri              mUri;
+	private final   String           mTag;
+	private final   DownloadListener mListener;
 
 	private PowerManager.WakeLock mWakeLock;
 	private ProgressDialog        mProgressDialog;
@@ -53,8 +53,10 @@ abstract class AbstractDownLoadTask extends AsyncTask<Void, Integer, Boolean> {
 		// take CPU lock to prevent CPU from going off if the user
 		// presses the power button during download
 		PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-		mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
-		mWakeLock.acquire();
+		if (pm != null) {
+			mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
+			mWakeLock.acquire(10*60*1000L /*10 minutes*/);
+		}
 		mProgressDialog = new ProgressDialog(mContext);
 		mProgressDialog.setTitle("Downloading"); //fixme
 		mProgressDialog.setCancelable(false);
@@ -156,6 +158,8 @@ abstract class AbstractDownLoadTask extends AsyncTask<Void, Integer, Boolean> {
 			SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
 			edit.putBoolean(mTag, true);
 			edit.apply();
+
+			mListener.downloadDone();
 		}
 	}
 }

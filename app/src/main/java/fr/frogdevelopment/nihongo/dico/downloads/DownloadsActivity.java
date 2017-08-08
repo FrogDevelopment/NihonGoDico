@@ -38,10 +38,10 @@ public class DownloadsActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_downloads);
 
-		mDico = (Button) findViewById(R.id.download_dico);
+		mDico = findViewById(R.id.download_dico);
 		mDico.setOnClickListener(view -> warningBigFile((dialog, id) -> new DicoDownLoadTask(this, languageTag, () -> mDico.setEnabled(false)).execute()));
 
-		mExample = (Button) findViewById(R.id.download_examples);
+		mExample = findViewById(R.id.download_examples);
 		mExample.setOnClickListener(view -> warningBigFile((dialog, id) -> new ExampleDownLoadTask(this, languageTag, () -> mExample.setEnabled(false)).execute()));
 
 
@@ -56,19 +56,19 @@ public class DownloadsActivity extends AppCompatActivity {
 			mExample.setEnabled(!examples_saved);
 		}
 
-		TextView selectedLanguageView = (TextView) findViewById(R.id.download_selected_language);
+		TextView selectedLanguageView = findViewById(R.id.download_selected_language);
 
 
 		String[] languages = Locale.getISOLanguages();
 		final String[] items = new String[AVAILABLE_LANG.size()];
-		int i = 0;
+		int nbItems = 0;
 		Map<String, Locale> localeMap = new HashMap<>(languages.length);
 		for (String language : languages) {
 			Locale locale = new Locale(language);
 			if (AVAILABLE_LANG.contains(locale.getISO3Language())) {
 				String lang = StringUtils.capitalize(locale.getDisplayLanguage());
 				localeMap.put(lang, locale);
-				items[i++] = lang;
+				items[nbItems++] = lang;
 
 				if (locale.getISO3Language().equals(languageTag)) {
 					selectedLanguageView.setText(lang);
@@ -76,11 +76,16 @@ public class DownloadsActivity extends AppCompatActivity {
 			}
 		}
 
-		Button button = (Button) findViewById(R.id.download_change_language);
-		button.setOnClickListener(v -> new AlertDialog.Builder(getApplicationContext())
+		String[] copyOf = Arrays.copyOf(items, nbItems);
+
+		findViewById(R.id.download_change_language).setOnClickListener(v -> new AlertDialog.Builder(DownloadsActivity.this)
 				.setTitle(R.string.downloads_entries_hint)
-				.setItems(items, (dialog, which) -> {
-					Locale locale = localeMap.get(items[which]);
+				.setItems(copyOf, (dialog, which) -> {
+					String language = items[which];
+
+					selectedLanguageView.setText(language);
+
+					Locale locale = localeMap.get(language);
 					languageTag = locale.getISO3Language();
 
 					SharedPreferences.Editor editor = defaultSharedPreferences.edit();
@@ -89,7 +94,7 @@ public class DownloadsActivity extends AppCompatActivity {
 						mDico.setEnabled(true);
 						mExample.setEnabled(true);
 					}
-				})
+				}).create()
 				.show());
 
 	}

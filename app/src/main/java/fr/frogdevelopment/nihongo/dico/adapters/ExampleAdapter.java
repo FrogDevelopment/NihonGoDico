@@ -65,8 +65,8 @@ public class ExampleAdapter extends ArrayAdapter<Example> {
 		private final TextView text2;
 
 		private ViewHolder(View view) {
-			text1 = (TextView) view.findViewById(android.R.id.text1);
-			text2 = (TextView) view.findViewById(android.R.id.text2);
+			text1 = view.findViewById(android.R.id.text1);
+			text2 = view.findViewById(android.R.id.text2);
 		}
 	}
 }
