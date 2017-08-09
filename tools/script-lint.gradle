@@ -1,0 +1,12 @@
+android {
+    lintOptions {
+        lintConfig file("$project.rootDir/tools/rules-lint.xml")
+        htmlOutput file("$project.buildDir/outputs/lint/lint.html")
+        warningsAsErrors true
+        xmlReport false
+
+        disable 'InvalidPackage'
+
+        abortOnError false
+    }
+}

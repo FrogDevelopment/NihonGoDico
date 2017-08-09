@@ -1,4 +1,9 @@
 apply plugin: 'com.android.application'
+apply from: "$project.rootDir/tools/script-git-version.gradle"
+apply from: "$project.rootDir/tools/script-findbugs.gradle"
+apply from: "$project.rootDir/tools/script-lint.gradle"
+apply from: "$project.rootDir/tools/script-pmd.gradle"
+apply from: "$project.rootDir/tools/script-java-code-coverage.gradle"
 
 android {
     compileSdkVersion 26
@@ -9,21 +14,63 @@ android {
 
         minSdkVersion 21
         targetSdkVersion 26
-
-        versionCode 9
-        versionName "1.3.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
-    buildTypes {
+
+    signingConfigs {
+        debug {
+            keyAlias 'nihon_go_keystore'
+//            keyAlias 'nihon_go_keystore_debug'
+            keyPassword 'nihongo'
+            storePassword 'b3E12h21On'
+            // keytool -genkey -v -keystore debug.keystore -alias nihon_go_keystore_debug -keyalg RSA -keysize 2048 -validity 10000
+//            storeFile file('../keystore/debug.keystore')
+            storeFile file('../keystore/key_store.jks')
+        }
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            keyAlias 'nihon_go_keystore'
+            keyPassword 'nihongo'
+            storePassword 'b3E12h21On'
+            // keytool -genkey -v -keystore release.keystore -alias nihon_go_keystore -keyalg RSA -keysize 2048 -validity 10000
+//            storeFile file('../keystore/release.keystore')
+            storeFile file('../keystore/key_store.jks')
         }
     }
-    lintOptions {
-        disable 'InvalidPackage'
+
+    // Specifies a flavor dimension.
+    flavorDimensions "nihongo"
+
+    productFlavors {
+        dev {
+            signingConfig signingConfigs.debug
+            versionCode gitVersionCodeTime
+            versionName gitVersionName
+            applicationId "fr.frogdevelopment.nihongo.dico.dev"
+
+            dimension "nihongo"
+        }
+
+        prod {
+            signingConfig signingConfigs.release
+            versionCode gitVersionCode
+            versionName gitVersionName
+            applicationId "fr.frogdevelopment.nihongo.dico"
+
+            dimension "nihongo"
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), "$project.rootDir/tools/rules-proguard-debug.pro"
+            signingConfig signingConfigs.debug
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), "$project.rootDir/tools/rules-proguard.pro"
+            signingConfig signingConfigs.release
+        }
     }
 
     packagingOptions {
@@ -46,15 +93,15 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     // Android
-    implementation 'com.android.support:design:26.0.0'
-    implementation 'com.android.support:support-v4:26.0.0'
+    implementation 'com.android.support:design:26.0.1'
+    implementation 'com.android.support:support-v4:26.0.1'
 
     // Divers
-    implementation 'org.apache.commons:commons-lang3:3.5'
+    implementation 'org.apache.commons:commons-lang3:3.6'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.7'
 
     // logback
-    implementation 'org.slf4j:slf4j-api:1.7.21'
+    implementation 'org.slf4j:slf4j-api:1.7.25'
     implementation 'com.github.tony19:logback-android-core:1.1.1-6'
     implementation('com.github.tony19:logback-android-classic:1.1.1-6') {
         // workaround issue #73
