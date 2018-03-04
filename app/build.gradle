@@ -6,14 +6,14 @@ apply from: "$project.rootDir/tools/script-pmd.gradle"
 apply from: "$project.rootDir/tools/script-java-code-coverage.gradle"
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.1'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "fr.frogdevelopment.nihongo.dico"
 
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 27
     }
 
     signingConfigs {
@@ -93,8 +93,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     // Android
-    implementation 'com.android.support:design:26.0.1'
-    implementation 'com.android.support:support-v4:26.0.1'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:support-v4:26.1.0'
 
     // Divers
     implementation 'org.apache.commons:commons-lang3:3.6'
