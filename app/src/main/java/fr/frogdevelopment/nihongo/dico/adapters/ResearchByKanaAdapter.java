@@ -13,24 +13,24 @@ import fr.frogdevelopment.nihongo.dico.entities.Preview;
 
 public class ResearchByKanaAdapter extends DicoAdapter {
 
-    public ResearchByKanaAdapter(Activity context, List<Preview> items) {
-        super(context, items);
-    }
+	public ResearchByKanaAdapter(Activity context, List<Preview> items) {
+		super(context, items);
+	}
 
+	@Override
+	protected void handleFirstLine(TextView textview, Preview item) {
+		String pre = StringUtils.isBlank(item.kanji) ? " " : item.kanji + " - ";
+		int start = pre.length();
 
-    protected void handleFirstLine(TextView textview, Preview item) {
-        String pre = StringUtils.isBlank(item.kanji) ? " " : item.kanji + " - ";
-        int start = pre.length();
+		String text = pre + item.reading;
+		int end = text.length();
+		SpannableStringBuilder str = new SpannableStringBuilder(text);
+		spanKanjiKana(str, start, end);
 
-        String text = pre + item.reading;
-        int end = text.length();
-        SpannableStringBuilder str = new SpannableStringBuilder(text);
-        spanKanjiKana(str, start, end);
+		for (Pair<Integer, Integer> indices : item.matchIndices) {
+			spanMatchRegion(str, start + indices.getLeft(), start + indices.getRight());
+		}
 
-        for (Pair<Integer, Integer> indices : item.matchIndices) {
-            spanMatchRegion(str, start + indices.getLeft(), start + indices.getRight());
-        }
-
-        textview.setText(str);
-    }
+		textview.setText(str);
+	}
 }

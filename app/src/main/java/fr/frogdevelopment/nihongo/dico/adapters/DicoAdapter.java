@@ -13,12 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
+import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.entities.Preview;
 
 public abstract class DicoAdapter extends ArrayAdapter<Preview> {
@@ -37,7 +39,7 @@ public abstract class DicoAdapter extends ArrayAdapter<Preview> {
 		ViewHolder holder;
 
 		if (convertView == null) {
-			convertView = mInflater.inflate(android.R.layout.simple_list_item_2, parent, false);
+			convertView = mInflater.inflate(R.layout.row_item, parent, false);
 			holder = new ViewHolder(convertView);
 			convertView.setTag(holder);
 		} else {
@@ -46,8 +48,14 @@ public abstract class DicoAdapter extends ArrayAdapter<Preview> {
 
 		Preview item = getItem(position);
 
-		handleFirstLine(holder.text1, item);
-		handleSecondLine(holder.text2, item);
+		handleFirstLine(holder.kana, item);
+		handleSecondLine(holder.reading, item);
+
+		if (item.favorite) {
+			holder.favorite.setImageResource(R.drawable.ic_bookmark_black_24dp);
+		} else {
+			holder.favorite.setImageResource(R.drawable.ic_bookmark_border_black_24dp);
+		}
 
 		return convertView;
 	}
@@ -79,12 +87,14 @@ public abstract class DicoAdapter extends ArrayAdapter<Preview> {
 
 	private class ViewHolder {
 
-		private final TextView text1;
-		private final TextView text2;
+		private final TextView kana;
+		private final TextView reading;
+		private final ImageView favorite;
 
 		private ViewHolder(View view) {
-			text1 = view.findViewById(android.R.id.text1);
-			text2 = view.findViewById(android.R.id.text2);
+			kana = view.findViewById(R.id.row_kana);
+			reading = view.findViewById(R.id.row_reading);
+			favorite = view.findViewById(R.id.row_favorite);
 		}
 	}
 }

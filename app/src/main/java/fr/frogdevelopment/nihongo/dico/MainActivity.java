@@ -47,20 +47,20 @@ import fr.frogdevelopment.nihongo.dico.utils.InputUtils;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-	private static final int LOADER_INIT          = 0;
+	private static final int LOADER_INIT = 0;
 	private static final int LOADER_DICO_ID_KANJI = 100;
-	private static final int LOADER_DICO_ID_KANA  = 200;
+	private static final int LOADER_DICO_ID_KANA = 200;
 	private static final int LOADER_DICO_ID_GLOSS = 300;
 
 	private static final String REGEX_SEARCH_SPLIT = "\\+|!|\\?";
 
-	private ProgressBar                   mProgressBar;
-	private WebView                       mTipsView;
-	private ListView                      mListView;
-	private DicoAdapter                   mAdapter;
+	private ProgressBar mProgressBar;
+	private WebView mTipsView;
+	private ListView mListView;
+	private DicoAdapter mAdapter;
 	private SearchView.SearchAutoComplete mSearchAutoComplete;
 
-	private String     query;
+	private String query;
 	private SearchView mSearchView;
 
 	@Override
@@ -313,6 +313,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				preview.reading = data.getString(1);
 				preview.gloss = data.getString(2);
 				preview.sense_id = data.getLong(3);
+				preview.favorite = data.getInt(4) == 1;
 
 				String text;
 				switch (loaderId) {

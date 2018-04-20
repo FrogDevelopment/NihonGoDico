@@ -215,24 +215,27 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 				break;
 
 			case SEARCH_KANJI:
-				String sql_kanji = "SELECT entry.kanji, entry.reading, sense.gloss, sense._id FROM entry" +
+				String sql_kanji = "SELECT entry.kanji, entry.reading, sense.gloss, sense._id, favorites._ID FROM entry" +
 						" INNER JOIN sense ON (entry._id = sense.entry_id)" +
+						" LEFT OUTER JOIN favorites ON (sense._id = favorites.sense_id)" +
 						" WHERE entry._ID IN" +
 						" (SELECT docid FROM fts_entry WHERE kanji MATCH '" + selection + "')";
 				cursor = db.rawQuery(sql_kanji, null);
 				break;
 
 			case SEARCH_KANA:
-				String sql_kana = "SELECT entry.kanji, entry.reading, sense.gloss, sense._id FROM entry" +
+				String sql_kana = "SELECT entry.kanji, entry.reading, sense.gloss, sense._id, favorites._ID FROM entry" +
 						" INNER JOIN sense ON (entry._id = sense.entry_id)" +
+						" LEFT OUTER JOIN favorites ON (sense._id = favorites.sense_id)" +
 						" WHERE entry._ID IN" +
 						" (SELECT docid FROM fts_entry WHERE reading MATCH '" + selection + "')";
 				cursor = db.rawQuery(sql_kana, null);
 				break;
 
 			case SEARCH_GLOSS:
-				String sql_gloss = "SELECT entry.kanji, entry.reading, sense.gloss, sense._id FROM entry" +
+				String sql_gloss = "SELECT entry.kanji, entry.reading, sense.gloss, sense._id, favorites._ID FROM entry" +
 						" INNER JOIN sense ON (entry._id = sense.entry_id)" +
+						" LEFT OUTER JOIN favorites ON (sense._id = favorites.sense_id)" +
 						" WHERE sense._ID IN" +
 						" (SELECT docid FROM fts_gloss WHERE fts_gloss MATCH '" + selection + "')";
 				cursor = db.rawQuery(sql_gloss, null);

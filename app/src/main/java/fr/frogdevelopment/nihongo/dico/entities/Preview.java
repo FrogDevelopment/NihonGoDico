@@ -14,6 +14,7 @@ public class Preview {
 	public String reading;
 	public String gloss;
 	public double similarity;
+	public boolean favorite;
 
     public List<Pair<Integer,Integer>> matchIndices = new ArrayList<>();
 
@@ -25,6 +26,7 @@ public class Preview {
 				.append("reading", reading)
 				.append("gloss", gloss)
 				.append("similarity", similarity)
+				.append("favorite", favorite)
 				.toString();
 	}
 
