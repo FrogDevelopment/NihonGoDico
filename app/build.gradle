@@ -93,11 +93,11 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     // Android
-    implementation 'com.android.support:design:26.1.0'
-    implementation 'com.android.support:support-v4:26.1.0'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
 
     // Divers
-    implementation 'org.apache.commons:commons-lang3:3.6'
+    implementation 'org.apache.commons:commons-lang3:3.7'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.7'
 
     // logback
