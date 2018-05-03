@@ -16,29 +16,6 @@ android {
         targetSdkVersion 27
     }
 
-    // Specifies a flavor dimension.
-    flavorDimensions "nihongo"
-
-    productFlavors {
-        dev {
-            signingConfig signingConfigs.debug
-            versionCode gitVersionCodeTime
-            versionName gitVersionName
-            applicationId "fr.frogdevelopment.nihongo.dico.dev"
-
-            dimension "nihongo"
-        }
-
-        prod {
-            signingConfig signingConfigs.release
-            versionCode gitVersionCode
-            versionName gitVersionName
-            applicationId "fr.frogdevelopment.nihongo.dico"
-
-            dimension "nihongo"
-        }
-    }
-
     signingConfigs {
         Properties props = new Properties()
         def propFile = new File(System.getenv("SIGNING_PROPERTIES"))
@@ -67,6 +44,28 @@ android {
         }
     }
 
+    // Specifies a flavor dimension.
+    flavorDimensions "nihongo"
+
+    productFlavors {
+        dev {
+            signingConfig signingConfigs.debug
+            versionCode gitVersionCodeTime
+            versionName gitVersionName
+            applicationId "fr.frogdevelopment.nihongo.dico.dev"
+
+            dimension "nihongo"
+        }
+
+        prod {
+            signingConfig signingConfigs.release
+            versionCode gitVersionCode
+            versionName gitVersionName
+            applicationId "fr.frogdevelopment.nihongo.dico"
+
+            dimension "nihongo"
+        }
+    }
 
     buildTypes {
         debug {
