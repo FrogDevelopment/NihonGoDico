@@ -14,6 +14,9 @@ android {
 
         minSdkVersion 21
         targetSdkVersion 27
+
+        versionCode gitVersionCodeTime
+        versionName gitVersionName
     }
 
     signingConfigs {
@@ -41,29 +44,6 @@ android {
             }
         } else {
             println 'signing.properties not found'
-        }
-    }
-
-    // Specifies a flavor dimension.
-    flavorDimensions "nihongo"
-
-    productFlavors {
-        dev {
-            signingConfig signingConfigs.debug
-            versionCode gitVersionCodeTime
-            versionName gitVersionName
-            applicationId "fr.frogdevelopment.nihongo.dico.dev"
-
-            dimension "nihongo"
-        }
-
-        prod {
-            signingConfig signingConfigs.release
-            versionCode gitVersionCode
-            versionName gitVersionName
-            applicationId "fr.frogdevelopment.nihongo.dico"
-
-            dimension "nihongo"
         }
     }
 
