@@ -16,26 +16,6 @@ android {
         targetSdkVersion 27
     }
 
-    signingConfigs {
-        debug {
-            keyAlias 'nihon_go_keystore'
-//            keyAlias 'nihon_go_keystore_debug'
-            keyPassword 'nihongo'
-            storePassword 'b3E12h21On'
-            // keytool -genkey -v -keystore debug.keystore -alias nihon_go_keystore_debug -keyalg RSA -keysize 2048 -validity 10000
-//            storeFile file('../keystore/debug.keystore')
-            storeFile file('../keystore/key_store.jks')
-        }
-        release {
-            keyAlias 'nihon_go_keystore'
-            keyPassword 'nihongo'
-            storePassword 'b3E12h21On'
-            // keytool -genkey -v -keystore release.keystore -alias nihon_go_keystore -keyalg RSA -keysize 2048 -validity 10000
-//            storeFile file('../keystore/release.keystore')
-            storeFile file('../keystore/key_store.jks')
-        }
-    }
-
     // Specifies a flavor dimension.
     flavorDimensions "nihongo"
 
@@ -59,14 +39,43 @@ android {
         }
     }
 
+    signingConfigs {
+        Properties props = new Properties()
+        def propFile = new File(System.getenv("SIGNING_PROPERTIES"))
+        if (propFile.canRead()) {
+            props.load(new FileInputStream(propFile))
+            if (props == null || props.isEmpty()) {
+                println 'signing.properties found but entries are missing'
+                debug = null
+                release = null
+            } else {
+                debug {
+                    keyAlias props['ng_key_alias']
+                    keyPassword props['ng_key_password']
+                    storePassword props['store_password']
+                    storeFile file(props['store_file'])
+                }
+                release {
+                    keyAlias props['ng_key_alias']
+                    keyPassword props['ng_key_password']
+                    storePassword props['store_password']
+                    storeFile file(props['store_file'])
+                }
+            }
+        } else {
+            println 'signing.properties not found'
+        }
+    }
+
+
     buildTypes {
         debug {
             debuggable true
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), "$project.rootDir/tools/rules-proguard-debug.pro"
+            minifyEnabled false
             signingConfig signingConfigs.debug
         }
         release {
+            debuggable false
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), "$project.rootDir/tools/rules-proguard.pro"
             signingConfig signingConfigs.release
@@ -107,4 +116,12 @@ dependencies {
         // workaround issue #73
         exclude group: 'com.google.android', module: 'android'
     }
+
+    //
+    implementation 'com.google.code.gson:gson:2.8.2'
+    //   Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    implementation 'com.github.GrenderG:Toasty:1.2.8'
 }
