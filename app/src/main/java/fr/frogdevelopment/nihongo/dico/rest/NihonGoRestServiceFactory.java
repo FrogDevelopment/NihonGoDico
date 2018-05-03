@@ -1,16 +1,14 @@
-package fr.frogdevelopment.bibluelle.search.rest.google;
+package fr.frogdevelopment.nihongo.dico.rest;
 
-import fr.frogdevelopment.bibluelle.search.rest.RestServiceFactory;
+public class NihonGoRestServiceFactory extends RestServiceFactory {
 
-public class GoogleRestServiceFactory extends RestServiceFactory {
+	private static final NihonGoRestServiceFactory INSTANCE = new NihonGoRestServiceFactory();
 
-	private static final GoogleRestServiceFactory INSTANCE = new GoogleRestServiceFactory();
-
-	public static GoogleRestService getGoogleRestService() {
-		return INSTANCE.getService(GoogleRestService.class);
+	public static NihonGoClient getNihonGoClient() {
+		return INSTANCE.getService(NihonGoClient.class);
 	}
 
-	private GoogleRestServiceFactory() {
-		super("https://www.googleapis.com/");
+	private NihonGoRestServiceFactory() {
+		super("http://frog-development.com/");
 	}
 }

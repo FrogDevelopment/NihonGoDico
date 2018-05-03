@@ -5,32 +5,33 @@ import android.text.SpannableStringBuilder;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
-import fr.frogdevelopment.nihongo.dico.entities.Preview;
+import fr.frogdevelopment.nihongo.dico.search.Match;
+import fr.frogdevelopment.nihongo.dico.search.Search;
 
 public class ResearchByKanaAdapter extends DicoAdapter {
 
-	public ResearchByKanaAdapter(Activity context, List<Preview> items) {
-		super(context, items);
-	}
+    public ResearchByKanaAdapter(Activity context, List<Search> items) {
+        super(context, items);
+    }
 
-	@Override
-	protected void handleFirstLine(TextView textview, Preview item) {
-		String pre = StringUtils.isBlank(item.kanji) ? " " : item.kanji + " - ";
-		int start = pre.length();
+    @Override
+    protected void handleFirstLine(TextView textview, Search item) {
+        String pre = StringUtils.isBlank(item.kanji.value) ? " " : item.kanji.value + " - ";
+        int start = pre.length();
 
-		String text = pre + item.reading;
-		int end = text.length();
-		SpannableStringBuilder str = new SpannableStringBuilder(text);
-		spanKanjiKana(str, start, end);
+        String text = pre + item.kana;
+        int end = text.length();
+        SpannableStringBuilder str = new SpannableStringBuilder(text);
 
-		for (Pair<Integer, Integer> indices : item.matchIndices) {
-			spanMatchRegion(str, start + indices.getLeft(), start + indices.getRight());
-		}
+        spanKanjiKana(str, start, end);
 
-		textview.setText(str);
-	}
+        for (Match match : item.kana.matches) {
+            spanMatchRegion(str, start + match.start, start + match.end);
+        }
+
+        textview.setText(str);
+    }
 }

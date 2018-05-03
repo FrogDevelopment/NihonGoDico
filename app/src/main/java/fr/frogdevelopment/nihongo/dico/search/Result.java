@@ -5,7 +5,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class Result implements Serializable, Comparable<Result> {
     }
 
     @Override
-    public int compareTo(@NotNull Result o) {
+    public int compareTo(Result o) {
         return new CompareToBuilder()
                 .append(this.value, o.value)
                 .toComparison();

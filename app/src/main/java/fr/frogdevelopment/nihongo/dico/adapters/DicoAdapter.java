@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
@@ -13,88 +14,87 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
-import fr.frogdevelopment.nihongo.dico.entities.Preview;
+import fr.frogdevelopment.nihongo.dico.search.Result;
+import fr.frogdevelopment.nihongo.dico.search.Search;
 
-public abstract class DicoAdapter extends ArrayAdapter<Preview> {
+public abstract class DicoAdapter extends ArrayAdapter<Search> {
 
-	private final LayoutInflater mInflater;
+    private final LayoutInflater mInflater;
 
-	DicoAdapter(Activity context, List<Preview> items) {
-		super(context, 0, items);
+    DicoAdapter(Activity context, List<Search> items) {
+        super(context, 0, items);
 
-		mInflater = context.getLayoutInflater();
-	}
+        mInflater = context.getLayoutInflater();
+    }
 
-	@NonNull
-	@Override
-	public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-		ViewHolder holder;
+    @NonNull
+    @Override
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        ViewHolder holder;
 
-		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.row_item, parent, false);
-			holder = new ViewHolder(convertView);
-			convertView.setTag(holder);
-		} else {
-			holder = (ViewHolder) convertView.getTag();
-		}
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.row_item, parent, false);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
 
-		Preview item = getItem(position);
+        Search item = getItem(position);
 
-		handleFirstLine(holder.kana, item);
-		handleSecondLine(holder.reading, item);
+        handleFirstLine(holder.firstLine, item);
+        handleSecondLine(holder.secondLine, item);
 
-		if (item.favorite) {
-			holder.favorite.setImageResource(R.drawable.ic_bookmark_black_24dp);
-		} else {
-			holder.favorite.setImageResource(R.drawable.ic_bookmark_border_black_24dp);
-		}
+        return convertView;
+    }
 
-		return convertView;
-	}
+    protected void handleFirstLine(TextView textview, Search item) {
+        String pre = StringUtils.isBlank(item.kanji.value) ? " " : item.kanji.value + " - ";
+        int start = pre.length();
 
-	protected void handleFirstLine(TextView textview, Preview item) {
-		String pre = StringUtils.isBlank(item.kanji) ? " " : item.kanji + " - ";
-		int start = pre.length();
+        String text = pre + item.kana.value;
+        int end = text.length();
 
-		String text = pre + item.reading;
-		int end = text.length();
+        SpannableStringBuilder str = new SpannableStringBuilder(text);
+        spanKanjiKana(str, start, end);
+        textview.setText(str);
+    }
 
-		SpannableStringBuilder str = new SpannableStringBuilder(text);
-		spanKanjiKana(str, start, end);
-		textview.setText(str);
-	}
+    protected void handleSecondLine(TextView textview, Search item) {
+        List<String> gloss = new ArrayList<>();
 
-	protected void handleSecondLine(TextView textview, Preview item) {
-		textview.setText(item.gloss);
-	}
+        for (Result result : item.senses) {
+            gloss.add(result.value);
+        }
 
-	void spanKanjiKana(SpannableStringBuilder str, int start, int end) {
-		str.setSpan(new RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-	}
+        textview.setText(TextUtils.join(", ", gloss));
+    }
 
-	void spanMatchRegion(SpannableStringBuilder str, int start, int end) {
-		str.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		str.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-	}
+    void spanKanjiKana(SpannableStringBuilder str, int start, int end) {
+        str.setSpan(new RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
 
-	private class ViewHolder {
+    void spanMatchRegion(SpannableStringBuilder str, int start, int end) {
+        str.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        str.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
 
-		private final TextView kana;
-		private final TextView reading;
-		private final ImageView favorite;
+    private class ViewHolder {
 
-		private ViewHolder(View view) {
-			kana = view.findViewById(R.id.row_kana);
-			reading = view.findViewById(R.id.row_reading);
-			favorite = view.findViewById(R.id.row_favorite);
-		}
-	}
+        private final TextView firstLine;
+        private final TextView secondLine;
+
+        private ViewHolder(View view) {
+            firstLine = view.findViewById(R.id.row_first_line);
+            secondLine = view.findViewById(R.id.row_second_line);
+        }
+    }
 }

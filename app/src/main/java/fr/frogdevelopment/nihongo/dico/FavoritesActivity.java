@@ -44,15 +44,15 @@ public class FavoritesActivity extends AppCompatActivity implements LoaderManage
 	}
 
 	private void onItemClick(int position) {
-		Preview item = mAdapter.getItem(position);
-		Intent intent = new Intent(this, DetailsActivity.class);
-		intent.putExtra(EntryContract.KANJI, item.kanji);
-		intent.putExtra(EntryContract.READING, item.reading);
-		intent.putExtra(SenseContract.GLOSS, item.gloss);
-		intent.putExtra(SenseContract._ID, item.sense_id);
-
-		startActivity(intent);
-		overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+//		Preview item = mAdapter.getItem(position);
+//		Intent intent = new Intent(this, DetailsActivity.class);
+//		intent.putExtra(EntryContract.KANJI, item.kanji);
+//		intent.putExtra(EntryContract.READING, item.reading);
+//		intent.putExtra(SenseContract.GLOSS, item.gloss);
+//		intent.putExtra(SenseContract._ID, item.sense_id);
+//
+//		startActivity(intent);
+//		overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
 	}
 
 	@Override
@@ -65,30 +65,30 @@ public class FavoritesActivity extends AppCompatActivity implements LoaderManage
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		if (data.getCount() > 0) {
-			List<Preview> previews = new ArrayList<>();
-			while (data.moveToNext()) {
-				Preview preview = new Preview();
-				preview.kanji = data.getString(0);
-				preview.reading = data.getString(1);
-				preview.gloss = data.getString(2);
-				preview.sense_id = data.getLong(3);
-
-				previews.add(preview);
-			}
-
-			mAdapter = new ResearchByGlossAdapter(this, previews);
-			mListView.setAdapter(mAdapter);
-
-			mListView.setVisibility(View.VISIBLE);
-		} else {
-			Snackbar.make(findViewById(R.id.activity_main), R.string.no_favorites, Snackbar.LENGTH_LONG).show();
-		}
-
-		data.close();
-		getLoaderManager().destroyLoader(LOADER_INIT);
-
-		mProgressBar.setVisibility(View.INVISIBLE);
+//		if (data.getCount() > 0) {
+//			List<Preview> previews = new ArrayList<>();
+//			while (data.moveToNext()) {
+//				Preview preview = new Preview();
+//				preview.kanji = data.getString(0);
+//				preview.reading = data.getString(1);
+//				preview.gloss = data.getString(2);
+//				preview.sense_id = data.getLong(3);
+//
+//				previews.add(preview);
+//			}
+//
+//			mAdapter = new ResearchByGlossAdapter(this, previews);
+//			mListView.setAdapter(mAdapter);
+//
+//			mListView.setVisibility(View.VISIBLE);
+//		} else {
+//			Snackbar.make(findViewById(R.id.activity_main), R.string.no_favorites, Snackbar.LENGTH_LONG).show();
+//		}
+//
+//		data.close();
+//		getLoaderManager().destroyLoader(LOADER_INIT);
+//
+//		mProgressBar.setVisibility(View.INVISIBLE);
 	}
 
 	@Override
