@@ -76,7 +76,7 @@ android {
         release {
             debuggable false
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), "$project.rootDir/tools/rules-proguard.pro"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), "$project.rootDir/tools/rules-proguard.pro"
             signingConfig signingConfigs.release
         }
     }
