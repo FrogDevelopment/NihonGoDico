@@ -6,14 +6,14 @@ apply from: "$project.rootDir/tools/script-pmd.gradle"
 apply from: "$project.rootDir/tools/script-java-code-coverage.gradle"
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
         applicationId "fr.frogdevelopment.nihongo.dico"
 
-        minSdkVersion 21
-        targetSdkVersion 27
+        minSdkVersion 24
+        targetSdkVersion 28
 
         versionCode gitVersionCodeTime
         versionName gitVersionName
@@ -81,11 +81,11 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     // Android
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:support-v4:27.1.1'
+    implementation group: 'com.android.support', name: 'support-v13', version: '28.0.0-rc01'
+    implementation group: 'com.android.support', name: 'design', version: '28.0.0-rc01'
 
     // Divers
-    implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'org.apache.commons:commons-lang3:3.8'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.7'
 
     // logback
