@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -85,7 +86,7 @@ abstract class AbstractDownLoadTask extends AsyncTask<Void, Integer, Boolean> {
 			loopOnLines(connection);
 
 		} catch (IOException e) {
-			e.printStackTrace(); // fixme
+			Log.e("NGD", "Can not fetch data", e);
 			return false;
 		} finally {
 			if (connection != null) {
