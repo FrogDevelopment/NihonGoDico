@@ -2,25 +2,17 @@ package fr.frogdevelopment.nihongo.dico;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import java.util.ArrayList;
-import java.util.List;
+import androidx.appcompat.app.AppCompatActivity;
 
 import fr.frogdevelopment.nihongo.dico.adapters.DicoAdapter;
-import fr.frogdevelopment.nihongo.dico.adapters.ResearchByGlossAdapter;
-import fr.frogdevelopment.nihongo.dico.contentprovider.EntryContract;
 import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
-import fr.frogdevelopment.nihongo.dico.contentprovider.SenseContract;
-import fr.frogdevelopment.nihongo.dico.entities.Preview;
 
 public class FavoritesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 

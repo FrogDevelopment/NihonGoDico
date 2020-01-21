@@ -13,13 +13,11 @@ ext {
     git = Grgit.open(currentDir: projectDir)
     gitVersionName = git.describe()
     gitVersionCode = git.tag.list().size()
-    gitVersionCodeTime = git.head().time
 }
 
 task printVersion() {
     doLast {
         println("Version Name: $gitVersionName")
         println("Version Code: $gitVersionCode")
-        println("Version Code Time: $gitVersionCodeTime")
     }
 }

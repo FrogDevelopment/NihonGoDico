@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    android:id="@+id/activity_details"
+<androidx.coordinatorlayout.widget.CoordinatorLayout android:id="@+id/activity_details"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -75,14 +74,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/details_gloss"
             android:text="infos"
-            android:textStyle="italic"/>
+            android:textStyle="italic" />
 
         <ListView
             android:id="@+id/details_examples"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/details_info"
-            android:listSelector="@android:color/transparent"/>
+            android:listSelector="@android:color/transparent" />
     </RelativeLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

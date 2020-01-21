@@ -1,7 +1,3 @@
-/*
- * Copyright (c) Frog Development 2015.
- */
-
 package fr.frogdevelopment.nihongo.dico;
 
 import android.app.Activity;
@@ -11,23 +7,23 @@ import android.os.Handler;
 
 public class SplashScreenActivity extends Activity {
 
-	// Splash screen timer
-	private static final long SPLASH_TIME_OUT = 500;
+    // Splash screen timer
+    private static final long SPLASH_TIME_OUT = 500;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_splash_screen);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.splash_screen_activity);
 
-		// This method will be executed once the timer is over
-		new Handler().postDelayed(this::launchActivity, SPLASH_TIME_OUT);
-	}
+        // This method will be executed once the timer is over
+        new Handler().postDelayed(this::launchActivity, SPLASH_TIME_OUT);
+    }
 
-	private void launchActivity() {
-		startActivity(new Intent(this, MainActivity.class));
+    private void launchActivity() {
+        startActivity(new Intent(this, MainActivity.class));
 
-		// close this activity
-		finish();
-	}
+        // close this activity
+        finish();
+    }
 
 }

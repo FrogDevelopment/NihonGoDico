@@ -1,13 +1,10 @@
-<!--
-  ~ Copyright (c) Frog Development 2016.
-  -->
 <resources>
 
-    <style name="NihonGoTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@android:color/darker_gray</item> 
+    <style name="NihonGoTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@android:color/darker_gray</item>
         <!--<item name="colorPrimary">@color/primary</item> -->
         <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorControlHighlight">@color/accent_translucent</item> 
+        <item name="colorControlHighlight">@color/accent_translucent</item>
         <item name="colorAccent">@color/accent</item>
         <item name="selectableItemBackground">@drawable/selectable_item_background</item>
         <item name="android:selectableItemBackground">@drawable/selectable_item_background</item>

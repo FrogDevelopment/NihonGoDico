@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    android:id="@+id/activity_main"
+<androidx.coordinatorlayout.widget.CoordinatorLayout android:id="@+id/activity_main"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -33,9 +32,9 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
             android:layout_below="@id/main_tips"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </RelativeLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 

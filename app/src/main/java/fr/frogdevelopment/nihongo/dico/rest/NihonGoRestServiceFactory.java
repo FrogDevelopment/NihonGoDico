@@ -9,6 +9,6 @@ public class NihonGoRestServiceFactory extends RestServiceFactory {
 	}
 
 	private NihonGoRestServiceFactory() {
-		super("http://frog-development.com/");
+		super("https://gateway.frog-development.com/");
 	}
 }

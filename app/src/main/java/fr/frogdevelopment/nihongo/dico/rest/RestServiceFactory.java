@@ -1,26 +1,17 @@
 package fr.frogdevelopment.nihongo.dico.rest;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public abstract class RestServiceFactory {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(RestServiceFactory.class);
 
 	// ******************************
 	// Specific to each Retrofit Factory
@@ -53,30 +44,7 @@ public abstract class RestServiceFactory {
 	private OkHttpClient.Builder getClientBuilder() {
 		return new OkHttpClient.Builder()
 				.readTimeout(0, TimeUnit.SECONDS)
-				.connectTimeout(0, TimeUnit.SECONDS)
-				.addInterceptor(new LogInterceptor());
+				.connectTimeout(0, TimeUnit.SECONDS);
 	}
 
-	private class LogInterceptor implements Interceptor {
-
-		@Override
-		public Response intercept(@NonNull Chain chain) throws IOException {
-			Request request = chain.request();
-
-			// add GTS
-			Request.Builder requestBuilder = request.newBuilder();
-
-			// set json header
-			requestBuilder.addHeader("Content-Type", "application/json; charset=utf-8");
-			request = requestBuilder.build();
-
-			// LOG call
-			LOGGER.trace(" - Request : {}", request);
-			Response response = chain.proceed(request);
-			LOGGER.trace(" - Response : {}", response);
-
-			return response;
-		}
-
-	}
 }

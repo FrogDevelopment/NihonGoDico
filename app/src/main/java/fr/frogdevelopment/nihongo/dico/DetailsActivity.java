@@ -10,7 +10,6 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -21,6 +20,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -224,7 +226,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 		int end = start + trim.length();
 		str.setSpan(new ClickableSpan() {
 			@Override
-			public void onClick(View view) {
+			public void onClick(@NonNull View view) {
 				onClickWord(trim);
 			}
 		}, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -235,7 +237,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 	}
 
 	private void onClickWord(CharSequence word) {
-		Intent intent = new Intent(this, MainActivity.class);
+		Intent intent = new Intent(this, OldMainActivity.class);
 		intent.setAction(WIKI);
 		intent.putExtra(SearchManager.QUERY, word);
 
@@ -251,11 +253,10 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				finish();
-				overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
-				return true;
+		if (item.getItemId() == android.R.id.home) {
+			finish();
+			overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}

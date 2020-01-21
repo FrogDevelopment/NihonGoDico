@@ -1,63 +1,29 @@
 apply plugin: 'com.android.application'
 apply from: "$project.rootDir/tools/script-git-version.gradle"
-apply from: "$project.rootDir/tools/script-findbugs.gradle"
-apply from: "$project.rootDir/tools/script-lint.gradle"
-apply from: "$project.rootDir/tools/script-pmd.gradle"
-apply from: "$project.rootDir/tools/script-java-code-coverage.gradle"
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
 
     defaultConfig {
         applicationId "fr.frogdevelopment.nihongo.dico"
 
         minSdkVersion 24
-        targetSdkVersion 28
+        targetSdkVersion 29
 
         versionCode gitVersionCode
         versionName gitVersionName
     }
 
-//    signingConfigs {
-//        Properties props = new Properties()
-//        def propFile = new File(System.getenv("SIGNING_PROPERTIES"))
-//        if (propFile.canRead()) {
-//            props.load(new FileInputStream(propFile))
-//            if (props == null || props.isEmpty()) {
-//                println 'signing.properties found but entries are missing'
-//                debug = null
-//                release = null
-//            } else {
-//                debug {
-//                    keyAlias props['ng_key_alias']
-//                    keyPassword props['ng_key_password']
-//                    storePassword props['store_password']
-//                    storeFile file(props['store_file'])
-//                }
-//                release {
-//                    keyAlias props['ng_key_alias']
-//                    keyPassword props['ng_key_password']
-//                    storePassword props['store_password']
-//                    storeFile file(props['store_file'])
-//                }
-//            }
-//        } else {
-//            println 'signing.properties not found'
-//        }
-//    }
-
     buildTypes {
         debug {
             debuggable true
             minifyEnabled false
-//            signingConfig signingConfigs.debug
         }
         release {
             debuggable false
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), "$project.rootDir/tools/rules-proguard.pro"
-//            signingConfig signingConfigs.release
         }
     }
 
@@ -74,33 +40,45 @@ android {
 }
 
 dependencies {
-    // Test
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    testImplementation 'junit:junit:4.12'
+    // Room components
+//    def room_version = '2.2.3'
+//    implementation "androidx.room:room-runtime:$room_version"
+//    implementation "androidx.room:room-rxjava2:$room_version"
+//    annotationProcessor "androidx.room:room-compiler:$room_version"
+//    androidTestImplementation "androidx.room:room-testing:$room_version"
 
-    // Android
-    implementation group: 'com.android.support', name: 'support-v13', version: '28.0.0'
-    implementation group: 'com.android.support', name: 'design', version: '28.0.0'
+    // Lifecycle components
+    def archLifecycleVersion = '2.2.0-rc03'
+    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
+    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
+
+    // UI
+    def appcompat_version = '1.1.0'
+    def constraint_layout_version = '1.1.3'
+    def preferenceVersion = '1.1.0'
+    def material_version = '1.2.0-alpha04'
+//    def navigation_version = '2.1.0'
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
+    implementation "androidx.preference:preference:$preferenceVersion"
+    implementation "com.google.android.material:material:$material_version"
+//    implementation "androidx.navigation:navigation-fragment:$navigation_version"
+//    implementation "androidx.navigation:navigation-ui:$navigation_version"
+
+    // Testing
+    def coreTestingVersion = '2.1.0'
+    def junitVersion = '4.13'
+    def mockitoVersion = '3.2.4'
+    androidTestImplementation "androidx.arch.core:core-testing:$coreTestingVersion"
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
 
     // Divers
     implementation 'org.apache.commons:commons-lang3:3.9'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.7'
-
-    // logback
-    implementation 'org.slf4j:slf4j-api:1.7.28'
-    implementation 'com.github.tony19:logback-android-core:1.1.1-6'
-    implementation('com.github.tony19:logback-android-classic:1.1.1-6') {
-        // workaround issue #73
-        exclude group: 'com.google.android', module: 'android'
-    }
-
-    //
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.2'
     implementation 'com.google.code.gson:gson:2.8.6'
-    //   Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
 
     implementation 'com.github.GrenderG:Toasty:1.2.8'
 }

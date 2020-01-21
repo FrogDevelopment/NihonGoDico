@@ -17,8 +17,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.util.SparseLongArray;
+
+import androidx.annotation.NonNull;
 
 public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider {
 

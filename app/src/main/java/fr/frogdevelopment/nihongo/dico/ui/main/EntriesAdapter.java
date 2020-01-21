@@ -1,11 +1,10 @@
-package fr.frogdevelopment.nihongo.dico.adapters;
+package fr.frogdevelopment.nihongo.dico.ui.main;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
@@ -19,19 +18,17 @@ import androidx.annotation.NonNull;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
-import fr.frogdevelopment.nihongo.dico.search.Result;
-import fr.frogdevelopment.nihongo.dico.search.Search;
+import fr.frogdevelopment.nihongo.dico.search.Entry;
 
-public abstract class DicoAdapter extends ArrayAdapter<Search> {
+public class EntriesAdapter extends ArrayAdapter<Entry> {
 
     private final LayoutInflater mInflater;
 
-    DicoAdapter(Activity activity, List<Search> items) {
-        super(activity, 0, items);
+    EntriesAdapter(Activity activity, List<Entry> entries) {
+        super(activity, 0, entries);
 
         mInflater = activity.getLayoutInflater();
     }
@@ -49,19 +46,19 @@ public abstract class DicoAdapter extends ArrayAdapter<Search> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Search item = getItem(position);
+        Entry entry = getItem(position);
 
-        handleFirstLine(holder.firstLine, item);
-        handleSecondLine(holder.secondLine, item);
+        handleFirstLine(holder.firstLine, entry);
+        handleSecondLine(holder.secondLine, entry);
 
         return convertView;
     }
 
-    protected void handleFirstLine(TextView textview, Search item) {
-        String pre = StringUtils.isBlank(item.kanji.value) ? " " : item.kanji.value + " - ";
+    protected void handleFirstLine(TextView textview, Entry entry) {
+        String pre = StringUtils.isBlank(entry.kanji) ? " " : entry.kanji + " - ";
         int start = pre.length();
 
-        String text = pre + item.kana.value;
+        String text = pre + entry.kana;
         int end = text.length();
 
         SpannableStringBuilder str = new SpannableStringBuilder(text);
@@ -69,14 +66,15 @@ public abstract class DicoAdapter extends ArrayAdapter<Search> {
         textview.setText(str);
     }
 
-    protected void handleSecondLine(TextView textview, Search item) {
-        List<String> gloss = new ArrayList<>();
+    protected void handleSecondLine(TextView textview, Entry entry) {
+        // to <span class="keyword">eat</span>
+        StringBuilder sb = new StringBuilder(entry.vocabulary);
+        int start = sb.indexOf("<span class=\"keyword\">");
+        int end = sb.indexOf("</span>");
 
-        for (Result result : item.senses) {
-            gloss.add(result.value);
-        }
-
-        textview.setText(TextUtils.join(", ", gloss));
+        SpannableStringBuilder str = new SpannableStringBuilder(entry.vocabulary);
+        spanMatchRegion(str, start + "<span class=\"keyword\">".length(), end);
+        textview.setText(str);
     }
 
     void spanKanjiKana(SpannableStringBuilder str, int start, int end) {
@@ -88,7 +86,7 @@ public abstract class DicoAdapter extends ArrayAdapter<Search> {
         str.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    private class ViewHolder {
+    private static class ViewHolder {
 
         private final TextView firstLine;
         private final TextView secondLine;

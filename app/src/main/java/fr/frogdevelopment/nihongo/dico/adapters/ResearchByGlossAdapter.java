@@ -12,8 +12,8 @@ import fr.frogdevelopment.nihongo.dico.search.Search;
 
 public class ResearchByGlossAdapter extends DicoAdapter {
 
-    public ResearchByGlossAdapter(Activity context, List<Search> items) {
-        super(context, items);
+    public ResearchByGlossAdapter(Activity activity, List<Search> items) {
+        super(activity, items);
     }
 
     protected void handleSecondLine(TextView textview, Search item) {
