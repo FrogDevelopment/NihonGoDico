@@ -1,5 +1,8 @@
 package fr.frogdevelopment.nihongo.dico.rest;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
@@ -17,16 +20,18 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class RestServiceFactory {
 
     private static final String BASE_URL = "https://gateway.frog-development.com/api/nihongo/dico/";
-    private static final JacksonConverterFactory CONVERTER_FACTORY = JacksonConverterFactory.create();
 
-	private static final RestServiceFactory INSTANCE = new RestServiceFactory();
+    private static final RestServiceFactory INSTANCE = new RestServiceFactory();
 
     private Retrofit retrofit;
 
     private RestServiceFactory() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .addConverterFactory(CONVERTER_FACTORY)
+                .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .client(getUnsafeOkHttpClient().build())
                 .build();
     }

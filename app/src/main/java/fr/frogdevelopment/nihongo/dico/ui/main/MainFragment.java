@@ -1,6 +1,7 @@
 package fr.frogdevelopment.nihongo.dico.ui.main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,7 +106,7 @@ public class MainFragment extends Fragment {
                 } else {
                     List<Entry> entries = response.body();
 
-                    mAdapter = new EntriesAdapter(requireActivity(), entries);
+                    mAdapter = new EntriesAdapter(requireContext(), entries);
 
                     mListView.setAdapter(mAdapter);
 
@@ -121,6 +122,7 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<List<Entry>> call, @NonNull Throwable t) {
+                Log.e("NIHONGO_DICO", "Error while searching", t);
                 Toast.makeText(requireContext(), "Call failure", LENGTH_SHORT).show();
             }
         });

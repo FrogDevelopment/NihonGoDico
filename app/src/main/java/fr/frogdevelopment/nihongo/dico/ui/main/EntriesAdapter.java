@@ -1,9 +1,8 @@
 package fr.frogdevelopment.nihongo.dico.ui.main;
 
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -23,15 +22,13 @@ import java.util.List;
 import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.search.Entry;
 
+import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
+
 public class EntriesAdapter extends ArrayAdapter<Entry> {
 
     private final LayoutInflater mInflater;
 
-    EntriesAdapter(Activity activity, List<Entry> entries) {
-        super(activity, 0, entries);
-
-        mInflater = activity.getLayoutInflater();
-    }
+    private static final String startSpan = "<span class=\"keyword\">";
 
     @NonNull
     @Override
@@ -54,36 +51,60 @@ public class EntriesAdapter extends ArrayAdapter<Entry> {
         return convertView;
     }
 
+    private static final String endSpan = "</span>";
+
+    EntriesAdapter(Context context, List<Entry> entries) {
+        super(context, 0, entries);
+
+        mInflater = LayoutInflater.from(context);
+    }
+
     protected void handleFirstLine(TextView textview, Entry entry) {
-        String pre = StringUtils.isBlank(entry.kanji) ? " " : entry.kanji + " - ";
-        int start = pre.length();
+        if (StringUtils.isBlank(entry.kanji)) {
+            textview.setText(entry.kana);
+        } else {
+            String pre = entry.kanji + " - ";
+            int start = pre.length();
 
-        String text = pre + entry.kana;
-        int end = text.length();
+            String text = pre + entry.kana;
+            int end = text.length();
 
-        SpannableStringBuilder str = new SpannableStringBuilder(text);
-        spanKanjiKana(str, start, end);
-        textview.setText(str);
+            SpannableStringBuilder str = new SpannableStringBuilder(text);
+            spanKanjiKana(str, start, end);
+            textview.setText(str);
+        }
     }
 
     protected void handleSecondLine(TextView textview, Entry entry) {
-        // to <span class="keyword">eat</span>
-        StringBuilder sb = new StringBuilder(entry.vocabulary);
-        int start = sb.indexOf("<span class=\"keyword\">");
-        int end = sb.indexOf("</span>");
+        if (entry.vocabularySpannable == null) {
+            SpannableStringBuilder vocabularySpannable;
 
-        SpannableStringBuilder str = new SpannableStringBuilder(entry.vocabulary);
-        spanMatchRegion(str, start + "<span class=\"keyword\">".length(), end);
-        textview.setText(str);
+            StringBuilder sb = new StringBuilder(entry.vocabulary);
+            int start = sb.indexOf(startSpan);
+            if (start >= 0) {
+                sb = sb.delete(start, start + startSpan.length());
+                int end = sb.indexOf(endSpan);
+                sb = sb.delete(end, end + endSpan.length());
+
+                vocabularySpannable = new SpannableStringBuilder(sb);
+                spanMatchRegion(vocabularySpannable, start, end);
+            } else {
+                vocabularySpannable = new SpannableStringBuilder(entry.vocabulary);
+            }
+
+            entry.vocabularySpannable = vocabularySpannable;
+        }
+
+        textview.setText(entry.vocabularySpannable);
     }
 
     void spanKanjiKana(SpannableStringBuilder str, int start, int end) {
-        str.setSpan(new RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        str.setSpan(new RelativeSizeSpan(0.7f), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
     void spanMatchRegion(SpannableStringBuilder str, int start, int end) {
-        str.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        str.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        str.setSpan(new StyleSpan(Typeface.BOLD), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
+        str.setSpan(new ForegroundColorSpan(Color.RED), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
     private static class ViewHolder {
