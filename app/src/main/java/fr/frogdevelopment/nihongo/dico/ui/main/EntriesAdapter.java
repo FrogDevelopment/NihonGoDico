@@ -7,6 +7,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.annotation.NonNull;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
@@ -77,22 +79,23 @@ public class EntriesAdapter extends ArrayAdapter<Entry> {
 
     protected void handleSecondLine(TextView textview, Entry entry) {
         if (entry.vocabularySpannable == null) {
-            SpannableStringBuilder vocabularySpannable;
-
             StringBuilder sb = new StringBuilder(entry.vocabulary);
+            List<Pair<Integer, Integer>> matches = new ArrayList<>();
+
             int start = sb.indexOf(startSpan);
-            if (start >= 0) {
+            while (start >= 0) {
                 sb = sb.delete(start, start + startSpan.length());
                 int end = sb.indexOf(endSpan);
                 sb = sb.delete(end, end + endSpan.length());
 
-                vocabularySpannable = new SpannableStringBuilder(sb);
-                spanMatchRegion(vocabularySpannable, start, end);
-            } else {
-                vocabularySpannable = new SpannableStringBuilder(entry.vocabulary);
+                matches.add(Pair.create(start, end));
+                start = sb.indexOf(startSpan);
             }
 
-            entry.vocabularySpannable = vocabularySpannable;
+            entry.vocabularySpannable = new SpannableStringBuilder(sb);
+            for (Pair<Integer, Integer> match : matches) {
+                spanMatchRegion(entry.vocabularySpannable, match.first, match.second);
+            }
         }
 
         textview.setText(entry.vocabularySpannable);
