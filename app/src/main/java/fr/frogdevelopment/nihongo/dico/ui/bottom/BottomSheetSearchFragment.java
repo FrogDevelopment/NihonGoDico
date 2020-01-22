@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,7 +31,7 @@ import static java.net.HttpURLConnection.HTTP_OK;
 
 public class BottomSheetSearchFragment extends BottomSheetDialogFragment {
 
-    private EntriesClient entriesClient;
+    private EntriesClient mEntriesClient;
     private MainViewModel mViewModel;
 
     @Override
@@ -41,7 +40,7 @@ public class BottomSheetSearchFragment extends BottomSheetDialogFragment {
         setStyle(DialogFragment.STYLE_NORMAL, R.style.SearchBottomSheetDialog);
 
         mViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-        entriesClient = RestServiceFactory.getEntriesClient();
+        mEntriesClient = RestServiceFactory.getEntriesClient();
     }
 
     @Nullable
@@ -53,8 +52,8 @@ public class BottomSheetSearchFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SearchView mSearchView = view.findViewById(R.id.bottom_search_field);
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        SearchView searchview = view.findViewById(R.id.bottom_search_field);
+        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 search(query);
@@ -66,21 +65,11 @@ public class BottomSheetSearchFragment extends BottomSheetDialogFragment {
                 return false;
             }
         });
-
-        ImageView closeButton = mSearchView.findViewById(R.id.search_close_btn);
-        closeButton.setOnClickListener(v -> {
-            // Clear the text from EditText view
-            SearchView.SearchAutoComplete searchAutoComplete = view.findViewById(R.id.search_src_text);
-            searchAutoComplete.setText(null);
-
-            mSearchView.setQuery("", false);
-        });
     }
 
     private void search(String query) {
-        dismiss();
         mViewModel.isSearching(true);
-        entriesClient.search("eng", query).enqueue(new Callback<List<Entry>>() {
+        mEntriesClient.search("eng", query).enqueue(new Callback<List<Entry>>() {
             @Override
             public void onResponse(@NonNull Call<List<Entry>> call, @NonNull Response<List<Entry>> response) {
 
@@ -99,5 +88,6 @@ public class BottomSheetSearchFragment extends BottomSheetDialogFragment {
                 mViewModel.isSearching(false);
             }
         });
+        dismiss();
     }
 }
