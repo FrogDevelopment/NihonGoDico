@@ -2,9 +2,8 @@ package fr.frogdevelopment.nihongo.dico.adapters;
 
 import android.app.Activity;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.widget.TextView;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class ResearchByKanaAdapter extends DicoAdapter {
 
     @Override
     protected void handleFirstLine(TextView textview, Search item) {
-        String pre = StringUtils.isBlank(item.kanji.value) ? " " : item.kanji.value + " - ";
+        String pre = TextUtils.isEmpty(item.kanji.value) ? " " : item.kanji.value + " - ";
         int start = pre.length();
 
         String text = pre + item.kana;

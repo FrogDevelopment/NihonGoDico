@@ -17,8 +17,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +56,7 @@ public abstract class DicoAdapter extends ArrayAdapter<Search> {
     }
 
     protected void handleFirstLine(TextView textview, Search item) {
-        String pre = StringUtils.isBlank(item.kanji.value) ? " " : item.kanji.value + " - ";
+        String pre = TextUtils.isEmpty(item.kanji.value) ? " " : item.kanji.value + " - ";
         int start = pre.length();
 
         String text = pre + item.kana.value;

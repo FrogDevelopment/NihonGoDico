@@ -1,50 +1,83 @@
 package fr.frogdevelopment.nihongo.dico.rest;
 
-import androidx.annotation.NonNull;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.util.concurrent.TimeUnit;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
-public abstract class RestServiceFactory {
+public class RestServiceFactory {
 
-	// ******************************
-	// Specific to each Retrofit Factory
-	// ******************************
-	private static final GsonConverterFactory GSON_CONVERTER_FACTORY = buildGsonConverterFactory();
+    private static final String BASE_URL = "https://gateway.frog-development.com/api/nihongo/dico/";
+    private static final JacksonConverterFactory CONVERTER_FACTORY = JacksonConverterFactory.create();
 
-	private static GsonConverterFactory buildGsonConverterFactory() {
-		Gson gson = new GsonBuilder()
-				.setDateFormat("yyyy-MM-dd\\'T\\'HH:mm:ss")
-				.create();
+	private static final RestServiceFactory INSTANCE = new RestServiceFactory();
 
-		return GsonConverterFactory.create(gson);
-	}
+    private Retrofit retrofit;
 
-	private Retrofit retrofit;
+    private RestServiceFactory() {
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(CONVERTER_FACTORY)
+                .client(getUnsafeOkHttpClient().build())
+                .build();
+    }
 
-	protected RestServiceFactory(String baseUrl) {
-		retrofit = new Retrofit.Builder()
-				.baseUrl(baseUrl)
-				.addConverterFactory(GSON_CONVERTER_FACTORY)
-				.client(getClientBuilder().build())
-				.build();
-	}
+    private static <C> C getClient(Class<C> client) {
+        return INSTANCE.retrofit.create(client);
+    }
 
-	protected <T> T getService(Class<T> clazz) {
-		return retrofit.create(clazz);
-	}
+    public static EntriesClient getEntriesClient() {
+        return getClient(EntriesClient.class);
+    }
 
-	@NonNull
-	private OkHttpClient.Builder getClientBuilder() {
-		return new OkHttpClient.Builder()
-				.readTimeout(0, TimeUnit.SECONDS)
-				.connectTimeout(0, TimeUnit.SECONDS);
-	}
+    private static OkHttpClient.Builder getUnsafeOkHttpClient() {
+        try {
+            // Create a trust manager that does not validate certificate chains
+            final TrustManager[] trustAllCerts = new TrustManager[]{
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public X509Certificate[] getAcceptedIssuers() {
+                            return new X509Certificate[]{};
+                        }
+                    }
+            };
+
+            // Install the all-trusting trust manager
+            final SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+
+            // Create an ssl socket factory with our all-trusting manager
+            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0]);
+            builder.hostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+            return builder;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

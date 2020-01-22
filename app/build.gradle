@@ -81,14 +81,13 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
 
+    // REST Retrofit
+    def retrofit_version = '2.7.1'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-jackson:$retrofit_version"
+
     // Divers
     implementation 'org.apache.commons:commons-lang3:3.9'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.2'
-    implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
-
-    implementation 'com.github.GrenderG:Toasty:1.3.0'
 }
 
 task printVersion() {

@@ -18,7 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
-import fr.frogdevelopment.nihongo.dico.rest.NihonGoRestServiceFactory;
+import fr.frogdevelopment.nihongo.dico.rest.EntriesClient;
+import fr.frogdevelopment.nihongo.dico.rest.RestServiceFactory;
 import fr.frogdevelopment.nihongo.dico.search.Entry;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +32,7 @@ import static java.net.HttpURLConnection.HTTP_OK;
 
 public class MainFragment extends Fragment {
 
+    private EntriesClient entriesClient;
     private MainViewModel mViewModel;
 
     private SearchView mSearchView;
@@ -47,6 +49,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        entriesClient = RestServiceFactory.getEntriesClient();
 
         return inflater.inflate(R.layout.main_fragment, container, false);
     }
@@ -93,7 +96,7 @@ public class MainFragment extends Fragment {
     }
 
     private void search(String query) {
-        NihonGoRestServiceFactory.getNihonGoClient().search("eng", query).enqueue(new Callback<List<Entry>>() {
+        entriesClient.search("eng", query).enqueue(new Callback<List<Entry>>() {
             @Override
             public void onResponse(@NonNull Call<List<Entry>> call, @NonNull Response<List<Entry>> response) {
 

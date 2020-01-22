@@ -8,13 +8,13 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-public interface NihonGoClient {
+public interface EntriesClient {
 
-    @GET("api/nihongo/dico/entries/search")
+    @GET("entries/search")
     Call<List<Entry>> search(@Query("lang") String lang,
                              @Query("query") String query);
 
-    @GET("api/details")
+    @GET("entries/details")
     Call<SearchDetails> getDetails(@Query("lang") String lang,
                                    @Query("senseId") Long senseId);
 }
