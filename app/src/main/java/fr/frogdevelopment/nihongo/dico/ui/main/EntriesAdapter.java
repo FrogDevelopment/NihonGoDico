@@ -11,11 +11,11 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,43 +27,50 @@ import fr.frogdevelopment.nihongo.dico.search.Entry;
 
 import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 
-public class EntriesAdapter extends ArrayAdapter<Entry> {
+public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHolder> {
+
+    private static final String START_SPAN = "<span class=\"keyword\">";
+    private static final String END_SPAN = "</span>";
 
     private final LayoutInflater mInflater;
+    private final List<Entry> entries = new ArrayList<>();
+    private final Typeface kanjiFont;
+    private final Typeface kanaFont;
 
-    private static final String startSpan = "<span class=\"keyword\">";
+    public EntriesAdapter(Context context) {
+        mInflater = LayoutInflater.from(context);
+
+        kanaFont = ResourcesCompat.getFont(context, R.font.sawarabi_gothic);
+        kanjiFont = ResourcesCompat.getFont(context, R.font.sawarabi_mincho);
+    }
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        ViewHolder holder;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = mInflater.inflate(R.layout.row_item, parent, false);
+        return new ViewHolder(view);
+    }
 
-        if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.row_item, parent, false);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        Entry entry = getItem(position);
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        Entry entry = entries.get(position);
 
         handleFirstLine(holder.firstLine, entry);
         handleSecondLine(holder.secondLine, entry);
-
-        return convertView;
     }
 
-    private static final String endSpan = "</span>";
+    @Override
+    public int getItemCount() {
+        return entries.size();
+    }
 
-    EntriesAdapter(Context context) {
-        super(context, 0);
-
-        mInflater = LayoutInflater.from(context);
+    public void setEntries(@NonNull List<Entry> entries) {
+        this.entries.clear();
+        this.entries.addAll(entries);
+        notifyDataSetChanged();
     }
 
     protected void handleFirstLine(TextView textview, Entry entry) {
-        Typeface kanaFont = ResourcesCompat.getFont(getContext(), R.font.sawarabi_gothic);
         if (StringUtils.isBlank(entry.kanji)) {
             textview.setTypeface(kanaFont);
             textview.setText(entry.kana);
@@ -77,7 +84,6 @@ public class EntriesAdapter extends ArrayAdapter<Entry> {
             SpannableString str = new SpannableString(text);
             spanKanjiKana(str, start, end);
 
-            Typeface kanjiFont = ResourcesCompat.getFont(getContext(), R.font.sawarabi_mincho);
             str.setSpan(new CustomTypefaceSpan(kanjiFont), 0, entry.kanji.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
             str.setSpan(new CustomTypefaceSpan(kanaFont), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             textview.setText(str);
@@ -93,14 +99,14 @@ public class EntriesAdapter extends ArrayAdapter<Entry> {
             StringBuilder sb = new StringBuilder(entry.vocabulary);
             List<Pair<Integer, Integer>> matches = new ArrayList<>();
 
-            int start = sb.indexOf(startSpan);
+            int start = sb.indexOf(START_SPAN);
             while (start >= 0) {
-                sb = sb.delete(start, start + startSpan.length());
-                int end = sb.indexOf(endSpan);
-                sb = sb.delete(end, end + endSpan.length());
+                sb = sb.delete(start, start + START_SPAN.length());
+                int end = sb.indexOf(END_SPAN);
+                sb = sb.delete(end, end + END_SPAN.length());
 
                 matches.add(Pair.create(start, end));
-                start = sb.indexOf(startSpan);
+                start = sb.indexOf(START_SPAN);
             }
 
             entry.vocabularySpannable = new SpannableString(sb);
@@ -117,14 +123,15 @@ public class EntriesAdapter extends ArrayAdapter<Entry> {
         str.setSpan(new ForegroundColorSpan(Color.RED), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    private static class ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView firstLine;
         private final TextView secondLine;
 
-        private ViewHolder(View view) {
-            firstLine = view.findViewById(R.id.row_first_line);
-            secondLine = view.findViewById(R.id.row_second_line);
+        public ViewHolder(View itemView) {
+            super(itemView);
+            firstLine = itemView.findViewById(R.id.row_first_line);
+            secondLine = itemView.findViewById(R.id.row_second_line);
         }
     }
 }
