@@ -3,11 +3,10 @@ package fr.frogdevelopment.nihongo.dico.ui.main;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.text.SpannableStringBuilder;
+import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
-import android.text.style.TypefaceSpan;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,8 +63,8 @@ public class EntriesAdapter extends ArrayAdapter<Entry> {
     }
 
     protected void handleFirstLine(TextView textview, Entry entry) {
+        Typeface kanaFont = ResourcesCompat.getFont(getContext(), R.font.sawarabi_gothic);
         if (StringUtils.isBlank(entry.kanji)) {
-            Typeface kanaFont = ResourcesCompat.getFont(getContext(), R.font.sawarabi_gothic);
             textview.setTypeface(kanaFont);
             textview.setText(entry.kana);
         } else {
@@ -75,16 +74,17 @@ public class EntriesAdapter extends ArrayAdapter<Entry> {
             String text = pre + entry.kana;
             int end = text.length();
 
-            SpannableStringBuilder str = new SpannableStringBuilder(text);
+            SpannableString str = new SpannableString(text);
             spanKanjiKana(str, start, end);
-            textview.setText(str);
+
             Typeface kanjiFont = ResourcesCompat.getFont(getContext(), R.font.sawarabi_mincho);
-//            textview.setTypeface(kanjiFont);
-            str.setSpan(new TypefaceSpan(kanjiFont), 0, entry.kana.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+            str.setSpan(new CustomTypefaceSpan(kanjiFont), 0, entry.kanji.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+            str.setSpan(new CustomTypefaceSpan(kanaFont), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
+            textview.setText(str);
         }
     }
 
-    private void spanKanjiKana(SpannableStringBuilder str, int start, int end) {
+    private void spanKanjiKana(SpannableString str, int start, int end) {
         str.setSpan(new RelativeSizeSpan(0.7f), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
@@ -103,7 +103,7 @@ public class EntriesAdapter extends ArrayAdapter<Entry> {
                 start = sb.indexOf(startSpan);
             }
 
-            entry.vocabularySpannable = new SpannableStringBuilder(sb);
+            entry.vocabularySpannable = new SpannableString(sb);
             for (Pair<Integer, Integer> match : matches) {
                 spanMatchRegion(entry.vocabularySpannable, match.first, match.second);
             }
@@ -112,7 +112,7 @@ public class EntriesAdapter extends ArrayAdapter<Entry> {
         textview.setText(entry.vocabularySpannable);
     }
 
-    private void spanMatchRegion(SpannableStringBuilder str, int start, int end) {
+    private void spanMatchRegion(SpannableString str, int start, int end) {
         str.setSpan(new StyleSpan(Typeface.BOLD), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
         str.setSpan(new ForegroundColorSpan(Color.RED), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
     }

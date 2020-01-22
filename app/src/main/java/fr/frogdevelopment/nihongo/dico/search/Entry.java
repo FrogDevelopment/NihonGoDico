@@ -1,6 +1,6 @@
 package fr.frogdevelopment.nihongo.dico.search;
 
-import android.text.SpannableStringBuilder;
+import android.text.SpannableString;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,5 +15,5 @@ public class Entry implements Serializable {
     public double similarity;
 
     @JsonIgnore
-    public SpannableStringBuilder vocabularySpannable;
+    public SpannableString vocabularySpannable;
 }
