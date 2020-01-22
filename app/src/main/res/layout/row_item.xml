@@ -11,12 +11,14 @@
         android:id="@+id/row_first_line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="25sp"
         android:textAppearance="?android:attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/row_second_line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="20sp"
         android:textAppearance="?android:attr/textAppearanceListItemSecondary" />
 
 </LinearLayout>

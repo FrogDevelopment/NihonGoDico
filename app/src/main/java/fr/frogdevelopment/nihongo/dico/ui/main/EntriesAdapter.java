@@ -7,6 +7,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.text.style.TypefaceSpan;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -63,6 +65,8 @@ public class EntriesAdapter extends ArrayAdapter<Entry> {
 
     protected void handleFirstLine(TextView textview, Entry entry) {
         if (StringUtils.isBlank(entry.kanji)) {
+            Typeface kanaFont = ResourcesCompat.getFont(getContext(), R.font.sawarabi_gothic);
+            textview.setTypeface(kanaFont);
             textview.setText(entry.kana);
         } else {
             String pre = entry.kanji + " - ";
@@ -74,7 +78,14 @@ public class EntriesAdapter extends ArrayAdapter<Entry> {
             SpannableStringBuilder str = new SpannableStringBuilder(text);
             spanKanjiKana(str, start, end);
             textview.setText(str);
+            Typeface kanjiFont = ResourcesCompat.getFont(getContext(), R.font.sawarabi_mincho);
+//            textview.setTypeface(kanjiFont);
+            str.setSpan(new TypefaceSpan(kanjiFont), 0, entry.kana.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
         }
+    }
+
+    private void spanKanjiKana(SpannableStringBuilder str, int start, int end) {
+        str.setSpan(new RelativeSizeSpan(0.7f), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
     protected void handleSecondLine(TextView textview, Entry entry) {
@@ -101,11 +112,7 @@ public class EntriesAdapter extends ArrayAdapter<Entry> {
         textview.setText(entry.vocabularySpannable);
     }
 
-    void spanKanjiKana(SpannableStringBuilder str, int start, int end) {
-        str.setSpan(new RelativeSizeSpan(0.7f), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
-    }
-
-    void spanMatchRegion(SpannableStringBuilder str, int start, int end) {
+    private void spanMatchRegion(SpannableStringBuilder str, int start, int end) {
         str.setSpan(new StyleSpan(Typeface.BOLD), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
         str.setSpan(new ForegroundColorSpan(Color.RED), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
     }
