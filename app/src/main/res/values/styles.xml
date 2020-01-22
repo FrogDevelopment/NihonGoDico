@@ -10,4 +10,9 @@
         <item name="android:selectableItemBackground">@drawable/selectable_item_background</item>
     </style>
 
+    <style name="SearchBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
 </resources>

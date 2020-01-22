@@ -7,8 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import fr.frogdevelopment.nihongo.dico.ui.main.BottomNavigationDrawerFragment;
+import fr.frogdevelopment.nihongo.dico.ui.bottom.BottomNavigationDrawerFragment;
+import fr.frogdevelopment.nihongo.dico.ui.bottom.BottomSheetSearchFragment;
 import fr.frogdevelopment.nihongo.dico.ui.main.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +30,12 @@ public class MainActivity extends AppCompatActivity {
 
         BottomAppBar bar = findViewById(R.id.bottom_app_bar);
         setSupportActionBar(bar);
+
+        FloatingActionButton fab = findViewById(R.id.fab_search);
+        fab.setOnClickListener(v -> {
+            BottomSheetSearchFragment bottomSheetSearchFragment = new BottomSheetSearchFragment();
+            bottomSheetSearchFragment.show(getSupportFragmentManager(), bottomSheetSearchFragment.getTag());
+        });
     }
 
     @Override

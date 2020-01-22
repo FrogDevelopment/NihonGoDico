@@ -56,8 +56,8 @@ public class EntriesAdapter extends ArrayAdapter<Entry> {
 
     private static final String endSpan = "</span>";
 
-    EntriesAdapter(Context context, List<Entry> entries) {
-        super(context, 0, entries);
+    EntriesAdapter(Context context) {
+        super(context, 0);
 
         mInflater = LayoutInflater.from(context);
     }

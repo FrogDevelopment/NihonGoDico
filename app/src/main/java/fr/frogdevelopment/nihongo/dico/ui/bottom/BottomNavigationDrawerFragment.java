@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.ui.main;
+package fr.frogdevelopment.nihongo.dico.ui.bottom;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +17,6 @@ public class BottomNavigationDrawerFragment extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_bottomsheet, container, false);
+        return inflater.inflate(R.layout.bottomsheet_fragment, container, false);
     }
 }
