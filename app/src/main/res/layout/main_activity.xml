@@ -18,7 +18,6 @@
         android:layout_gravity="bottom"
         app:backgroundTint="@color/primary_dark"
         app:fabAlignmentMode="end"
-        app:fabCradleMargin="5dp"
         app:hideOnScroll="true"
         app:navigationIcon="@drawable/ic_baseline_menu_24" />
 

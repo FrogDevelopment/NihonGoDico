@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +13,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.List;
 
@@ -26,7 +27,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.widget.Toast.LENGTH_SHORT;
 import static java.net.HttpURLConnection.HTTP_OK;
 
 public class BottomSheetSearchFragment extends BottomSheetDialogFragment {
@@ -74,8 +74,7 @@ public class BottomSheetSearchFragment extends BottomSheetDialogFragment {
             public void onResponse(@NonNull Call<List<Entry>> call, @NonNull Response<List<Entry>> response) {
 
                 if (response.code() != HTTP_OK) {
-                    Toast.makeText(requireContext(), "Response code : " + response.code(), LENGTH_SHORT).show();
-                    mViewModel.isSearching(false);
+                    mViewModel.setError("Response code : " + response.code());
                 } else {
                     mViewModel.setEntries(response.body());
                 }
@@ -84,8 +83,7 @@ public class BottomSheetSearchFragment extends BottomSheetDialogFragment {
             @Override
             public void onFailure(@NonNull Call<List<Entry>> call, @NonNull Throwable t) {
                 Log.e("NIHONGO_DICO", "Error while searching", t);
-                Toast.makeText(requireContext(), "Call failure", LENGTH_SHORT).show();
-                mViewModel.isSearching(false);
+                mViewModel.setError("Failure: " + ExceptionUtils.getMessage(t));
             }
         });
         dismiss();

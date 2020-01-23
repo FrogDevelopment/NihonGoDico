@@ -14,6 +14,7 @@ public class MainViewModel extends AndroidViewModel {
 
     private final MutableLiveData<List<Entry>> entries = new MutableLiveData<>();
     private final MutableLiveData<Boolean> searching = new MutableLiveData<>();
+    private final MutableLiveData<String> error = new MutableLiveData<>();
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -33,5 +34,13 @@ public class MainViewModel extends AndroidViewModel {
 
     public MutableLiveData<Boolean> searching() {
         return this.searching;
+    }
+
+    public void setError(String error) {
+        this.error.postValue(error);
+    }
+
+    public MutableLiveData<String> error() {
+        return this.error;
     }
 }
