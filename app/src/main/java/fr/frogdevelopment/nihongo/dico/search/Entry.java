@@ -12,8 +12,11 @@ public class Entry implements Serializable {
     public String kanji;
     public String kana;
     public String vocabulary;
-    public double similarity;
 
+    @JsonIgnore
+    public SpannableString kanjiSpannable;
+    @JsonIgnore
+    public SpannableString kanaSpannable;
     @JsonIgnore
     public SpannableString vocabularySpannable;
 }

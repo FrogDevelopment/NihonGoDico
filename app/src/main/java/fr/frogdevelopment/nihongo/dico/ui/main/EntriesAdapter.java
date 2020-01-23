@@ -1,7 +1,6 @@
 package fr.frogdevelopment.nihongo.dico.ui.main;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -25,23 +24,29 @@ import java.util.List;
 import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.search.Entry;
 
+import static android.graphics.Typeface.BOLD;
 import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 
 public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHolder> {
 
     private static final String START_SPAN = "<span class=\"keyword\">";
     private static final String END_SPAN = "</span>";
+    public static final String KANJI_KANA_SEPARATOR = " - ";
+    public static final float KANA_RELATIVE_SIZE = 0.8f;
 
     private final LayoutInflater mInflater;
     private final List<Entry> entries = new ArrayList<>();
+
     private final Typeface kanjiFont;
     private final Typeface kanaFont;
+    private final int colorMatch;
 
     public EntriesAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
 
         kanaFont = ResourcesCompat.getFont(context, R.font.sawarabi_gothic);
         kanjiFont = ResourcesCompat.getFont(context, R.font.sawarabi_mincho);
+        colorMatch = ResourcesCompat.getColor(context.getResources(), R.color.primary, null);
     }
 
     @NonNull
@@ -70,57 +75,62 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    protected void handleFirstLine(TextView textview, Entry entry) {
+    protected void handleFirstLine(TextView textView, Entry entry) {
         if (StringUtils.isBlank(entry.kanji)) {
-            textview.setTypeface(kanaFont);
-            textview.setText(entry.kana);
+            if (entry.kanaSpannable == null) {
+                entry.kanaSpannable = handleMatches(entry.kana);
+                entry.kanaSpannable.setSpan(new CustomTypefaceSpan(kanaFont), 0, entry.kana.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            textView.setText(entry.kanaSpannable);
         } else {
-            String pre = entry.kanji + " - ";
-            int start = pre.length();
+            if (entry.kanjiSpannable == null) {
+                entry.kanjiSpannable = handleMatches(entry.kanji + KANJI_KANA_SEPARATOR + entry.kana);
 
-            String text = pre + entry.kana;
-            int end = text.length();
+                String text = entry.kanjiSpannable.toString();
 
-            SpannableString str = new SpannableString(text);
-            spanKanjiKana(str, start, end);
+                int kanjiStart = 0;
+                int kanjiEnd = text.indexOf(KANJI_KANA_SEPARATOR) - 1;
+                int kanaStart = text.indexOf(KANJI_KANA_SEPARATOR) + 1;
+                int kanaEnd = text.length();
 
-            str.setSpan(new CustomTypefaceSpan(kanjiFont), 0, entry.kanji.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
-            str.setSpan(new CustomTypefaceSpan(kanaFont), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
-            textview.setText(str);
+                entry.kanjiSpannable.setSpan(new CustomTypefaceSpan(kanjiFont), kanjiStart, kanjiEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+                entry.kanjiSpannable.setSpan(new RelativeSizeSpan(KANA_RELATIVE_SIZE), kanaStart, kanaEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+                entry.kanjiSpannable.setSpan(new CustomTypefaceSpan(kanaFont), kanaStart, kanaEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+            textView.setText(entry.kanjiSpannable);
         }
     }
 
-    private void spanKanjiKana(SpannableString str, int start, int end) {
-        str.setSpan(new RelativeSizeSpan(0.7f), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
-    }
-
-    protected void handleSecondLine(TextView textview, Entry entry) {
+    protected void handleSecondLine(TextView textView, Entry entry) {
         if (entry.vocabularySpannable == null) {
-            StringBuilder sb = new StringBuilder(entry.vocabulary);
-            List<Pair<Integer, Integer>> matches = new ArrayList<>();
-
-            int start = sb.indexOf(START_SPAN);
-            while (start >= 0) {
-                sb = sb.delete(start, start + START_SPAN.length());
-                int end = sb.indexOf(END_SPAN);
-                sb = sb.delete(end, end + END_SPAN.length());
-
-                matches.add(Pair.create(start, end));
-                start = sb.indexOf(START_SPAN);
-            }
-
-            entry.vocabularySpannable = new SpannableString(sb);
-            for (Pair<Integer, Integer> match : matches) {
-                spanMatchRegion(entry.vocabularySpannable, match.first, match.second);
-            }
+            entry.vocabularySpannable = handleMatches(entry.vocabulary);
         }
 
-        textview.setText(entry.vocabularySpannable);
+        textView.setText(entry.vocabularySpannable);
     }
 
-    private void spanMatchRegion(SpannableString str, int start, int end) {
-        str.setSpan(new StyleSpan(Typeface.BOLD), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
-        str.setSpan(new ForegroundColorSpan(Color.RED), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
+    private SpannableString handleMatches(String value) {
+        StringBuilder sb = new StringBuilder(value);
+        List<Pair<Integer, Integer>> matches = new ArrayList<>();
+
+        int start = sb.indexOf(START_SPAN);
+        while (start >= 0) {
+            sb = sb.delete(start, start + START_SPAN.length());
+            int end = sb.indexOf(END_SPAN);
+            sb = sb.delete(end, end + END_SPAN.length());
+
+            matches.add(Pair.create(start, end));
+            start = sb.indexOf(START_SPAN);
+        }
+
+        SpannableString spannableString = new SpannableString(sb);
+        for (Pair<Integer, Integer> match : matches) {
+            spannableString.setSpan(new StyleSpan(BOLD), match.first, match.second, SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(new ForegroundColorSpan(colorMatch), match.first, match.second, SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        return spannableString;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
