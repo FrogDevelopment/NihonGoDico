@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         app:backgroundTint="@color/primary_dark"
-        app:fabAlignmentMode="end"
+        app:fabAlignmentMode="center"
+        app:fabAnimationMode="scale"
         app:hideOnScroll="true"
         app:navigationIcon="@drawable/ic_baseline_menu_24" />
 
