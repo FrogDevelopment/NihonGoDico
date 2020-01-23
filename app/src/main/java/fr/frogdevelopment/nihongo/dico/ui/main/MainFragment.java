@@ -19,7 +19,7 @@ import java.util.List;
 import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.search.Entry;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements EntriesAdapter.OnEntryClickListener {
 
     private EntriesAdapter mAdapter;
     private ContentLoadingProgressBar mSearchingProgress;
@@ -61,7 +61,7 @@ public class MainFragment extends Fragment {
         View root = inflater.inflate(R.layout.main_fragment, container, false);
         RecyclerView recyclerView = root.findViewById(R.id.entries_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        mAdapter = new EntriesAdapter(requireContext());
+        mAdapter = new EntriesAdapter(requireContext(), this);
         recyclerView.setAdapter(mAdapter);
 
         mSearchingProgress = root.findViewById(R.id.searching_progress);
@@ -69,4 +69,12 @@ public class MainFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onEntryClick(Entry item) {
+//        requireActivity()
+//                .getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.container, new DetailsFragment())
+//                .commitNow();
+    }
 }

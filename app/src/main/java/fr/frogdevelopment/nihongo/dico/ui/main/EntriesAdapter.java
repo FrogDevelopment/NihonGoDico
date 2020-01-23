@@ -29,6 +29,11 @@ import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 
 public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHolder> {
 
+    @FunctionalInterface
+    public interface OnEntryClickListener {
+        void onEntryClick(Entry item);
+    }
+
     private static final String START_SPAN = "<span class=\"keyword\">";
     private static final String END_SPAN = "</span>";
     public static final String KANJI_KANA_SEPARATOR = " - ";
@@ -40,13 +45,15 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
     private final Typeface kanjiFont;
     private final Typeface kanaFont;
     private final int colorMatch;
+    private final OnEntryClickListener listener;
 
-    public EntriesAdapter(Context context) {
-        mInflater = LayoutInflater.from(context);
+    public EntriesAdapter(Context context, OnEntryClickListener listener) {
+        this.mInflater = LayoutInflater.from(context);
+        this.listener = listener;
 
-        kanaFont = ResourcesCompat.getFont(context, R.font.sawarabi_gothic);
-        kanjiFont = ResourcesCompat.getFont(context, R.font.sawarabi_mincho);
-        colorMatch = ResourcesCompat.getColor(context.getResources(), R.color.primary, null);
+        this.kanaFont = ResourcesCompat.getFont(context, R.font.sawarabi_gothic);
+        this.kanjiFont = ResourcesCompat.getFont(context, R.font.sawarabi_mincho);
+        this.colorMatch = ResourcesCompat.getColor(context.getResources(), R.color.primary, null);
     }
 
     @NonNull
@@ -62,6 +69,8 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
 
         handleFirstLine(holder.firstLine, entry);
         handleSecondLine(holder.secondLine, entry);
+
+        holder.itemView.setOnClickListener(v -> listener.onEntryClick(entry));
     }
 
     @Override
