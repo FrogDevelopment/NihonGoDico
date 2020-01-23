@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.downloads;
+package fr.frogdevelopment.nihongo.dico.to_delete.downloads;
 
 import android.app.ProgressDialog;
 import android.content.ContentValues;

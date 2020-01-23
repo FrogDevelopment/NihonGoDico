@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico;
+package fr.frogdevelopment.nihongo.dico.to_delete;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import fr.frogdevelopment.nihongo.dico.R;
+import fr.frogdevelopment.nihongo.dico.databinding.MainActivityBinding;
 import fr.frogdevelopment.nihongo.dico.ui.bottom.BottomNavigationDrawerFragment;
 import fr.frogdevelopment.nihongo.dico.ui.bottom.BottomSheetSearchFragment;
 import fr.frogdevelopment.nihongo.dico.ui.main.MainFragment;
@@ -16,28 +18,27 @@ import fr.frogdevelopment.nihongo.dico.ui.main.MainFragment;
 public class MainActivity extends AppCompatActivity {
 
     private boolean isSearching;
-    private BottomAppBar mBaB;
-    private FloatingActionButton mFaB;
+    private MainActivityBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mBinding = MainActivityBinding.inflate(getLayoutInflater());
 
-        setContentView(R.layout.main_activity);
+        setContentView(mBinding.getRoot());
 
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.container, MainFragment.newInstance())
-                    .commitNow();
+                    .addToBackStack(null)
+                    .commit();
         }
 
-        mBaB = findViewById(R.id.bottom_app_bar);
-        setSupportActionBar(mBaB);
+        setSupportActionBar(mBinding.bottomAppBar);
 
         isSearching = true;
-        mFaB = findViewById(R.id.fab_search);
-        mFaB.setOnClickListener(v -> {
+        mBinding.fabSearch.setOnClickListener(v -> {
             BottomSheetSearchFragment bottomSheetSearchFragment = new BottomSheetSearchFragment();
             bottomSheetSearchFragment.show(getSupportFragmentManager(), bottomSheetSearchFragment.getTag());
         });
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 BottomNavigationDrawerFragment bottomNavigationDrawerFragment = new BottomNavigationDrawerFragment();
                 bottomNavigationDrawerFragment.show(getSupportFragmentManager(), bottomNavigationDrawerFragment.getTag());
             } else {
-                mFaB.hide(onVisibilityChangedListener);
+                mBinding.fabSearch.hide(onVisibilityChangedListener);
             }
             return true;
         }
@@ -76,29 +77,31 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private void switchToDetails() {
+    public void switchToDetails() {
         // Hide navigation drawer icon
-        mBaB.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
+        mBinding.bottomAppBar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
 
         // Move FAB from the center of BottomAppBar to the end of it
-        mBaB.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
+        mBinding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
 
         // Change FAB icon
-        mFaB.setImageResource(R.drawable.ic_baseline_favorite_24);
+        mBinding.fabSearch.setImageResource(R.drawable.ic_speak);
 
         isSearching = false;
     }
 
     private void switchToSearch() {
         // Show navigation drawer icon
-        mBaB.setNavigationIcon(R.drawable.ic_baseline_menu_24);
+        mBinding.bottomAppBar.setNavigationIcon(R.drawable.ic_baseline_menu_24);
 
         // Move FAB from the center of BottomAppBar to the end of it
-        mBaB.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
+        mBinding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
 
         // Change FAB icon
-        mFaB.setImageResource(R.drawable.ic_baseline_search_24);
+        mBinding.fabSearch.setImageResource(R.drawable.ic_baseline_search_24);
 
         isSearching = true;
+
+        getSupportFragmentManager().popBackStackImmediate();
     }
 }

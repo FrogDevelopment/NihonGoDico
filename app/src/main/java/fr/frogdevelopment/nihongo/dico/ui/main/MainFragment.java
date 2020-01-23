@@ -9,19 +9,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
+import fr.frogdevelopment.nihongo.dico.databinding.MainFragmentBinding;
 import fr.frogdevelopment.nihongo.dico.rest.EntriesClient;
 import fr.frogdevelopment.nihongo.dico.rest.RestServiceFactory;
 import fr.frogdevelopment.nihongo.dico.search.Entry;
 import fr.frogdevelopment.nihongo.dico.search.EntryDetails;
+import fr.frogdevelopment.nihongo.dico.to_delete.MainActivity;
 import fr.frogdevelopment.nihongo.dico.ui.details.DetailsFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,10 +35,14 @@ public class MainFragment extends Fragment implements EntriesAdapter.OnEntryClic
     private EntriesClient mEntriesClient;
 
     private EntriesAdapter mAdapter;
-    private ContentLoadingProgressBar mSearchingProgress;
+    private MainFragmentBinding mBinding;
 
     public static MainFragment newInstance() {
         return new MainFragment();
+    }
+
+    private MainFragment() {
+        super();
     }
 
     @Override
@@ -47,11 +51,24 @@ public class MainFragment extends Fragment implements EntriesAdapter.OnEntryClic
 
         mViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         mEntriesClient = RestServiceFactory.getEntriesClient();
+        mAdapter = new EntriesAdapter(requireContext(), this);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mBinding = MainFragmentBinding.inflate(getLayoutInflater());
+
+        mBinding.entriesRecyclerview.setLayoutManager(new LinearLayoutManager(requireContext()));
+        mBinding.entriesRecyclerview.setAdapter(mAdapter);
+
+        return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         mViewModel.searching().observe(requireActivity(), this::onSearchStart);
         mViewModel.entries().observe(requireActivity(), this::onSearchFinished);
         mViewModel.error().observe(requireActivity(), this::onSearchError);
@@ -59,33 +76,20 @@ public class MainFragment extends Fragment implements EntriesAdapter.OnEntryClic
 
     private void onSearchStart(Boolean isSearching) {
         if (isSearching) {
-            mSearchingProgress.show();
+            mBinding.searchingProgress.show();
         } else {
-            mSearchingProgress.hide();
+            mBinding.searchingProgress.hide();
         }
     }
 
     private void onSearchFinished(List<Entry> entries) {
-        mSearchingProgress.hide();
+        mBinding.searchingProgress.hide();
         mAdapter.setEntries(entries);
     }
 
     private void onSearchError(String error) {
-        mSearchingProgress.hide();
+        mBinding.searchingProgress.hide();
         Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.main_fragment, container, false);
-        RecyclerView recyclerView = root.findViewById(R.id.entries_recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        mAdapter = new EntriesAdapter(requireContext(), this);
-        recyclerView.setAdapter(mAdapter);
-
-        mSearchingProgress = root.findViewById(R.id.searching_progress);
-
-        return root;
     }
 
     @Override
@@ -98,11 +102,13 @@ public class MainFragment extends Fragment implements EntriesAdapter.OnEntryClic
                     Toast.makeText(requireContext(), "Response code : " + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     mViewModel.setDetails(response.body());
+                    ((MainActivity) requireActivity()).switchToDetails();
                     requireActivity()
                             .getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.container, new DetailsFragment())
-                            .commitNow();
+                            .replace(R.id.container, DetailsFragment.newInstance())
+                            .addToBackStack(null)
+                            .commit();
                 }
             }
 
@@ -112,5 +118,11 @@ public class MainFragment extends Fragment implements EntriesAdapter.OnEntryClic
                 Toast.makeText(requireContext(), "Call failure", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBinding = null;
     }
 }

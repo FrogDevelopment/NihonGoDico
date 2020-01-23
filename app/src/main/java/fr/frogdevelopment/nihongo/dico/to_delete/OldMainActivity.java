@@ -1,7 +1,6 @@
-package fr.frogdevelopment.nihongo.dico;
+package fr.frogdevelopment.nihongo.dico.to_delete;
 
 import android.app.AlertDialog;
-import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -32,13 +31,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fr.frogdevelopment.nihongo.dico.adapters.DicoAdapter;
+import fr.frogdevelopment.nihongo.dico.FavoritesActivity;
+import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
-import fr.frogdevelopment.nihongo.dico.downloads.DownloadsActivity;
 import fr.frogdevelopment.nihongo.dico.entities.Preview;
+import fr.frogdevelopment.nihongo.dico.to_delete.adapters.DicoAdapter;
+import fr.frogdevelopment.nihongo.dico.to_delete.downloads.DownloadsActivity;
 import fr.frogdevelopment.nihongo.dico.utils.InputUtils;
 
-public class OldMainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class OldMainActivity extends AppCompatActivity {
 
     private static final int LOADER_INIT = 0;
     private static final int LOADER_DICO_ID_KANJI = 100;
@@ -59,9 +60,9 @@ public class OldMainActivity extends AppCompatActivity implements LoaderManager.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+//        setContentView(R.layout.activity_main);
 
-        mSearchView = findViewById(R.id.main_search_field);
+//        mSearchView = findViewById(R.id.main_search_field);
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
         // Assumes current activity is the searchable activity
@@ -93,7 +94,7 @@ public class OldMainActivity extends AppCompatActivity implements LoaderManager.
 
         mProgressBar = findViewById(R.id.main_progress);
 
-        mTipsView = findViewById(R.id.main_tips);
+//        mTipsView = findViewById(R.id.main_tips);
         mTipsView.loadDataWithBaseURL(null, getString(R.string.tips), "text/html", "utf-8", null);
 
         mListView = findViewById(R.id.main_entries);
@@ -235,10 +236,10 @@ public class OldMainActivity extends AppCompatActivity implements LoaderManager.
 //            }
 //        });
 
-        getLoaderManager().restartLoader(loaderId, args, this);
+//        getLoaderManager().restartLoader(loaderId, args, this);
     }
 
-    @Override
+    //    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         mProgressBar.setVisibility(View.VISIBLE);
         mTipsView.setVisibility(View.VISIBLE);
@@ -309,7 +310,7 @@ public class OldMainActivity extends AppCompatActivity implements LoaderManager.
                 ; // todo other ?
     }
 
-    @Override
+    //    @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 //        int loaderId = loader.getId();
 //        if (data.getCount() > 0) {
@@ -419,11 +420,6 @@ public class OldMainActivity extends AppCompatActivity implements LoaderManager.
                 preview.matchIndices.add(Pair.of(matcher.start(), matcher.end()));
             }
         }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 
     @Override

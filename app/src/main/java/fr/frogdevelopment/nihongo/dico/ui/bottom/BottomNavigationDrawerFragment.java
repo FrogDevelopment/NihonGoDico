@@ -41,7 +41,7 @@ public class BottomNavigationDrawerFragment extends BottomSheetDialogFragment im
         switch (item.getItemId()) {
             case R.id.nav_favorites:
                 hideFaB();
-                fragment = new DetailsFragment(); // fixme just for test
+                fragment = DetailsFragment.newInstance(); // fixme just for test
                 break;
             case R.id.nav_settings:
                 hideFaB();

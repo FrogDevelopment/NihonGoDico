@@ -1,85 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/activity_details"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
-        android:id="@+id/content_details"
+    <data>
+
+        <variable
+            name="details"
+            type="fr.frogdevelopment.nihongo.dico.search.EntryDetails" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin">
+        android:padding="@dimen/activity_vertical_margin">
 
         <ImageView
-            android:id="@+id/details_favorite"
+            android:id="@+id/favorite"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:tint="@android:color/darker_gray" />
+            android:src="@drawable/ic_baseline_favorite_24"
+            android:tint="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/details_kanji"
+            android:id="@+id/kanji"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_toStartOf="@id/details_favorite"
-            android:text="ただ今"
-            android:textSize="50sp" />
+            android:layout_toStartOf="@id/favorite"
+            android:text="@{details.kanji}"
+            android:textSize="50sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/details_reading"
+            android:id="@+id/kana"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/details_kanji"
-            android:text="ただいま"
-            android:textSize="30sp" />
+            android:layout_below="@id/kanji"
+            android:text="@{details.kana}"
+            android:textSize="30sp"
+            app:layout_constraintStart_toStartOf="@+id/kanji"
+            app:layout_constraintTop_toBottomOf="@+id/kanji" />
 
         <TextView
-            android:id="@+id/details_romaji"
+            android:id="@+id/reading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/details_reading"
-            android:text="tadaima"
+            android:text="@{details.reading}"
             android:textSize="20sp"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@+id/kana"
+            app:layout_constraintTop_toBottomOf="@+id/kana" />
 
         <TextView
-            android:id="@+id/details_lexicon"
+            android:id="@+id/lexicon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/details_romaji"
             android:text="(adv, int, n, uk)"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@+id/reading"
+            app:layout_constraintTop_toBottomOf="@+id/reading"
+            tools:layout_editor_absoluteX="16dp" />
 
         <TextView
-            android:id="@+id/details_gloss"
+            android:id="@+id/vocabulary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/details_lexicon"
-            android:text="Bonjour (en rentrant chez soi)"
-            android:textSize="20sp" />
+            android:layout_below="@id/lexicon"
+            android:text="@{details.gloss}"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/lexicon"
+            app:layout_constraintTop_toBottomOf="@+id/lexicon" />
 
         <TextView
-            android:id="@+id/details_info"
+            android:id="@+id/info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/details_gloss"
-            android:text="infos"
-            android:textStyle="italic" />
+            android:text="@{details.info}"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@+id/vocabulary"
+            app:layout_constraintTop_toBottomOf="@+id/vocabulary" />
 
         <ListView
-            android:id="@+id/details_examples"
+            android:id="@+id/examples"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/details_info"
-            android:listSelector="@android:color/transparent" />
-    </RelativeLayout>
+            android:layout_height="0dp"
+            android:listSelector="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/info" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

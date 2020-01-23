@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.adapters;
+package fr.frogdevelopment.nihongo.dico.to_delete.adapters;
 
 import android.app.Activity;
 import android.text.SpannableStringBuilder;

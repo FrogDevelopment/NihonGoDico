@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.downloads;
+package fr.frogdevelopment.nihongo.dico.to_delete.downloads;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
