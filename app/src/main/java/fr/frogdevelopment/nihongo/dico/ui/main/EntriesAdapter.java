@@ -76,30 +76,38 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
     }
 
     protected void handleFirstLine(TextView textView, Entry entry) {
-        if (StringUtils.isBlank(entry.kanji)) {
-            if (entry.kanaSpannable == null) {
-                entry.kanaSpannable = handleMatches(entry.kana);
-                entry.kanaSpannable.setSpan(new CustomTypefaceSpan(kanaFont), 0, entry.kana.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-            textView.setText(entry.kanaSpannable);
+        if (StringUtils.isNotBlank(entry.kanji)) {
+            handleKanjiAndKana(textView, entry);
         } else {
-            if (entry.kanjiSpannable == null) {
-                entry.kanjiSpannable = handleMatches(entry.kanji + KANJI_KANA_SEPARATOR + entry.kana);
-
-                String text = entry.kanjiSpannable.toString();
-
-                int kanjiStart = 0;
-                int kanjiEnd = text.indexOf(KANJI_KANA_SEPARATOR) - 1;
-                int kanaStart = text.indexOf(KANJI_KANA_SEPARATOR) + 1;
-                int kanaEnd = text.length();
-
-                entry.kanjiSpannable.setSpan(new CustomTypefaceSpan(kanjiFont), kanjiStart, kanjiEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
-                entry.kanjiSpannable.setSpan(new RelativeSizeSpan(KANA_RELATIVE_SIZE), kanaStart, kanaEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
-                entry.kanjiSpannable.setSpan(new CustomTypefaceSpan(kanaFont), kanaStart, kanaEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-
-            textView.setText(entry.kanjiSpannable);
+            handleKanaOnly(textView, entry);
         }
+    }
+
+    private void handleKanjiAndKana(TextView textView, Entry entry) {
+        if (entry.kanjiSpannable == null) {
+            entry.kanjiSpannable = handleMatches(entry.kanji + KANJI_KANA_SEPARATOR + entry.kana);
+
+            String text = entry.kanjiSpannable.toString();
+
+            int kanjiStart = 0;
+            int kanjiEnd = text.indexOf(KANJI_KANA_SEPARATOR) - 1;
+            int kanaStart = text.indexOf(KANJI_KANA_SEPARATOR) + 1;
+            int kanaEnd = text.length();
+
+            entry.kanjiSpannable.setSpan(new CustomTypefaceSpan(kanjiFont), kanjiStart, kanjiEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+            entry.kanjiSpannable.setSpan(new RelativeSizeSpan(KANA_RELATIVE_SIZE), kanaStart, kanaEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+            entry.kanjiSpannable.setSpan(new CustomTypefaceSpan(kanaFont), kanaStart, kanaEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        textView.setText(entry.kanjiSpannable);
+    }
+
+    private void handleKanaOnly(TextView textView, Entry entry) {
+        if (entry.kanaSpannable == null) {
+            entry.kanaSpannable = handleMatches(entry.kana);
+            entry.kanaSpannable.setSpan(new CustomTypefaceSpan(kanaFont), 0, entry.kanaSpannable.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        textView.setText(entry.kanaSpannable);
     }
 
     protected void handleSecondLine(TextView textView, Entry entry) {
