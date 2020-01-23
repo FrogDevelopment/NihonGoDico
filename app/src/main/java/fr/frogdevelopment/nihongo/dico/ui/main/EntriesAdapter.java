@@ -31,7 +31,7 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
 
     @FunctionalInterface
     public interface OnEntryClickListener {
-        void onEntryClick(Entry item);
+        void onEntryClick(String senseSeq);
     }
 
     private static final String START_SPAN = "<span class=\"keyword\">";
@@ -70,7 +70,7 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
         handleFirstLine(holder.firstLine, entry);
         handleSecondLine(holder.secondLine, entry);
 
-        holder.itemView.setOnClickListener(v -> listener.onEntryClick(entry));
+        holder.itemView.setOnClickListener(v -> listener.onEntryClick(entry.senseSeq));
     }
 
     @Override

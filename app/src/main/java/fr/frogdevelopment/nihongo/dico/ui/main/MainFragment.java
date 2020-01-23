@@ -1,6 +1,7 @@
 package fr.frogdevelopment.nihongo.dico.ui.main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
+import fr.frogdevelopment.nihongo.dico.rest.EntriesClient;
+import fr.frogdevelopment.nihongo.dico.rest.RestServiceFactory;
 import fr.frogdevelopment.nihongo.dico.search.Entry;
+import fr.frogdevelopment.nihongo.dico.search.EntryDetails;
+import fr.frogdevelopment.nihongo.dico.ui.details.DetailsFragment;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static java.net.HttpURLConnection.HTTP_OK;
 
 public class MainFragment extends Fragment implements EntriesAdapter.OnEntryClickListener {
+
+    private MainViewModel mViewModel;
+    private EntriesClient mEntriesClient;
 
     private EntriesAdapter mAdapter;
     private ContentLoadingProgressBar mSearchingProgress;
@@ -29,13 +42,19 @@ public class MainFragment extends Fragment implements EntriesAdapter.OnEntryClic
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        mEntriesClient = RestServiceFactory.getEntriesClient();
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        MainViewModel viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-        viewModel.searching().observe(requireActivity(), this::onSearchStart);
-        viewModel.entries().observe(requireActivity(), this::onSearchFinished);
-        viewModel.error().observe(requireActivity(), this::onSearchError);
+        mViewModel.searching().observe(requireActivity(), this::onSearchStart);
+        mViewModel.entries().observe(requireActivity(), this::onSearchFinished);
+        mViewModel.error().observe(requireActivity(), this::onSearchError);
     }
 
     private void onSearchStart(Boolean isSearching) {
@@ -70,11 +89,28 @@ public class MainFragment extends Fragment implements EntriesAdapter.OnEntryClic
     }
 
     @Override
-    public void onEntryClick(Entry item) {
-//        requireActivity()
-//                .getSupportFragmentManager()
-//                .beginTransaction()
-//                .replace(R.id.container, new DetailsFragment())
-//                .commitNow();
+    public void onEntryClick(String senseSeq) {
+        mEntriesClient.getDetails("eng", senseSeq).enqueue(new Callback<EntryDetails>() {
+            @Override
+            public void onResponse(@NonNull Call<EntryDetails> call, @NonNull Response<EntryDetails> response) {
+                if (response.code() != HTTP_OK) {
+                    Log.e("NIHONGO_DICO", "Response code : " + response.code());
+                    Toast.makeText(requireContext(), "Response code : " + response.code(), Toast.LENGTH_LONG).show();
+                } else {
+                    mViewModel.setDetails(response.body());
+                    requireActivity()
+                            .getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.container, new DetailsFragment())
+                            .commitNow();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<EntryDetails> call, @NonNull Throwable t) {
+                Log.e("NIHONGO_DICO", "Error while fetching details", t);
+                Toast.makeText(requireContext(), "Call failure", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

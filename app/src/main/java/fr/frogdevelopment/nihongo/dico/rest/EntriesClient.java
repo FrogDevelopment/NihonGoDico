@@ -3,7 +3,7 @@ package fr.frogdevelopment.nihongo.dico.rest;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.search.Entry;
-import fr.frogdevelopment.nihongo.dico.search.SearchDetails;
+import fr.frogdevelopment.nihongo.dico.search.EntryDetails;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -15,6 +15,6 @@ public interface EntriesClient {
                              @Query("query") String query);
 
     @GET("entries/details")
-    Call<SearchDetails> getDetails(@Query("lang") String lang,
-                                   @Query("senseId") Long senseId);
+    Call<EntryDetails> getDetails(@Query("lang") String lang,
+                                  @Query("senseSeq") String senseSeq);
 }
