@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     private FloatingActionButton.OnVisibilityChangedListener onVisibilityChangedListener = new FloatingActionButton.OnVisibilityChangedListener() {
         @Override
         public void onShown(FloatingActionButton fab) {
@@ -77,7 +76,11 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public void switchToDetails() {
+    public void hideFab() {
+        mBinding.fabSearch.hide(onVisibilityChangedListener);
+    }
+
+    private void switchToDetails() {
         // Hide navigation drawer icon
         mBinding.bottomAppBar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
 

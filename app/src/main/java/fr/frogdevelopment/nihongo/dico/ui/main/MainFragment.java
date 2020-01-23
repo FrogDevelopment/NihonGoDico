@@ -102,7 +102,7 @@ public class MainFragment extends Fragment implements EntriesAdapter.OnEntryClic
                     Toast.makeText(requireContext(), "Response code : " + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     mViewModel.setDetails(response.body());
-                    ((MainActivity) requireActivity()).switchToDetails();
+                    ((MainActivity) requireActivity()).hideFab();
                     requireActivity()
                             .getSupportFragmentManager()
                             .beginTransaction()
