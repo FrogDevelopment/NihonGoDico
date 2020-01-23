@@ -14,7 +14,7 @@ public interface EntriesClient {
     Call<List<Entry>> search(@Query("lang") String lang,
                              @Query("query") String query);
 
-    @GET("entries/details")
+    @GET("entries/search/details")
     Call<EntryDetails> getDetails(@Query("lang") String lang,
                                   @Query("senseSeq") String senseSeq);
 }
