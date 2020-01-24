@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.databinding.DetailsFragmentBinding;
 import fr.frogdevelopment.nihongo.dico.ui.main.MainViewModel;
 
@@ -37,6 +39,9 @@ public class DetailsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DetailsFragmentBinding.inflate(getLayoutInflater());
+
+        mBinding.kanji.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.sawarabi_mincho));
+        mBinding.kana.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.sawarabi_gothic));
 
         mViewModel.entryDetails().observe(requireActivity(), entryDetails -> mBinding.setDetails(entryDetails));
 
