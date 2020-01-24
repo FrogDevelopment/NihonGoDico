@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico;
+package fr.frogdevelopment.nihongo.dico.to_delete;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.data.contentprovider.NihonGoDicoContentProvider;
 import fr.frogdevelopment.nihongo.dico.to_delete.adapters.DicoAdapter;
 
@@ -27,9 +28,9 @@ public class FavoritesActivity extends AppCompatActivity implements LoaderManage
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_favorites);
 
-		mProgressBar = (ProgressBar) findViewById(R.id.main_progress);
+		mProgressBar = findViewById(R.id.main_progress);
 
-		mListView = (ListView) findViewById(R.id.main_entries);
+		mListView = findViewById(R.id.main_entries);
 		mListView.setOnItemClickListener((adapterView, view, i, l) -> onItemClick(i));
 
 		getLoaderManager().initLoader(LOADER_INIT, null, this);

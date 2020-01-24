@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:mContext="fr.frogdevelopment.nihongo.dico.FavoritesActivity">
+    tools:mContext="fr.frogdevelopment.nihongo.dico.to_delete.FavoritesActivity">
 
     <!-- The main content view -->
     <RelativeLayout

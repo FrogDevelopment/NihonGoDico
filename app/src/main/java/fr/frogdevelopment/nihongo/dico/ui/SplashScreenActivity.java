@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import fr.frogdevelopment.nihongo.dico.R;
-import fr.frogdevelopment.nihongo.dico.to_delete.MainActivity;
 
 public class SplashScreenActivity extends Activity {
 

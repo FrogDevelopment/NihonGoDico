@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fr.frogdevelopment.nihongo.dico.FavoritesActivity;
 import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.data.contentprovider.NihonGoDicoContentProvider;
 import fr.frogdevelopment.nihongo.dico.data.entities.Preview;

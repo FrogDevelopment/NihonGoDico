@@ -17,7 +17,7 @@
         <!-- Points to searchable activity so the whole app can invoke search. -->
         <!--        <meta-data-->
         <!--            android:name="android.app.default_searchable"-->
-        <!--            android:value="fr.frogdevelopment.nihongo.dico.to_delete.MainActivity" />-->
+        <!--            android:value="fr.frogdevelopment.nihongo.dico.ui.MainActivity" />-->
 
         <activity
             android:name=".ui.SplashScreenActivity"
@@ -35,7 +35,7 @@
             android:name=".data.contentprovider.NihonGoDicoContentProvider"
             android:authorities=".NihonGoDicoContentProvider"
             android:exported="false" />
-        <activity android:name=".to_delete.MainActivity" />
+        <activity android:name=".ui.MainActivity" />
         <!--        <activity-->
         <!--            android:name=".OldMainActivity"-->
         <!--            android:configChanges="keyboardHidden|orientation|screenSize"-->

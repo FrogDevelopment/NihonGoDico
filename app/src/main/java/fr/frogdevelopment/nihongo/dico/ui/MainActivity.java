@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.to_delete;
+package fr.frogdevelopment.nihongo.dico.ui;
 
 import android.os.Bundle;
 import android.view.MenuItem;
