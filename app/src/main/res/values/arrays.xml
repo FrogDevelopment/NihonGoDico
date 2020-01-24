@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="settings_languages">
+        <item>@string/settings_lang_eng_value</item>
+        <item>@string/settings_lang_fra_value</item>
+    </array>
+    <array name="settings_languages_label">
+        <item>@string/settings_lang_eng_label</item>
+        <item>@string/settings_lang_fra_label</item>
+    </array>
+
+</resources>

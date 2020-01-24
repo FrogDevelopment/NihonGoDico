@@ -20,10 +20,12 @@
     <string name="downloads_language_title">Language</string>
     <string name="downloads_entries_hint">Select a language</string>
     <string name="downloads_entries_title">Download dictionary</string>
-    <string name="downloads_entries_info" translatable="false">Copyright JMdict/EDICT &amp; EDRDG\nwww.edrdg.org/jmdict/edict_doc.html</string>
+    <string name="downloads_entries_info" translatable="false">Copyright JMdict/EDICT &amp; EDRDG</string>
+    <string name="downloads_entries_summary" translatable="false">https://www.edrdg.org/jmdict/edict_doc.html</string>
     <string name="downloads_entries">Download dictionary</string>
     <string name="downloads_examples_title">Download examples</string>
-    <string name="downloads_examples_info" translatable="false">CC-BY 2.0 Tatoeba\ntatoeba.org</string>
+    <string name="downloads_examples_info" translatable="false">CC-BY 2.0 Tatoeba</string>
+    <string name="downloads_examples_summary" translatable="false">https://tatoeba.org</string>
     <string name="downloads_examples">Download examples</string>
     <string name="downloads_big_file_warning">Beware, the file is big, please use WiFi. Continue ?</string>
 
@@ -45,5 +47,16 @@
     <string name="favorites_title">Favorites</string>
     <string name="no_favorites">No favorites</string>
 
+
+    <string name="settings_lang_eng_value" translatable="false">eng</string>
+    <string name="settings_lang_eng_label" translatable="false">English</string>
+    <string name="settings_lang_fra_value" translatable="false">fra</string>
+    <string name="settings_lang_fra_label" translatable="false">Français</string>
+
+
+    <string name="settings_dictionary_title" translatable="false">Dictionary</string>
+    <string name="settings_languages_title" translatable="false">Languages</string>
+    <string name="settings_about_application" translatable="false">Application</string>
+    <string name="settings_about_version_title" translatable="false">Version</string>
 
 </resources>

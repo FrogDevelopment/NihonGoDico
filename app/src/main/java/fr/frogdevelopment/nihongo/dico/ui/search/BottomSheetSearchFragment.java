@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.ui.bottom;
+package fr.frogdevelopment.nihongo.dico.ui.search;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -23,6 +24,7 @@ import fr.frogdevelopment.nihongo.dico.data.rest.RestServiceFactory;
 import fr.frogdevelopment.nihongo.dico.data.rest.search.Entry;
 import fr.frogdevelopment.nihongo.dico.data.search.SearchViewModel;
 import fr.frogdevelopment.nihongo.dico.databinding.SearchsheetFragmentBinding;
+import fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,7 +73,8 @@ public class BottomSheetSearchFragment extends BottomSheetDialogFragment {
 
     private void search(String query) {
         mViewModel.isSearching(true);
-        RestServiceFactory.getEntriesClient().search("eng", query).enqueue(new Callback<List<Entry>>() {
+        String language = PreferenceManager.getDefaultSharedPreferences(requireContext()).getString(SettingsFragment.KEY_LANGUAGE, "eng");
+        RestServiceFactory.getEntriesClient().search(language, query).enqueue(new Callback<List<Entry>>() {
             @Override
             public void onResponse(@NonNull Call<List<Entry>> call, @NonNull Response<List<Entry>> response) {
 

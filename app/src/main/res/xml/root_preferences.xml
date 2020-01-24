@@ -1,10 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="Data">
+    <PreferenceCategory
+        android:icon="@drawable/ic_baseline_tune_24"
+        app:title="@string/settings_dictionary_title">
 
+        <ListPreference
+            app:defaultValue="eng"
+            app:entries="@array/settings_languages_label"
+            app:entryValues="@array/settings_languages"
+            app:key="languageTag"
+            app:title="@string/settings_languages_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:key="settings_entries"
+            app:title="@string/downloads_entries_title" />
+
+        <Preference
+            app:key="settings_sentences"
+            app:title="@string/downloads_examples" />
+
+        <SwitchPreference
+            android:summaryOff="Online"
+            android:summaryOn="Offline"
+            app:defaultValue="true"
+            app:key="settings_offline"
+            app:switchTextOff="Offline"
+            app:switchTextOn="Online"
+            app:title="Use downloaded dictionary"/>
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        app:icon="@drawable/ic_baseline_info_24"
+        app:title="@string/settings_about_application">
+        <Preference
+            app:icon="@drawable/ic_copyright"
+            app:key="settings_about_entries"
+            app:summary="@string/downloads_entries_summary"
+            app:title="@string/downloads_entries_info">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/downloads_entries_summary" />
+        </Preference>
+
+        <Preference
+            app:icon="@drawable/ic_cc"
+            app:key="settings_about_sentences"
+            app:summary="@string/downloads_examples_summary"
+            app:title="@string/downloads_examples_info">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/downloads_examples_summary" />
+        </Preference>
+
+        <Preference
+            app:key="settings_version"
+            app:title="@string/settings_about_version_title" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

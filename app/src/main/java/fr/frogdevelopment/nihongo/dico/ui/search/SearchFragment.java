@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import fr.frogdevelopment.nihongo.dico.data.rest.search.EntryDetails;
 import fr.frogdevelopment.nihongo.dico.data.search.SearchViewModel;
 import fr.frogdevelopment.nihongo.dico.databinding.SearchFragmentBinding;
 import fr.frogdevelopment.nihongo.dico.ui.details.DetailsFragment;
+import fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -98,7 +100,8 @@ public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryCl
     @Override
     public void onEntryClick(String senseSeq) {
         mBinding.searchingProgress.show();
-        mEntriesClient.getDetails("eng", senseSeq).enqueue(new Callback<EntryDetails>() {
+        String language = PreferenceManager.getDefaultSharedPreferences(requireContext()).getString(SettingsFragment.KEY_LANGUAGE, "eng");
+        mEntriesClient.getDetails(language, senseSeq).enqueue(new Callback<EntryDetails>() {
             @Override
             public void onResponse(@NonNull Call<EntryDetails> call, @NonNull Response<EntryDetails> response) {
                 if (response.code() != HTTP_OK) {
