@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.entities;
+package fr.frogdevelopment.nihongo.dico.data.entities;
 
 public class Details {
 

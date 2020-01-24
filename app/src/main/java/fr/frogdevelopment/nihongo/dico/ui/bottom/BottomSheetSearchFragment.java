@@ -19,10 +19,10 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
-import fr.frogdevelopment.nihongo.dico.rest.EntriesClient;
-import fr.frogdevelopment.nihongo.dico.rest.RestServiceFactory;
-import fr.frogdevelopment.nihongo.dico.search.Entry;
-import fr.frogdevelopment.nihongo.dico.ui.main.MainViewModel;
+import fr.frogdevelopment.nihongo.dico.data.rest.RestServiceFactory;
+import fr.frogdevelopment.nihongo.dico.data.rest.search.Entry;
+import fr.frogdevelopment.nihongo.dico.data.search.SearchViewModel;
+import fr.frogdevelopment.nihongo.dico.databinding.SearchsheetFragmentBinding;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,29 +31,23 @@ import static java.net.HttpURLConnection.HTTP_OK;
 
 public class BottomSheetSearchFragment extends BottomSheetDialogFragment {
 
-    private EntriesClient mEntriesClient;
-    private MainViewModel mViewModel;
+    private SearchViewModel mViewModel;
+    private SearchsheetFragmentBinding mBinding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.SearchBottomSheetDialog);
 
-        mViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-        mEntriesClient = RestServiceFactory.getEntriesClient();
+        mViewModel = new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.searchsheet_fragment, container, false);
-    }
+        mBinding = SearchsheetFragmentBinding.inflate(getLayoutInflater());
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        SearchView searchview = view.findViewById(R.id.bottom_search_field);
-        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mBinding.bottomSearchField.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 search(query);
@@ -65,11 +59,19 @@ public class BottomSheetSearchFragment extends BottomSheetDialogFragment {
                 return false;
             }
         });
+
+        return mBinding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBinding = null;
     }
 
     private void search(String query) {
         mViewModel.isSearching(true);
-        mEntriesClient.search("eng", query).enqueue(new Callback<List<Entry>>() {
+        RestServiceFactory.getEntriesClient().search("eng", query).enqueue(new Callback<List<Entry>>() {
             @Override
             public void onResponse(@NonNull Call<List<Entry>> call, @NonNull Response<List<Entry>> response) {
 

@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.ui.main;
+package fr.frogdevelopment.nihongo.dico.data.search;
 
 import android.app.Application;
 
@@ -8,17 +8,15 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
-import fr.frogdevelopment.nihongo.dico.search.Entry;
-import fr.frogdevelopment.nihongo.dico.search.EntryDetails;
+import fr.frogdevelopment.nihongo.dico.data.rest.search.Entry;
 
-public class MainViewModel extends AndroidViewModel {
+public class SearchViewModel extends AndroidViewModel {
 
     private final MutableLiveData<List<Entry>> entries = new MutableLiveData<>();
     private final MutableLiveData<Boolean> searching = new MutableLiveData<>();
     private final MutableLiveData<String> error = new MutableLiveData<>();
-    private final MutableLiveData<EntryDetails> entryDetails = new MutableLiveData<>();
 
-    public MainViewModel(@NonNull Application application) {
+    public SearchViewModel(@NonNull Application application) {
         super(application);
     }
 
@@ -44,13 +42,5 @@ public class MainViewModel extends AndroidViewModel {
 
     public MutableLiveData<String> error() {
         return this.error;
-    }
-
-    public void setDetails(EntryDetails entryDetails) {
-        this.entryDetails.postValue(entryDetails);
-    }
-
-    public MutableLiveData<EntryDetails> entryDetails() {
-        return this.entryDetails;
     }
 }

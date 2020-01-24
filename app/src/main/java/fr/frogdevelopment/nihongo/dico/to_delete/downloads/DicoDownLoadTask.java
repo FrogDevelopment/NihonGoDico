@@ -6,9 +6,9 @@ import android.content.Context;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
-import fr.frogdevelopment.nihongo.dico.contentprovider.EntryContract;
-import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
-import fr.frogdevelopment.nihongo.dico.contentprovider.SenseContract;
+import fr.frogdevelopment.nihongo.dico.data.contentprovider.EntryContract;
+import fr.frogdevelopment.nihongo.dico.data.contentprovider.NihonGoDicoContentProvider;
+import fr.frogdevelopment.nihongo.dico.data.contentprovider.SenseContract;
 
 class DicoDownLoadTask extends AbstractDownLoadTask {
 

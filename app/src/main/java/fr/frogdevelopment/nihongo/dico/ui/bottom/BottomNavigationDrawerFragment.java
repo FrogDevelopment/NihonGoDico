@@ -16,7 +16,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.ui.details.DetailsFragment;
-import fr.frogdevelopment.nihongo.dico.ui.main.MainFragment;
+import fr.frogdevelopment.nihongo.dico.ui.search.SearchFragment;
 import fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment;
 
 public class BottomNavigationDrawerFragment extends BottomSheetDialogFragment implements NavigationView.OnNavigationItemSelectedListener {
@@ -50,7 +50,7 @@ public class BottomNavigationDrawerFragment extends BottomSheetDialogFragment im
 
             default:
                 showFaB();
-                fragment = MainFragment.newInstance();
+                fragment = SearchFragment.newInstance();
                 break;
         }
 
@@ -65,12 +65,12 @@ public class BottomNavigationDrawerFragment extends BottomSheetDialogFragment im
     }
 
     private void hideFaB() {
-        FloatingActionButton fab = requireActivity().findViewById(R.id.fab_search);
+        FloatingActionButton fab = requireActivity().findViewById(R.id.fab);
         fab.hide();
     }
 
     private void showFaB() {
-        FloatingActionButton fab = requireActivity().findViewById(R.id.fab_search);
+        FloatingActionButton fab = requireActivity().findViewById(R.id.fab);
         fab.show();
     }
 }

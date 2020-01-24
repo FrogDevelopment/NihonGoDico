@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.rest;
+package fr.frogdevelopment.nihongo.dico.data.rest;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

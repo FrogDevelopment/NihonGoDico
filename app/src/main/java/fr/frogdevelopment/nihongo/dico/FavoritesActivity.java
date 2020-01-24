@@ -11,7 +11,7 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
+import fr.frogdevelopment.nihongo.dico.data.contentprovider.NihonGoDicoContentProvider;
 import fr.frogdevelopment.nihongo.dico.to_delete.adapters.DicoAdapter;
 
 public class FavoritesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {

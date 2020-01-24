@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.entities;
+package fr.frogdevelopment.nihongo.dico.data.entities;
 
 import org.apache.commons.lang3.tuple.Pair;
 

@@ -1,10 +1,11 @@
-package fr.frogdevelopment.nihongo.dico;
+package fr.frogdevelopment.nihongo.dico.ui;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.to_delete.MainActivity;
 
 public class SplashScreenActivity extends Activity {

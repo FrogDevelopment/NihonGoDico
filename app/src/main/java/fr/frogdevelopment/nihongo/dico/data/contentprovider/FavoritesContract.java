@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.contentprovider;
+package fr.frogdevelopment.nihongo.dico.data.contentprovider;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;

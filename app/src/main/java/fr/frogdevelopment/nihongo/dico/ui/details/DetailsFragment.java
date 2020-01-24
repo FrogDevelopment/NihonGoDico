@@ -12,23 +12,15 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import fr.frogdevelopment.nihongo.dico.R;
+import fr.frogdevelopment.nihongo.dico.data.details.DetailsViewModel;
 import fr.frogdevelopment.nihongo.dico.databinding.DetailsFragmentBinding;
-import fr.frogdevelopment.nihongo.dico.ui.main.MainViewModel;
 
 public class DetailsFragment extends Fragment {
 
-    private MainViewModel mViewModel;
     private DetailsFragmentBinding mBinding;
 
     public static DetailsFragment newInstance() {
         return new DetailsFragment();
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        mViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
     }
 
     @Nullable
@@ -39,8 +31,15 @@ public class DetailsFragment extends Fragment {
         mBinding.kanji.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.sawarabi_mincho));
         mBinding.kana.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.sawarabi_gothic));
 
-        mViewModel.entryDetails().observe(requireActivity(), entryDetails -> mBinding.setDetails(entryDetails));
+        DetailsViewModel viewModel = new ViewModelProvider(requireActivity()).get(DetailsViewModel.class);
+        mBinding.setViewModel(viewModel);
 
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBinding = null;
     }
 }

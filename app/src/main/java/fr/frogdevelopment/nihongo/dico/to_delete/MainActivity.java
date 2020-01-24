@@ -13,7 +13,7 @@ import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.databinding.MainActivityBinding;
 import fr.frogdevelopment.nihongo.dico.ui.bottom.BottomNavigationDrawerFragment;
 import fr.frogdevelopment.nihongo.dico.ui.bottom.BottomSheetSearchFragment;
-import fr.frogdevelopment.nihongo.dico.ui.main.MainFragment;
+import fr.frogdevelopment.nihongo.dico.ui.search.SearchFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,18 +30,25 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
-                    .addToBackStack(null)
+                    .replace(R.id.container, SearchFragment.newInstance())
                     .commit();
+            getSupportFragmentManager()
+                    .addOnBackStackChangedListener(this::switchFaB);
         }
 
         setSupportActionBar(mBinding.bottomAppBar);
 
         isSearching = true;
-        mBinding.fabSearch.setOnClickListener(v -> {
+        mBinding.fab.setOnClickListener(v -> {
             BottomSheetSearchFragment bottomSheetSearchFragment = new BottomSheetSearchFragment();
             bottomSheetSearchFragment.show(getSupportFragmentManager(), bottomSheetSearchFragment.getTag());
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBinding = null;
     }
 
     @Override
@@ -51,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 BottomNavigationDrawerFragment bottomNavigationDrawerFragment = new BottomNavigationDrawerFragment();
                 bottomNavigationDrawerFragment.show(getSupportFragmentManager(), bottomNavigationDrawerFragment.getTag());
             } else {
-                mBinding.fabSearch.hide(onVisibilityChangedListener);
+                switchFaB();
             }
             return true;
         }
@@ -76,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public void hideFab() {
-        mBinding.fabSearch.hide(onVisibilityChangedListener);
+    private void switchFaB() {
+        mBinding.fab.hide(onVisibilityChangedListener);
     }
 
     private void switchToDetails() {
@@ -88,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         mBinding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
 
         // Change FAB icon
-        mBinding.fabSearch.setImageResource(R.drawable.ic_speak);
+        mBinding.fab.setImageResource(R.drawable.ic_speak);
 
         isSearching = false;
     }
@@ -101,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         mBinding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
 
         // Change FAB icon
-        mBinding.fabSearch.setImageResource(R.drawable.ic_baseline_search_24);
+        mBinding.fab.setImageResource(R.drawable.ic_baseline_search_24);
 
         isSearching = true;
 

@@ -3,13 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="details"
-            type="fr.frogdevelopment.nihongo.dico.search.EntryDetails" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,6 +15,7 @@
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_baseline_favorite_24"
             android:tint="@android:color/darker_gray"
+            android:onClick="@{() -> viewModel.onFavorite()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,7 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@id/favorite"
-            android:text="@{details.kanji}"
+            android:text="@{viewModel.entryDetails().kanji}"
             android:textSize="50sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -40,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/kanji"
-            android:text="@{details.kana}"
+            android:text="@{viewModel.entryDetails().kana}"
             android:textSize="30sp"
             app:layout_constraintStart_toStartOf="@+id/kanji"
             app:layout_constraintTop_toBottomOf="@+id/kanji" />
@@ -49,7 +43,7 @@
             android:id="@+id/reading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{details.reading}"
+            android:text="@{viewModel.entryDetails().reading}"
             android:textSize="20sp"
             android:textStyle="italic"
             app:layout_constraintStart_toStartOf="@+id/kana"
@@ -70,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lexicon"
-            android:text="@{details.gloss}"
+            android:text="@{viewModel.entryDetails().gloss}"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/lexicon"
             app:layout_constraintTop_toBottomOf="@+id/lexicon" />
@@ -79,7 +73,7 @@
             android:id="@+id/info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{details.info}"
+            android:text="@{viewModel.entryDetails().info}"
             android:textStyle="italic"
             app:layout_constraintStart_toStartOf="@+id/vocabulary"
             app:layout_constraintTop_toBottomOf="@+id/vocabulary" />
@@ -95,4 +89,10 @@
             app:layout_constraintTop_toBottomOf="@+id/info" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+        <variable
+            name="viewModel"
+            type="fr.frogdevelopment.nihongo.dico.data.details.DetailsViewModel" />
+    </data>
 </layout>

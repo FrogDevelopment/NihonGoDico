@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.search;
+package fr.frogdevelopment.nihongo.dico.data.rest.search;
 
 import java.io.Serializable;
 import java.util.HashSet;

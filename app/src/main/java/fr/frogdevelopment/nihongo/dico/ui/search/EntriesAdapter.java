@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.ui.main;
+package fr.frogdevelopment.nihongo.dico.ui.search;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
-import fr.frogdevelopment.nihongo.dico.search.Entry;
+import fr.frogdevelopment.nihongo.dico.data.rest.search.Entry;
+import fr.frogdevelopment.nihongo.dico.ui.main.CustomTypefaceSpan;
 
 import static android.graphics.Typeface.BOLD;
 import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;

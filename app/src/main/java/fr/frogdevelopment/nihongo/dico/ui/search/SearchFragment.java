@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.ui.main;
+package fr.frogdevelopment.nihongo.dico.ui.search;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -16,12 +16,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
-import fr.frogdevelopment.nihongo.dico.databinding.MainFragmentBinding;
-import fr.frogdevelopment.nihongo.dico.rest.EntriesClient;
-import fr.frogdevelopment.nihongo.dico.rest.RestServiceFactory;
-import fr.frogdevelopment.nihongo.dico.search.Entry;
-import fr.frogdevelopment.nihongo.dico.search.EntryDetails;
-import fr.frogdevelopment.nihongo.dico.to_delete.MainActivity;
+import fr.frogdevelopment.nihongo.dico.data.details.DetailsViewModel;
+import fr.frogdevelopment.nihongo.dico.data.rest.EntriesClient;
+import fr.frogdevelopment.nihongo.dico.data.rest.RestServiceFactory;
+import fr.frogdevelopment.nihongo.dico.data.rest.search.Entry;
+import fr.frogdevelopment.nihongo.dico.data.rest.search.EntryDetails;
+import fr.frogdevelopment.nihongo.dico.data.search.SearchViewModel;
+import fr.frogdevelopment.nihongo.dico.databinding.SearchFragmentBinding;
 import fr.frogdevelopment.nihongo.dico.ui.details.DetailsFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,23 +30,25 @@ import retrofit2.Response;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 
-public class MainFragment extends Fragment implements EntriesAdapter.OnEntryClickListener {
+public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryClickListener {
 
-    private MainViewModel mViewModel;
+    private SearchViewModel mSearchViewModel;
+    private DetailsViewModel mDetailsViewModel;
     private EntriesClient mEntriesClient;
 
     private EntriesAdapter mAdapter;
-    private MainFragmentBinding mBinding;
+    private SearchFragmentBinding mBinding;
 
-    public static MainFragment newInstance() {
-        return new MainFragment();
+    public static SearchFragment newInstance() {
+        return new SearchFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        mSearchViewModel = new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
+        mDetailsViewModel = new ViewModelProvider(requireActivity()).get(DetailsViewModel.class);
         mEntriesClient = RestServiceFactory.getEntriesClient();
         mAdapter = new EntriesAdapter(requireContext(), this);
     }
@@ -53,21 +56,25 @@ public class MainFragment extends Fragment implements EntriesAdapter.OnEntryClic
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = MainFragmentBinding.inflate(getLayoutInflater());
+        mBinding = SearchFragmentBinding.inflate(getLayoutInflater());
 
         mBinding.entriesRecyclerview.setLayoutManager(new LinearLayoutManager(requireContext()));
         mBinding.entriesRecyclerview.setAdapter(mAdapter);
+
+        mSearchViewModel.searching().observe(requireActivity(), this::onSearchStart);
+        mSearchViewModel.entries().observe(requireActivity(), this::onSearchFinished);
+        mSearchViewModel.error().observe(requireActivity(), this::onSearchError);
 
         return mBinding.getRoot();
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        mViewModel.searching().observe(requireActivity(), this::onSearchStart);
-        mViewModel.entries().observe(requireActivity(), this::onSearchFinished);
-        mViewModel.error().observe(requireActivity(), this::onSearchError);
+    public void onDestroyView() {
+        super.onDestroyView();
+        mSearchViewModel.searching().removeObservers(requireActivity());
+        mSearchViewModel.entries().removeObservers(requireActivity());
+        mSearchViewModel.error().removeObservers(requireActivity());
+        mBinding = null;
     }
 
     private void onSearchStart(Boolean isSearching) {
@@ -90,21 +97,23 @@ public class MainFragment extends Fragment implements EntriesAdapter.OnEntryClic
 
     @Override
     public void onEntryClick(String senseSeq) {
+        mBinding.searchingProgress.show();
         mEntriesClient.getDetails("eng", senseSeq).enqueue(new Callback<EntryDetails>() {
             @Override
             public void onResponse(@NonNull Call<EntryDetails> call, @NonNull Response<EntryDetails> response) {
                 if (response.code() != HTTP_OK) {
                     Log.e("NIHONGO_DICO", "Response code : " + response.code());
                     Toast.makeText(requireContext(), "Response code : " + response.code(), Toast.LENGTH_LONG).show();
+                    mBinding.searchingProgress.hide();
                 } else {
-                    mViewModel.setDetails(response.body());
-                    ((MainActivity) requireActivity()).hideFab();
+                    mDetailsViewModel.setDetails(response.body());
                     requireActivity()
                             .getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.container, DetailsFragment.newInstance())
                             .addToBackStack(null)
                             .commit();
+                    mBinding.searchingProgress.hide();
                 }
             }
 
@@ -112,13 +121,8 @@ public class MainFragment extends Fragment implements EntriesAdapter.OnEntryClic
             public void onFailure(@NonNull Call<EntryDetails> call, @NonNull Throwable t) {
                 Log.e("NIHONGO_DICO", "Error while fetching details", t);
                 Toast.makeText(requireContext(), "Call failure", Toast.LENGTH_LONG).show();
+                mBinding.searchingProgress.hide();
             }
         });
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mBinding = null;
     }
 }

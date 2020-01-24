@@ -6,9 +6,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import fr.frogdevelopment.nihongo.dico.search.Match;
-import fr.frogdevelopment.nihongo.dico.search.Result;
-import fr.frogdevelopment.nihongo.dico.search.Search;
+import fr.frogdevelopment.nihongo.dico.data.rest.search.Match;
+import fr.frogdevelopment.nihongo.dico.data.rest.search.Result;
+import fr.frogdevelopment.nihongo.dico.data.rest.search.Search;
 
 public class ResearchByGlossAdapter extends DicoAdapter {
 

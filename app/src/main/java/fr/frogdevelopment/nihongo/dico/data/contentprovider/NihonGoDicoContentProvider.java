@@ -2,7 +2,7 @@
  * Copyright (c) Frog Development 2015.
  */
 
-package fr.frogdevelopment.nihongo.dico.contentprovider;
+package fr.frogdevelopment.nihongo.dico.data.contentprovider;
 
 import android.app.SearchManager;
 import android.content.ContentResolver;

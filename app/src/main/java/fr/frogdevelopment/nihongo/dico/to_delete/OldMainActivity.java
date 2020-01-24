@@ -33,8 +33,8 @@ import java.util.regex.Pattern;
 
 import fr.frogdevelopment.nihongo.dico.FavoritesActivity;
 import fr.frogdevelopment.nihongo.dico.R;
-import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
-import fr.frogdevelopment.nihongo.dico.entities.Preview;
+import fr.frogdevelopment.nihongo.dico.data.contentprovider.NihonGoDicoContentProvider;
+import fr.frogdevelopment.nihongo.dico.data.entities.Preview;
 import fr.frogdevelopment.nihongo.dico.to_delete.adapters.DicoAdapter;
 import fr.frogdevelopment.nihongo.dico.to_delete.downloads.DownloadsActivity;
 import fr.frogdevelopment.nihongo.dico.utils.InputUtils;

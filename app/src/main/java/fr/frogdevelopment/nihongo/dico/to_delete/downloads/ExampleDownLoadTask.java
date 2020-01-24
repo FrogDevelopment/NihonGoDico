@@ -6,10 +6,10 @@ import android.content.Context;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
-import fr.frogdevelopment.nihongo.dico.contentprovider.ExampleContract;
-import fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider;
+import fr.frogdevelopment.nihongo.dico.data.contentprovider.ExampleContract;
+import fr.frogdevelopment.nihongo.dico.data.contentprovider.NihonGoDicoContentProvider;
 
-import static fr.frogdevelopment.nihongo.dico.contentprovider.NihonGoDicoContentProvider.URI_EXAMPLE;
+import static fr.frogdevelopment.nihongo.dico.data.contentprovider.NihonGoDicoContentProvider.URI_EXAMPLE;
 
 class ExampleDownLoadTask extends AbstractDownLoadTask {
 
