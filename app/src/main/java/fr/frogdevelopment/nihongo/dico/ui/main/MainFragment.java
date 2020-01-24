@@ -41,10 +41,6 @@ public class MainFragment extends Fragment implements EntriesAdapter.OnEntryClic
         return new MainFragment();
     }
 
-    private MainFragment() {
-        super();
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

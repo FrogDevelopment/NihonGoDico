@@ -24,10 +24,6 @@ public class DetailsFragment extends Fragment {
         return new DetailsFragment();
     }
 
-    private DetailsFragment() {
-        super();
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
