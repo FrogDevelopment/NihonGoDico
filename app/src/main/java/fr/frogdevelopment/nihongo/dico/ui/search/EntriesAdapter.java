@@ -100,8 +100,8 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
             String text = entry.kanjiSpannable.toString();
 
             int kanjiStart = 0;
-            int kanjiEnd = text.indexOf(KANJI_KANA_SEPARATOR) - 1;
-            int kanaStart = text.indexOf(KANJI_KANA_SEPARATOR) + 1;
+            int kanjiEnd = text.indexOf(KANJI_KANA_SEPARATOR);
+            int kanaStart = text.indexOf(KANJI_KANA_SEPARATOR);
             int kanaEnd = text.length();
 
             entry.kanjiSpannable.setSpan(new CustomTypefaceSpan(kanjiFont), kanjiStart, kanjiEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
