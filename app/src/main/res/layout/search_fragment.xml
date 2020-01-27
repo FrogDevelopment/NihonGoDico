@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/row_item" />
+        tools:listitem="@layout/search_row" />
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/searching_progress"

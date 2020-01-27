@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -37,8 +36,6 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
 
     private static final String START_SPAN = "<span class=\"keyword\">";
     private static final String END_SPAN = "</span>";
-    public static final String KANJI_KANA_SEPARATOR = " - ";
-    public static final float KANA_RELATIVE_SIZE = 0.8f;
 
     private final LayoutInflater mInflater;
     private final List<Entry> entries = new ArrayList<>();
@@ -60,16 +57,16 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.row_item, parent, false);
+        View view = mInflater.inflate(R.layout.search_row, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Entry entry = entries.get(position);
 
-        handleFirstLine(holder.firstLine, entry);
-        handleSecondLine(holder.secondLine, entry);
+        handleHeader(holder, entry);
+        handleVocabulary(holder, entry);
 
         holder.itemView.setOnClickListener(v -> listener.onEntryClick(entry.senseSeq));
     }
@@ -85,31 +82,23 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    protected void handleFirstLine(TextView textView, Entry entry) {
+    protected void handleHeader(ViewHolder holder, Entry entry) {
         if (StringUtils.isNotBlank(entry.kanji)) {
-            handleKanjiAndKana(textView, entry);
+            handleKanjiAndKana(holder, entry);
         } else {
-            handleKanaOnly(textView, entry);
+            handleKanaOnly(holder.header, entry);
         }
     }
 
-    private void handleKanjiAndKana(TextView textView, Entry entry) {
+    private void handleKanjiAndKana(ViewHolder holder, Entry entry) {
         if (entry.kanjiSpannable == null) {
-            entry.kanjiSpannable = handleMatches(entry.kanji + KANJI_KANA_SEPARATOR + entry.kana);
-
-            String text = entry.kanjiSpannable.toString();
-
-            int kanjiStart = 0;
-            int kanjiEnd = text.indexOf(KANJI_KANA_SEPARATOR);
-            int kanaStart = text.indexOf(KANJI_KANA_SEPARATOR);
-            int kanaEnd = text.length();
-
-            entry.kanjiSpannable.setSpan(new CustomTypefaceSpan(kanjiFont), kanjiStart, kanjiEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
-            entry.kanjiSpannable.setSpan(new RelativeSizeSpan(KANA_RELATIVE_SIZE), kanaStart, kanaEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
-            entry.kanjiSpannable.setSpan(new CustomTypefaceSpan(kanaFont), kanaStart, kanaEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+            entry.kanjiSpannable = handleMatches(entry.kanji);
+            entry.kanjiSpannable.setSpan(new CustomTypefaceSpan(kanjiFont), 0, entry.kanjiSpannable.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
-        textView.setText(entry.kanjiSpannable);
+        holder.header.setText(entry.kanjiSpannable);
+
+        handleKanaOnly(holder.subhead, entry);
     }
 
     private void handleKanaOnly(TextView textView, Entry entry) {
@@ -120,12 +109,12 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
         textView.setText(entry.kanaSpannable);
     }
 
-    protected void handleSecondLine(TextView textView, Entry entry) {
+    protected void handleVocabulary(ViewHolder holder, Entry entry) {
         if (entry.vocabularySpannable == null) {
             entry.vocabularySpannable = handleMatches(entry.vocabulary);
         }
 
-        textView.setText(entry.vocabularySpannable);
+        holder.vocabulary.setText(entry.vocabularySpannable);
     }
 
     private SpannableString handleMatches(String value) {
@@ -153,13 +142,15 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView firstLine;
-        private final TextView secondLine;
+        private final TextView header;
+        private final TextView subhead;
+        private final TextView vocabulary;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            firstLine = itemView.findViewById(R.id.row_first_line);
-            secondLine = itemView.findViewById(R.id.row_second_line);
+            header = itemView.findViewById(R.id.row_header);
+            subhead = itemView.findViewById(R.id.row_subhead);
+            vocabulary = itemView.findViewById(R.id.row_vocabulary);
         }
     }
 }

@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.List;
@@ -30,6 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 import static java.net.HttpURLConnection.HTTP_OK;
 
 public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryClickListener {
@@ -62,6 +64,7 @@ public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryCl
 
         mBinding.entriesRecyclerview.setLayoutManager(new LinearLayoutManager(requireContext()));
         mBinding.entriesRecyclerview.setAdapter(mAdapter);
+        mBinding.entriesRecyclerview.addItemDecoration(new DividerItemDecoration(requireContext(), VERTICAL));
 
         mSearchViewModel.searching().observe(requireActivity(), this::onSearchStart);
         mSearchViewModel.entries().observe(requireActivity(), this::onSearchFinished);
