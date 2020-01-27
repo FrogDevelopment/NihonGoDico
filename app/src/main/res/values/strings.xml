@@ -1,19 +1,19 @@
 <resources>
-    <string name="frog_development" translatable="false">FROG DEVELOPMENT</string>
-
-    <string name="app_name">Nihon Go! Dictionary</string>
-
-    <!-- ****** -->
-    <!-- SEARCH -->
-    <!-- ****** -->
-    <string name="search_label">Search</string>
-    <string name="search_hint">Search a word</string>
-    <string name="no_results">No results</string>
-
     <plurals name="search_results">
         <item quantity="one">%1$d result</item>
         <item quantity="other">%1$d results</item>
     </plurals>
+
+    <string name="frog_development" translatable="false">FROG DEVELOPMENT</string>
+
+    <!-- ****** -->
+    <!-- SEARCH -->
+    <!-- ****** -->
+    <string name="app_name">Nihon Go! Dictionary</string>
+    <string name="search_label">Search</string>
+    <string name="search_hint">Search a word</string>
+
+    <string name="no_results">No results</string>
 
     <!-- DOWNLOADS -->
     <string name="downloads_title">Downloads</string>

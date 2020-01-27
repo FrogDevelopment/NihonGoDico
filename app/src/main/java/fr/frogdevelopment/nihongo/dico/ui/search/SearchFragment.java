@@ -147,7 +147,7 @@ public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryCl
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.container, DetailsFragment.newInstance())
+                .replace(R.id.main_container, DetailsFragment.newInstance())
                 .addToBackStack(null)
                 .commit();
     }

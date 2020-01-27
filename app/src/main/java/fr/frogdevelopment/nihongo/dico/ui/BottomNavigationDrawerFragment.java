@@ -1,23 +1,23 @@
-package fr.frogdevelopment.nihongo.dico.ui.bottom;
+package fr.frogdevelopment.nihongo.dico.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import fr.frogdevelopment.nihongo.dico.R;
-import fr.frogdevelopment.nihongo.dico.ui.details.DetailsFragment;
 import fr.frogdevelopment.nihongo.dico.ui.search.SearchFragment;
-import fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment;
+import fr.frogdevelopment.nihongo.dico.ui.settings.SettingsActivity;
 
 public class BottomNavigationDrawerFragment extends BottomSheetDialogFragment implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -37,28 +37,26 @@ public class BottomNavigationDrawerFragment extends BottomSheetDialogFragment im
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment fragment;
         switch (item.getItemId()) {
-            case R.id.nav_favorites:
-                hideFaB();
-                fragment = DetailsFragment.newInstance(); // fixme just for test
-                break;
             case R.id.nav_settings:
                 hideFaB();
-                fragment = new SettingsFragment();
+                startActivity(new Intent(requireContext(), SettingsActivity.class));
+                break;
+
+            case R.id.nav_favorites:
+                hideFaB();
+                Toast.makeText(requireContext(), "Not yet implemented", Toast.LENGTH_SHORT).show();
                 break;
 
             default:
                 showFaB();
-                fragment = SearchFragment.newInstance();
+                requireActivity()
+                        .getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_container, SearchFragment.newInstance())
+                        .commitNow();
                 break;
         }
-
-        requireActivity()
-                .getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, fragment)
-                .commitNow();
 
         dismiss();
         return true;

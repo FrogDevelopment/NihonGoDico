@@ -11,7 +11,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.databinding.MainActivityBinding;
-import fr.frogdevelopment.nihongo.dico.ui.bottom.BottomNavigationDrawerFragment;
 import fr.frogdevelopment.nihongo.dico.ui.search.BottomSheetSearchFragment;
 import fr.frogdevelopment.nihongo.dico.ui.search.SearchFragment;
 
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.container, SearchFragment.newInstance())
+                    .replace(R.id.main_container, SearchFragment.newInstance())
                     .commit();
             getSupportFragmentManager()
                     .addOnBackStackChangedListener(this::switchFaB);
