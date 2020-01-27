@@ -1,7 +1,9 @@
 package fr.frogdevelopment.nihongo.dico.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.databinding.MainActivityBinding;
 import fr.frogdevelopment.nihongo.dico.ui.search.BottomSheetSearchFragment;
 import fr.frogdevelopment.nihongo.dico.ui.search.SearchFragment;
+import fr.frogdevelopment.nihongo.dico.ui.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             if (isSearching) {
-                BottomNavigationDrawerFragment bottomNavigationDrawerFragment = new BottomNavigationDrawerFragment();
+                BottomNavigationDrawerFragment bottomNavigationDrawerFragment = new BottomNavigationDrawerFragment(this::navigateTo);
                 bottomNavigationDrawerFragment.show(getSupportFragmentManager(), bottomNavigationDrawerFragment.getTag());
             } else {
                 switchFaB();
@@ -62,6 +65,28 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void navigateTo(int itemId) {
+        switch (itemId) {
+            case R.id.nav_settings:
+                mBinding.fab.hide();
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
+
+            case R.id.nav_favorites:
+                mBinding.fab.hide();
+                Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
+                break;
+
+            default:
+                mBinding.fab.show();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_container, SearchFragment.newInstance())
+                        .commitNow();
+                break;
+        }
     }
 
     private FloatingActionButton.OnVisibilityChangedListener onVisibilityChangedListener = new FloatingActionButton.OnVisibilityChangedListener() {
