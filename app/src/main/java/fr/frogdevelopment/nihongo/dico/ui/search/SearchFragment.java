@@ -1,5 +1,6 @@
 package fr.frogdevelopment.nihongo.dico.ui.search;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,26 +20,27 @@ import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.data.details.DetailsViewModel;
-import fr.frogdevelopment.nihongo.dico.data.rest.EntriesClient;
 import fr.frogdevelopment.nihongo.dico.data.rest.RestServiceFactory;
 import fr.frogdevelopment.nihongo.dico.data.rest.search.Entry;
 import fr.frogdevelopment.nihongo.dico.data.rest.search.EntryDetails;
 import fr.frogdevelopment.nihongo.dico.data.search.SearchViewModel;
 import fr.frogdevelopment.nihongo.dico.databinding.SearchFragmentBinding;
 import fr.frogdevelopment.nihongo.dico.ui.details.DetailsFragment;
-import fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
+import static fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment.KEY_LANGUAGE;
+import static fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment.KEY_OFFLINE;
+import static fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment.LANGUAGE_DEFAULT;
+import static fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment.OFFLINE_DEFAULT;
 import static java.net.HttpURLConnection.HTTP_OK;
 
 public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryClickListener {
 
     private SearchViewModel mSearchViewModel;
     private DetailsViewModel mDetailsViewModel;
-    private EntriesClient mEntriesClient;
 
     private EntriesAdapter mAdapter;
     private SearchFragmentBinding mBinding;
@@ -53,7 +55,6 @@ public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryCl
 
         mSearchViewModel = new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
         mDetailsViewModel = new ViewModelProvider(requireActivity()).get(DetailsViewModel.class);
-        mEntriesClient = RestServiceFactory.getEntriesClient();
         mAdapter = new EntriesAdapter(requireContext(), this);
     }
 
@@ -103,32 +104,51 @@ public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryCl
     @Override
     public void onEntryClick(String senseSeq) {
         mBinding.searchingProgress.show();
-        String language = PreferenceManager.getDefaultSharedPreferences(requireContext()).getString(SettingsFragment.KEY_LANGUAGE, "eng");
-        mEntriesClient.getDetails(language, senseSeq).enqueue(new Callback<EntryDetails>() {
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        String language = preferences.getString(KEY_LANGUAGE, LANGUAGE_DEFAULT);
+        boolean offline = preferences.getBoolean(KEY_OFFLINE, OFFLINE_DEFAULT);
+        if (offline) {
+            searchOffline(senseSeq, language);
+        } else {
+            searchOnline(senseSeq, language);
+        }
+    }
+
+    private void searchOffline(String senseSeq, String language) {
+        mBinding.searchingProgress.hide();
+        Toast.makeText(requireContext(), "Offline search not ready yet", Toast.LENGTH_LONG).show();
+    }
+
+    private void searchOnline(String senseSeq, String language) {
+        RestServiceFactory.getEntriesClient().getDetails(language, senseSeq).enqueue(new Callback<EntryDetails>() {
             @Override
             public void onResponse(@NonNull Call<EntryDetails> call, @NonNull Response<EntryDetails> response) {
+                mBinding.searchingProgress.hide();
                 if (response.code() != HTTP_OK) {
                     Log.e("NIHONGO_DICO", "Response code : " + response.code());
                     Toast.makeText(requireContext(), "Response code : " + response.code(), Toast.LENGTH_LONG).show();
-                    mBinding.searchingProgress.hide();
                 } else {
-                    mDetailsViewModel.setDetails(response.body());
-                    requireActivity()
-                            .getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.container, DetailsFragment.newInstance())
-                            .addToBackStack(null)
-                            .commit();
-                    mBinding.searchingProgress.hide();
+                    onDetails(response.body());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<EntryDetails> call, @NonNull Throwable t) {
+                mBinding.searchingProgress.hide();
                 Log.e("NIHONGO_DICO", "Error while fetching details", t);
                 Toast.makeText(requireContext(), "Call failure", Toast.LENGTH_LONG).show();
-                mBinding.searchingProgress.hide();
             }
         });
+    }
+
+    private void onDetails(EntryDetails details) {
+        mDetailsViewModel.setDetails(details);
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, DetailsFragment.newInstance())
+                .addToBackStack(null)
+                .commit();
     }
 }

@@ -14,6 +14,9 @@ import static java.lang.Boolean.TRUE;
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     public static final String KEY_LANGUAGE = "languageTag";
+    public static final String LANGUAGE_DEFAULT = "end";
+    public static final String KEY_OFFLINE = "settings_offline";
+    public static final boolean OFFLINE_DEFAULT = false;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -21,14 +24,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         setSummary("settings_version", VERSION_NAME);
 
-        SwitchPreference online = findPreference("settings_offline");
-        if (online != null) {
-            online.setOnPreferenceChangeListener((preference, newValue) -> {
+        SwitchPreference offline = findPreference(KEY_OFFLINE);
+        if (offline != null) {
+            offline.setOnPreferenceChangeListener((preference, newValue) -> {
                 handleDownloadsVisibility(TRUE.equals(newValue));
                 return true;
             });
 
-            handleDownloadsVisibility(online.isChecked());
+            handleDownloadsVisibility(offline.isChecked());
         }
     }
 

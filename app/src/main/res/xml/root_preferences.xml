@@ -16,7 +16,7 @@
 
         <SwitchPreference
             android:summaryOff="Online"
-            android:summaryOn="Ofline"
+            android:summaryOn="Offline"
             app:defaultValue="true"
             app:key="settings_offline"
             app:switchTextOff="Online"
