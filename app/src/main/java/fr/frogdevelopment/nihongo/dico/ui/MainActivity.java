@@ -7,7 +7,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -101,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onHidden(FloatingActionButton fab) {
-            super.onHidden(fab);
             if (isSearching) {
                 switchToDetails();
             } else {
@@ -111,7 +112,15 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private void slideUpBottomBar() {
+        mBinding.bottomAppBar.performShow();
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBinding.fab.getLayoutParams();
+        HideBottomViewOnScrollBehavior behavior = (HideBottomViewOnScrollBehavior) layoutParams.getBehavior();
+        behavior.slideUp(mBinding.fab);
+    }
+
     private void switchFaB() {
+        slideUpBottomBar();
         mBinding.fab.hide(onVisibilityChangedListener);
     }
 
