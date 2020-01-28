@@ -67,7 +67,7 @@ public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryCl
         mBinding.entriesRecyclerview.setAdapter(mAdapter);
         mBinding.entriesRecyclerview.addItemDecoration(new DividerItemDecoration(requireContext(), VERTICAL));
 
-        mSearchViewModel.searching().observe(requireActivity(), this::onSearchStart);
+        mSearchViewModel.searching().observe(requireActivity(), this::onSearch);
         mSearchViewModel.entries().observe(requireActivity(), this::onSearchFinished);
         mSearchViewModel.error().observe(requireActivity(), this::onSearchError);
 
@@ -83,27 +83,35 @@ public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryCl
         mBinding = null;
     }
 
-    private void onSearchStart(Boolean isSearching) {
+    private void onSearch(Boolean isSearching) {
         if (isSearching) {
-            mBinding.searchingProgress.show();
+            showProgressBar();
         } else {
-            mBinding.searchingProgress.hide();
+            hideProgressBar();
         }
     }
 
     private void onSearchFinished(List<Entry> entries) {
-        mBinding.searchingProgress.hide();
+        hideProgressBar();
         mAdapter.setEntries(entries);
     }
 
     private void onSearchError(String error) {
-        mBinding.searchingProgress.hide();
+        hideProgressBar();
         Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show();
+    }
+
+    private void showProgressBar() {
+        mBinding.searchingProgress.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBar() {
+        mBinding.searchingProgress.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onEntryClick(String senseSeq) {
-        mBinding.searchingProgress.show();
+        showProgressBar();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String language = preferences.getString(KEY_LANGUAGE, LANGUAGE_DEFAULT);
@@ -116,7 +124,7 @@ public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryCl
     }
 
     private void searchOffline(String senseSeq, String language) {
-        mBinding.searchingProgress.hide();
+        hideProgressBar();
         Toast.makeText(requireContext(), "Offline search not ready yet", Toast.LENGTH_LONG).show();
     }
 
@@ -124,7 +132,7 @@ public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryCl
         RestServiceFactory.getEntriesClient().getDetails(language, senseSeq).enqueue(new Callback<EntryDetails>() {
             @Override
             public void onResponse(@NonNull Call<EntryDetails> call, @NonNull Response<EntryDetails> response) {
-                mBinding.searchingProgress.hide();
+                hideProgressBar();
                 if (response.code() != HTTP_OK) {
                     Log.e("NIHONGO_DICO", "Response code : " + response.code());
                     Toast.makeText(requireContext(), "Response code : " + response.code(), Toast.LENGTH_LONG).show();
@@ -135,7 +143,7 @@ public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryCl
 
             @Override
             public void onFailure(@NonNull Call<EntryDetails> call, @NonNull Throwable t) {
-                mBinding.searchingProgress.hide();
+                hideProgressBar();
                 Log.e("NIHONGO_DICO", "Error while fetching details", t);
                 Toast.makeText(requireContext(), "Call failure", Toast.LENGTH_LONG).show();
             }

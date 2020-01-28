@@ -17,13 +17,13 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/search_row" />
 
-    <androidx.core.widget.ContentLoadingProgressBar
+    <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/searching_progress"
-        style="?android:attr/progressBarStyleLarge"
+        style="@style/SpinKitView.Large.ThreeBounce"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:visibility="invisible"
+        app:SpinKit_Color="@color/primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
