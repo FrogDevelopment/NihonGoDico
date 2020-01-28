@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 
+import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.databinding.BottomsheetFragmentBinding;
 
 public class BottomNavigationDrawerFragment extends BottomSheetDialogFragment implements NavigationView.OnNavigationItemSelectedListener {
@@ -22,6 +24,12 @@ public class BottomNavigationDrawerFragment extends BottomSheetDialogFragment im
     public BottomNavigationDrawerFragment(OnNavigateToListener onNavigateToListener) {
         super();
         this.onNavigateToListener = onNavigateToListener;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.NavigationBottomSheet);
     }
 
     @Nullable

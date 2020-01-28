@@ -23,8 +23,4 @@ public class DetailsViewModel extends AndroidViewModel {
     public EntryDetails entryDetails() {
         return this.entryDetails.getValue();
     }
-
-    public void onFavorite() {
-
-    }
 }

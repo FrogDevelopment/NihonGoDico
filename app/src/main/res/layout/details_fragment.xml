@@ -8,22 +8,10 @@
         android:layout_height="match_parent"
         android:padding="@dimen/activity_vertical_margin">
 
-        <ImageView
-            android:id="@+id/favorite"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_baseline_favorite_24"
-            android:tint="@android:color/darker_gray"
-            android:onClick="@{() -> viewModel.onFavorite()}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/kanji"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/favorite"
             android:text="@{viewModel.entryDetails().kanji}"
             android:textSize="50sp"
             app:layout_constraintStart_toStartOf="parent"

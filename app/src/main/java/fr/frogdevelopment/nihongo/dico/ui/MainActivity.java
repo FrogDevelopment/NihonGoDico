@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isSearching;
     private MainActivityBinding mBinding;
+    private BottomNavigationDrawerFragment bottomNavigationDrawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +43,13 @@ public class MainActivity extends AppCompatActivity {
 
         isSearching = true;
         mBinding.fab.setOnClickListener(v -> {
-            BottomSheetSearchFragment bottomSheetSearchFragment = new BottomSheetSearchFragment();
-            bottomSheetSearchFragment.show(getSupportFragmentManager(), bottomSheetSearchFragment.getTag());
+            if (isSearching) {
+                BottomSheetSearchFragment bottomSheetSearchFragment = new BottomSheetSearchFragment();
+                bottomSheetSearchFragment.show(getSupportFragmentManager(), bottomSheetSearchFragment.getTag());
+            }
         });
+
+        bottomNavigationDrawerFragment = new BottomNavigationDrawerFragment(this::navigateTo);
     }
 
     @Override
@@ -57,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             if (isSearching) {
-                BottomNavigationDrawerFragment bottomNavigationDrawerFragment = new BottomNavigationDrawerFragment(this::navigateTo);
                 bottomNavigationDrawerFragment.show(getSupportFragmentManager(), bottomNavigationDrawerFragment.getTag());
             } else {
                 switchFaB();
@@ -112,30 +116,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void switchToDetails() {
-        // Hide navigation drawer icon
         mBinding.bottomAppBar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
-
-        // Move FAB from the center of BottomAppBar to the end of it
         mBinding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
-
-        // Change FAB icon
         mBinding.fab.setImageResource(R.drawable.ic_speak);
 
         isSearching = false;
     }
 
     private void switchToSearch() {
-        // Show navigation drawer icon
         mBinding.bottomAppBar.setNavigationIcon(R.drawable.ic_baseline_menu_24);
-
-        // Move FAB from the center of BottomAppBar to the end of it
         mBinding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
-
-        // Change FAB icon
         mBinding.fab.setImageResource(R.drawable.ic_baseline_search_24);
 
         isSearching = true;
-
         getSupportFragmentManager().popBackStackImmediate();
     }
 }
