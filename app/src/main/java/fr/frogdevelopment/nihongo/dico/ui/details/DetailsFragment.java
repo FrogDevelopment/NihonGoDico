@@ -1,6 +1,7 @@
 package fr.frogdevelopment.nihongo.dico.ui.details;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,9 @@ import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.data.details.DetailsViewModel;
@@ -33,6 +37,27 @@ public class DetailsFragment extends Fragment {
 
         DetailsViewModel viewModel = new ViewModelProvider(requireActivity()).get(DetailsViewModel.class);
         mBinding.setViewModel(viewModel);
+
+        List<String> lexicon = new ArrayList<>();
+        if (!viewModel.entryDetails().pos.isEmpty()) {
+            lexicon.addAll(viewModel.entryDetails().pos);
+        }
+        if (!viewModel.entryDetails().field.isEmpty()) {
+            lexicon.addAll(viewModel.entryDetails().field);
+        }
+        if (!viewModel.entryDetails().misc.isEmpty()) {
+            lexicon.addAll(viewModel.entryDetails().misc);
+        }
+        if (!viewModel.entryDetails().dial.isEmpty()) {
+            lexicon.addAll(viewModel.entryDetails().dial);
+        }
+
+        if (lexicon.isEmpty()) {
+            mBinding.lexicon.setVisibility(View.GONE);
+        } else {
+            mBinding.lexicon.setText("[" + TextUtils.join(", ", lexicon) + "]");
+            mBinding.lexicon.setVisibility(View.VISIBLE);
+        }
 
         return mBinding.getRoot();
     }
