@@ -59,4 +59,207 @@
     <string name="settings_about_application" translatable="false">Application</string>
     <string name="settings_about_version_title" translatable="false">Version</string>
 
+
+    <string name="misc_title" translatable="false">Miscellaneous sense info</string>
+    <string name="misc_abbr" translatable="false">abbreviation</string>
+    <string name="misc_aphorism" translatable="false">aphorism (pithy saying)</string>
+    <string name="misc_arch" translatable="false">archaism</string>
+    <string name="misc_chn" translatable="false">children\'s language</string>
+    <string name="misc_col" translatable="false">colloquialism</string>
+    <string name="misc_company" translatable="false">company name</string>
+    <string name="misc_dated" translatable="false">dated term</string>
+    <string name="misc_derog" translatable="false">derogatory</string>
+    <string name="misc_eK" translatable="false">exclusively kanji</string>
+    <string name="misc_fam" translatable="false">familiar language</string>
+    <string name="misc_fem" translatable="false">female term, language, or name</string>
+    <string name="misc_given" translatable="false">given name or forename, gender not specified</string>
+    <string name="misc_hist" translatable="false">historical term</string>
+    <string name="misc_hon" translatable="false">honorific or respectful (sonkeigo) language</string>
+    <string name="misc_hum" translatable="false">humble (kenjougo) language</string>
+    <string name="misc_id" translatable="false">idiomatic expression</string>
+    <string name="misc_joc" translatable="false">jocular, humorous term</string>
+    <string name="misc_litf" translatable="false">literary or formal term</string>
+    <string name="misc_m_sl" translatable="false">manga slang</string>
+    <string name="misc_male" translatable="false">male term, language, or name</string>
+    <string name="misc_net_sl" translatable="false">Internet slang</string>
+    <string name="misc_obs" translatable="false">obsolete term</string>
+    <string name="misc_obsc" translatable="false">obscure term</string>
+    <string name="misc_on_mim" translatable="false">onomatopoeic or mimetic word</string>
+    <string name="misc_organization" translatable="false">organization name</string>
+    <string name="misc_person" translatable="false">full name of a particular person</string>
+    <string name="misc_place" translatable="false">place name</string>
+    <string name="misc_poet" translatable="false">poetical term</string>
+    <string name="misc_pol" translatable="false">polite (teineigo) language</string>
+    <string name="misc_product" translatable="false">product name</string>
+    <string name="misc_proverb" translatable="false">proverb</string>
+    <string name="misc_quote" translatable="false">quotation</string>
+    <string name="misc_rare" translatable="false">rare</string>
+    <string name="misc_sens" translatable="false">sensitive</string>
+    <string name="misc_sl" translatable="false">slang</string>
+    <string name="misc_station" translatable="false">railway station</string>
+    <string name="misc_surname" translatable="false">family or surname</string>
+    <string name="misc_uk" translatable="false">word usually written using kana alone</string>
+    <string name="misc_unclass" translatable="false">unclassified name</string>
+    <string name="misc_vulg" translatable="false">vulgar expression or word</string>
+    <string name="misc_work" translatable="false">work of art, literature, music, etc. name</string>
+    <string name="misc_X" translatable="false">rudeor X-rated term (not displayed in educational software)</string>
+    <string name="misc_yoji" translatable="false">yojijukugo</string>
+
+    <string name="pos_title" translatable="false">Part-of-speech info</string>
+    <string name="pos_adj_f" translatable="false">noun or verb acting prenominally</string>
+    <string name="pos_adj_i" translatable="false">adjective (keiyoushi)</string>
+    <string name="pos_adj_ix" translatable="false">yoi/ii i-adjective</string>
+    <string name="pos_adj_kari" translatable="false">kari adjective (archaic)</string>
+    <string name="pos_adj_ku" translatable="false">ku adjective (archaic)</string>
+    <string name="pos_adj_na" translatable="false">adjectival nouns or quasi-adjectives (keiyodoshi)</string>
+    <string name="pos_adj_nari" translatable="false">archaic/formal form of na-adjective</string>
+    <string name="pos_adj_no" translatable="false">nouns which may take the genitive case particle \'no\'</string>
+    <string name="pos_adj_pn" translatable="false">pre-noun adjectival (rentaishi)</string>
+    <string name="pos_adj_shiku" translatable="false">shiku adjective (archaic)</string>
+    <string name="pos_adj_t" translatable="false">\'taru\' adjective</string>
+    <string name="pos_adv" translatable="false">adverb (fukushi)</string>
+    <string name="pos_adv_to" translatable="false">adverb taking the \'to\' particle</string>
+    <string name="pos_aux" translatable="false">auxiliary</string>
+    <string name="pos_aux_adj" translatable="false">auxiliary adjective</string>
+    <string name="pos_aux_v" translatable="false">auxiliary verb</string>
+    <string name="pos_conj" translatable="false">conjunction</string>
+    <string name="pos_cop" translatable="false">copula</string>
+    <string name="pos_ctr" translatable="false">counter</string>
+    <string name="pos_exp" translatable="false">Expressions (phrases, clauses, etc.)</string>
+    <string name="pos_int" translatable="false">interjection (kandoushi)</string>
+    <string name="pos_n" translatable="false">noun (common) (futsuumeishi)</string>
+    <string name="pos_n_adv" translatable="false">adverbial noun (fukushitekimeishi)</string>
+    <string name="pos_n_pr" translatable="false">proper noun</string>
+    <string name="pos_n_pref" translatable="false">noun, used as a prefix</string>
+    <string name="pos_n_suf" translatable="false">noun, used as a suffix</string>
+    <string name="pos_n_t" translatable="false">noun (temporal) (jisoumeishi)</string>
+    <string name="pos_num" translatable="false">numeric</string>
+    <string name="pos_pn" translatable="false">pronoun</string>
+    <string name="pos_pref" translatable="false">prefix</string>
+    <string name="pos_prt" translatable="false">particle</string>
+    <string name="pos_suf" translatable="false">suffix</string>
+    <string name="pos_unc" translatable="false">unclassified</string>
+    <string name="pos_v_unspec" translatable="false">verb unspecified</string>
+    <string name="pos_v1" translatable="false">Ichidan verb</string>
+    <string name="pos_v1_s" translatable="false">Ichidan verb - kureru special class</string>
+    <string name="pos_v2a_s" translatable="false">Nidan verb with \'u\' ending (archaic)</string>
+    <string name="pos_v2b_k" translatable="false">Nidan verb (upper class) with bu ending (archaic)</string>
+    <string name="pos_v2b_s" translatable="false">Nidan verb (lower class) with bu ending (archaic)</string>
+    <string name="pos_v2d_k" translatable="false">Nidan verb (upper class) with dzu ending (archaic)</string>
+    <string name="pos_v2d_s" translatable="false">Nidan verb (lower class) with dzu ending (archaic)</string>
+    <string name="pos_v2g_k" translatable="false">Nidan verb (upper class) with gu ending (archaic)</string>
+    <string name="pos_v2g_s" translatable="false">Nidan verb (lower class) with gu ending (archaic)</string>
+    <string name="pos_v2h_k" translatable="false">Nidan verb (upper class) with hu/fu ending (archaic)</string>
+    <string name="pos_v2h_s" translatable="false">Nidan verb (lower class) with hu/fu ending (archaic)</string>
+    <string name="pos_v2k_k" translatable="false">Nidan verb (upper class) with ku ending (archaic)</string>
+    <string name="pos_v2k_s" translatable="false">Nidan verb (lower class) with ku ending (archaic)</string>
+    <string name="pos_v2m_k" translatable="false">Nidan verb (upper class) with mu ending (archaic)</string>
+    <string name="pos_v2m_s" translatable="false">Nidan verb (lower class) with mu ending (archaic)</string>
+    <string name="pos_v2n_s" translatable="false">Nidan verb (lower class) with nu ending (archaic)</string>
+    <string name="pos_v2r_k" translatable="false">Nidan verb (upper class) with ru ending (archaic)</string>
+    <string name="pos_v2r_s" translatable="false">Nidan verb (lower class) with ru ending (archaic)</string>
+    <string name="pos_v2s_s" translatable="false">Nidan verb (lower class) with su ending (archaic)</string>
+    <string name="pos_v2t_k" translatable="false">Nidan verb (upper class) with tsu ending (archaic)</string>
+    <string name="pos_v2t_s" translatable="false">Nidan verb (lower class) with tsu ending (archaic)</string>
+    <string name="pos_v2w_s" translatable="false">Nidan verb (lower class) with u ending and we conjugation (archaic)</string>
+    <string name="pos_v2y_k" translatable="false">Nidan verb (upper class) with yu ending (archaic)</string>
+    <string name="pos_v2y_s" translatable="false">Nidan verb (lower class) with yu ending (archaic)</string>
+    <string name="pos_v2z_s" translatable="false">Nidan verb (lower class) with zu ending (archaic)</string>
+    <string name="pos_v4b" translatable="false">Yodan verb with bu ending (archaic)</string>
+    <string name="pos_v4g" translatable="false">Yodan verb with gu ending (archaic)</string>
+    <string name="pos_v4h" translatable="false">Yodan verb with \'hu/fu\' ending (archaic)</string>
+    <string name="pos_v4k" translatable="false">Yodan verb with ku ending (archaic)</string>
+    <string name="pos_v4m" translatable="false">Yodan verb with mu ending (archaic)</string>
+    <string name="pos_v4n" translatable="false">Yodan verb with nu ending (archaic)</string>
+    <string name="pos_v4r" translatable="false">Yodan verb with \'ru\' ending (archaic)</string>
+    <string name="pos_v4s" translatable="false">Yodan verb with su ending (archaic)</string>
+    <string name="pos_v4t" translatable="false">Yodan verb with tsu ending (archaic)</string>
+    <string name="pos_v5aru" translatable="false">Godan verb - -aru special class</string>
+    <string name="pos_v5b" translatable="false">Godan verb with \'bu\' ending</string>
+    <string name="pos_v5g" translatable="false">Godan verb with \'gu\' ending</string>
+    <string name="pos_v5k" translatable="false">Godan verb with \'ku\' ending</string>
+    <string name="pos_v5k_s" translatable="false">Godan verb - Iku/Yuku special class</string>
+    <string name="pos_v5m" translatable="false">Godan verb with \'mu\' ending</string>
+    <string name="pos_v5n" translatable="false">Godan verb with \'nu\' ending</string>
+    <string name="pos_v5r" translatable="false">Godan verb with \'ru\' ending</string>
+    <string name="pos_v5r_i" translatable="false">Godan verb with \'ru\' ending (irregular verb)</string>
+    <string name="pos_v5s" translatable="false">Godan verb with \'su\' ending</string>
+    <string name="pos_v5t" translatable="false">Godan verb with \'tsu\' ending</string>
+    <string name="pos_v5u" translatable="false">Godan verb with \'u\' ending</string>
+    <string name="pos_v5u_s" translatable="false">Godan verb with \'u\' ending (special class)</string>
+    <string name="pos_v5uru" translatable="false">Godan verb - Uru old class verb (old form of Eru)</string>
+    <string name="pos_vi" translatable="false">intransitive verb</string>
+    <string name="pos_vk" translatable="false">Kuru verb - special class</string>
+    <string name="pos_vn" translatable="false">irregular nu verb</string>
+    <string name="pos_vr" translatable="false">irregular ru verb, plain form ends with -ri</string>
+    <string name="pos_vs" translatable="false">noun or participle which takes the aux. verb suru</string>
+    <string name="pos_vs_c" translatable="false">su verb - precursor to the modern suru</string>
+    <string name="pos_vs_i" translatable="false">suru verb - irregular</string>
+    <string name="pos_vs_s" translatable="false">suru verb - special class</string>
+    <string name="pos_vt" translatable="false">transitive verb</string>
+    <string name="pos_vz" translatable="false">Ichidan verb - zuru verb (alternative form of -jiru verbs)</string>
+
+    <string name="dial_title" translatable="false">Dialect</string>
+    <string name="dial_hob" translatable="false">Hokkaidou-ben</string>
+    <string name="dial_ksb" translatable="false">Kansai-ben</string>
+    <string name="dial_ktb" translatable="false">Kantou-ben</string>
+    <string name="dial_kyb" translatable="false">Kyoto-ben</string>
+    <string name="dial_kyu" translatable="false">Kyuushuu-ben</string>
+    <string name="dial_nab" translatable="false">Nagano-ben</string>
+    <string name="dial_osb" translatable="false">Osaka-ben</string>
+    <string name="dial_rkb" translatable="false">Ryuukyuu-ben</string>
+    <string name="dial_std" translatable="false">Tokyo-ben (std)</string>
+    <string name="dial_thb" translatable="false">Touhoku-ben</string>
+    <string name="dial_tsb" translatable="false">Tosa-ben</string>
+    <string name="dial_tsug" translatable="false">Tsugaru-ben</string>
+
+    <string name="field_title" translatable="false">Usage domain</string>
+    <string name="field_anat" translatable="false">anatomical term</string>
+    <string name="field_archit" translatable="false">architecture term</string>
+    <string name="field_astron" translatable="false">astronomy, etc. term</string>
+    <string name="field_baseb" translatable="false">baseball term</string>
+    <string name="field_biol" translatable="false">biology term</string>
+    <string name="field_bot" translatable="false">botany term</string>
+    <string name="field_Buddh" translatable="false">Buddhist term</string>
+    <string name="field_bus" translatable="false">business term</string>
+    <string name="field_chem" translatable="false">chemistry term</string>
+    <string name="field_Christn" translatable="false">Christian term</string>
+    <string name="field_comp" translatable="false">computing term</string>
+    <string name="field_econ" translatable="false">economics term</string>
+    <string name="field_engr" translatable="false">engineering term</string>
+    <string name="field_finc" translatable="false">finance term</string>
+    <string name="field_food" translatable="false">food term</string>
+    <string name="field_geol" translatable="false">geology, etc. term</string>
+    <string name="field_geom" translatable="false">geometry term</string>
+    <string name="field_law" translatable="false">law, etc. term</string>
+    <string name="field_ling" translatable="false">linguistics term</string>
+    <string name="field_MA" translatable="false">martial arts term</string>
+    <string name="field_mahj" translatable="false">mahjong term</string>
+    <string name="field_math" translatable="false">mathematics term</string>
+    <string name="field_med" translatable="false">medicine, etc. term</string>
+    <string name="field_mil" translatable="false">military term</string>
+    <string name="field_music" translatable="false">music term</string>
+    <string name="field_physics" translatable="false">physics term</string>
+    <string name="field_Shinto" translatable="false">Shinto term</string>
+    <string name="field_shogi" translatable="false">shogi term</string>
+    <string name="field_sports" translatable="false">sports term</string>
+    <string name="field_sumo" translatable="false">sumo term</string>
+    <string name="field_zool" translatable="false">zoology term</string>
+
+    <string name="info_title" translatable="false">Reading info</string>
+    <string name="info_anat" translatable="false">anatomical term</string>
+    <string name="info_gikun" translatable="false">gikun (meaning) reading</string>
+    <string name="info_go" translatable="false">on-yomi, go</string>
+    <string name="info_ik" translatable="false">word containing irregular kana usage</string>
+    <string name="info_jouyou" translatable="false">approved reading for jouyou kanji</string>
+    <string name="info_kan" translatable="false">on-yomi, kan</string>
+    <string name="info_kanyou" translatable="false">on-yomi, kan\'you</string>
+    <string name="info_kun" translatable="false">kun-yomi</string>
+    <string name="info_name" translatable="false">reading used only in names (nanori)</string>
+    <string name="info_oik" translatable="false">old or irregular kana form</string>
+    <string name="info_ok" translatable="false">out-dated or obsolete kana usage</string>
+    <string name="info_on" translatable="false">on-yomi</string>
+    <string name="info_rad" translatable="false">reading used as name of radical</string>
+    <string name="info_tou" translatable="false">on-yomi, tou</string>
+    <string name="info_uK" translatable="false">word usually written using kanji alone</string>
 </resources>
