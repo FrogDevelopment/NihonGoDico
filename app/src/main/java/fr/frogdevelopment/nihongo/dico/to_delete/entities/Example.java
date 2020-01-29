@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.data.entities;
+package fr.frogdevelopment.nihongo.dico.to_delete.entities;
 
 import org.apache.commons.lang3.tuple.Pair;
 

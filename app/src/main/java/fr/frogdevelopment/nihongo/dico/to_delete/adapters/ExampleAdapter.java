@@ -19,7 +19,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
-import fr.frogdevelopment.nihongo.dico.data.entities.Example;
+import fr.frogdevelopment.nihongo.dico.to_delete.entities.Example;
 
 public class ExampleAdapter extends ArrayAdapter<Example> {
 

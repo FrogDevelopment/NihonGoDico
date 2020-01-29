@@ -33,9 +33,9 @@ import java.util.regex.Pattern;
 
 import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.data.contentprovider.NihonGoDicoContentProvider;
-import fr.frogdevelopment.nihongo.dico.data.entities.Preview;
 import fr.frogdevelopment.nihongo.dico.to_delete.adapters.DicoAdapter;
 import fr.frogdevelopment.nihongo.dico.to_delete.downloads.DownloadsActivity;
+import fr.frogdevelopment.nihongo.dico.to_delete.entities.Preview;
 import fr.frogdevelopment.nihongo.dico.utils.InputUtils;
 
 public class OldMainActivity extends AppCompatActivity {
