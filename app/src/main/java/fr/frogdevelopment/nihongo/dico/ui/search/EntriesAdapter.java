@@ -7,7 +7,6 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Pair;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -22,6 +21,7 @@ import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.data.rest.Entry;
+import fr.frogdevelopment.nihongo.dico.databinding.SearchRowBinding;
 import fr.frogdevelopment.nihongo.dico.ui.main.CustomTypefaceSpan;
 
 import static android.graphics.Typeface.BOLD;
@@ -38,16 +38,17 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
     private static final String END_SPAN = "</span>";
 
     private final LayoutInflater mInflater;
-    private final List<Entry> entries = new ArrayList<>();
+    private final List<Entry> mEntries;
 
     private final Typeface kanjiFont;
     private final Typeface kanaFont;
     private final int colorMatch;
     private final OnEntryClickListener listener;
 
-    public EntriesAdapter(Context context, OnEntryClickListener listener) {
+    public EntriesAdapter(Context context, OnEntryClickListener listener, List<Entry> entries) {
         this.mInflater = LayoutInflater.from(context);
         this.listener = listener;
+        this.mEntries = entries;
 
         this.kanaFont = ResourcesCompat.getFont(context, R.font.sawarabi_gothic);
         this.kanjiFont = ResourcesCompat.getFont(context, R.font.sawarabi_mincho);
@@ -57,13 +58,12 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.search_row, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(SearchRowBinding.inflate(mInflater, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Entry entry = entries.get(position);
+        Entry entry = mEntries.get(position);
 
         handleHeader(holder, entry);
         handleVocabulary(holder, entry);
@@ -73,20 +73,14 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return entries.size();
-    }
-
-    public void setEntries(@NonNull List<Entry> entries) {
-        this.entries.clear();
-        this.entries.addAll(entries);
-        notifyDataSetChanged();
+        return mEntries.size();
     }
 
     protected void handleHeader(ViewHolder holder, Entry entry) {
         if (StringUtils.isNotBlank(entry.kanji)) {
             handleKanjiAndKana(holder, entry);
         } else {
-            handleKanaOnly(holder.header, entry);
+            handleKanaOnly(holder.binding.header, entry);
         }
     }
 
@@ -96,9 +90,9 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
             entry.kanjiSpannable.setSpan(new CustomTypefaceSpan(kanjiFont), 0, entry.kanjiSpannable.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
-        holder.header.setText(entry.kanjiSpannable);
+        holder.binding.header.setText(entry.kanjiSpannable);
 
-        handleKanaOnly(holder.subhead, entry);
+        handleKanaOnly(holder.binding.subhead, entry);
     }
 
     private void handleKanaOnly(TextView textView, Entry entry) {
@@ -114,7 +108,7 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
             entry.vocabularySpannable = handleMatches(entry.vocabulary);
         }
 
-        holder.vocabulary.setText(entry.vocabularySpannable);
+        holder.binding.vocabulary.setText(entry.vocabularySpannable);
     }
 
     private SpannableString handleMatches(String value) {
@@ -142,15 +136,11 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView header;
-        private final TextView subhead;
-        private final TextView vocabulary;
+        private final SearchRowBinding binding;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
-            header = itemView.findViewById(R.id.row_header);
-            subhead = itemView.findViewById(R.id.row_subhead);
-            vocabulary = itemView.findViewById(R.id.row_vocabulary);
+        public ViewHolder(SearchRowBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

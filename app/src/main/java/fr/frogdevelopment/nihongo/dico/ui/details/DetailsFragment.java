@@ -16,6 +16,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 import static fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment.KEY_LANGUAGE;
 import static fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment.KEY_OFFLINE;
 import static fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment.LANGUAGE_DEFAULT;
@@ -104,6 +107,8 @@ public class DetailsFragment extends Fragment {
             mBinding.infoValue.setText(getStringResourceByName("info_", mViewModel.entryDetails().info));
         }
 
+        mBinding.sentences.addItemDecoration(new DividerItemDecoration(requireContext(), VERTICAL));
+
         fetchSentences();
 
         return mBinding.getRoot();
@@ -137,11 +142,11 @@ public class DetailsFragment extends Fragment {
     }
 
     private void showProgressBar() {
-        mBinding.searchingProgress.setVisibility(View.VISIBLE);
+        mBinding.searchingProgress.setVisibility(VISIBLE);
     }
 
     private void hideProgressBar() {
-        mBinding.searchingProgress.setVisibility(View.INVISIBLE);
+        mBinding.searchingProgress.setVisibility(INVISIBLE);
     }
 
     private void fetchSentences() {
@@ -173,8 +178,14 @@ public class DetailsFragment extends Fragment {
                             Log.e("NIHONGO_DICO", "Response code : " + response.code());
                             Toast.makeText(requireContext(), "Response code : " + response.code(), Toast.LENGTH_LONG).show();
                         } else {
-                            SentencesAdapter sentencesAdapter = new SentencesAdapter(requireActivity(), response.body());
+                            List<Sentence> sentences = response.body();
+                            SentencesAdapter sentencesAdapter = new SentencesAdapter(requireActivity(), sentences);
                             mBinding.sentences.setAdapter(sentencesAdapter);
+                            if (sentences == null || sentences.isEmpty()) {
+                                mBinding.sentencesTitle.setVisibility(INVISIBLE);
+                            } else {
+                                mBinding.sentencesTitle.setVisibility(VISIBLE);
+                            }
                         }
                     }
 

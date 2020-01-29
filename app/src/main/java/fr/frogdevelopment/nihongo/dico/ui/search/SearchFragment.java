@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.List;
 
@@ -42,7 +41,6 @@ public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryCl
     private SearchViewModel mSearchViewModel;
     private DetailsViewModel mDetailsViewModel;
 
-    private EntriesAdapter mAdapter;
     private SearchFragmentBinding mBinding;
 
     public static SearchFragment newInstance() {
@@ -55,7 +53,6 @@ public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryCl
 
         mSearchViewModel = new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
         mDetailsViewModel = new ViewModelProvider(requireActivity()).get(DetailsViewModel.class);
-        mAdapter = new EntriesAdapter(requireContext(), this);
     }
 
     @Nullable
@@ -63,8 +60,6 @@ public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryCl
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = SearchFragmentBinding.inflate(getLayoutInflater());
 
-        mBinding.entriesRecyclerview.setLayoutManager(new LinearLayoutManager(requireContext()));
-        mBinding.entriesRecyclerview.setAdapter(mAdapter);
         mBinding.entriesRecyclerview.addItemDecoration(new DividerItemDecoration(requireContext(), VERTICAL));
 
         mSearchViewModel.searching().observe(requireActivity(), this::onSearch);
@@ -93,7 +88,7 @@ public class SearchFragment extends Fragment implements EntriesAdapter.OnEntryCl
 
     private void onSearchFinished(List<Entry> entries) {
         hideProgressBar();
-        mAdapter.setEntries(entries);
+        mBinding.entriesRecyclerview.setAdapter(new EntriesAdapter(requireContext(), this, entries));
     }
 
     private void onSearchError(String error) {

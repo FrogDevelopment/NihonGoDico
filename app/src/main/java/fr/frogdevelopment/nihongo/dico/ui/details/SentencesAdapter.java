@@ -3,60 +3,55 @@ package fr.frogdevelopment.nihongo.dico.ui.details;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.data.rest.Sentence;
+import fr.frogdevelopment.nihongo.dico.databinding.SentenceRowBinding;
 
-public class SentencesAdapter extends ArrayAdapter<Sentence> {
+public class SentencesAdapter extends RecyclerView.Adapter<SentencesAdapter.ViewHolder> {
 
     private final LayoutInflater mInflater;
     private final Typeface kanjiFont;
+    private final List<Sentence> mSentences;
 
-    public SentencesAdapter(Context context, List<Sentence> items) {
-        super(context, 0, items);
-
+    public SentencesAdapter(Context context, List<Sentence> sentences) {
         mInflater = LayoutInflater.from(context);
+        mSentences = sentences;
         this.kanjiFont = ResourcesCompat.getFont(context, R.font.sawarabi_mincho);
     }
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        ViewHolder holder;
-
-        if (convertView == null) {
-            convertView = mInflater.inflate(android.R.layout.simple_list_item_2, parent, false);
-            holder = new ViewHolder(convertView);
-            holder.text1.setTypeface(kanjiFont);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-		Sentence item = getItem(position);
-        holder.text1.setText(item.japanese);
-        holder.text2.setText(item.translation);
-
-        return convertView;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        SentenceRowBinding binding = SentenceRowBinding.inflate(mInflater, parent, false);
+        binding.japanese.setTypeface(kanjiFont);
+        return new ViewHolder(binding);
     }
 
-    private static class ViewHolder {
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.binding.setSentence(mSentences.get(position));
+    }
 
-        private final TextView text1;
-        private final TextView text2;
+    @Override
+    public int getItemCount() {
+        return mSentences.size();
+    }
 
-        private ViewHolder(View view) {
-            text1 = view.findViewById(android.R.id.text1);
-            text2 = view.findViewById(android.R.id.text2);
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        private final SentenceRowBinding binding;
+
+        public ViewHolder(SentenceRowBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

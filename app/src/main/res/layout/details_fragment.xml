@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <data>
-
-        <variable
-            name="viewModel"
-            type="fr.frogdevelopment.nihongo.dico.data.details.DetailsViewModel" />
-    </data>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -132,16 +126,27 @@
             app:layout_constraintStart_toStartOf="@+id/info_value"
             app:layout_constraintTop_toBottomOf="@+id/info_value" />
 
+        <TextView
+            android:id="@+id/sentences_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sentences"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@+id/vocabulary"
+            app:layout_constraintTop_toBottomOf="@+id/vocabulary" />
 
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/sentences"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:listSelector="@android:color/transparent"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/vocabulary" />
+            app:layout_constraintTop_toBottomOf="@+id/sentences_title"
+            tools:listitem="@layout/sentence_row" />
 
         <com.github.ybq.android.spinkit.SpinKitView
             android:id="@+id/searching_progress"
@@ -156,4 +161,11 @@
             app:layout_constraintTop_toBottomOf="@+id/vocabulary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="fr.frogdevelopment.nihongo.dico.data.details.DetailsViewModel" />
+    </data>
 </layout>
