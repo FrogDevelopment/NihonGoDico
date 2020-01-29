@@ -20,9 +20,9 @@ import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
 import fr.frogdevelopment.nihongo.dico.data.details.DetailsViewModel;
+import fr.frogdevelopment.nihongo.dico.data.rest.Entry;
+import fr.frogdevelopment.nihongo.dico.data.rest.EntryDetails;
 import fr.frogdevelopment.nihongo.dico.data.rest.RestServiceFactory;
-import fr.frogdevelopment.nihongo.dico.data.rest.search.Entry;
-import fr.frogdevelopment.nihongo.dico.data.rest.search.EntryDetails;
 import fr.frogdevelopment.nihongo.dico.data.search.SearchViewModel;
 import fr.frogdevelopment.nihongo.dico.databinding.SearchFragmentBinding;
 import fr.frogdevelopment.nihongo.dico.ui.details.DetailsFragment;

@@ -44,6 +44,10 @@ public class RestServiceFactory {
         return getClient(EntriesClient.class);
     }
 
+    public static SentencesClient getSentencesClient() {
+        return getClient(SentencesClient.class);
+    }
+
     private static OkHttpClient.Builder getUnsafeOkHttpClient() {
         try {
             // Create a trust manager that does not validate certificate chains

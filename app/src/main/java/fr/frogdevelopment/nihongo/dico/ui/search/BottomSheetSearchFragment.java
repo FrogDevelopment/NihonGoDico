@@ -20,8 +20,8 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
+import fr.frogdevelopment.nihongo.dico.data.rest.Entry;
 import fr.frogdevelopment.nihongo.dico.data.rest.RestServiceFactory;
-import fr.frogdevelopment.nihongo.dico.data.rest.search.Entry;
 import fr.frogdevelopment.nihongo.dico.data.search.SearchViewModel;
 import fr.frogdevelopment.nihongo.dico.databinding.SearchsheetFragmentBinding;
 import fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment;

@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
-import fr.frogdevelopment.nihongo.dico.data.rest.search.Result;
-import fr.frogdevelopment.nihongo.dico.data.rest.search.Search;
+import fr.frogdevelopment.nihongo.dico.to_delete.entity.Result;
+import fr.frogdevelopment.nihongo.dico.to_delete.entity.Search;
 
 public abstract class DicoAdapter extends ArrayAdapter<Search> {
 

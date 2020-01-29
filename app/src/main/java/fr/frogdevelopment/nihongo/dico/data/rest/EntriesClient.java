@@ -2,8 +2,6 @@ package fr.frogdevelopment.nihongo.dico.data.rest;
 
 import java.util.List;
 
-import fr.frogdevelopment.nihongo.dico.data.rest.search.Entry;
-import fr.frogdevelopment.nihongo.dico.data.rest.search.EntryDetails;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

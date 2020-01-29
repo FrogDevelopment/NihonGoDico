@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
-import fr.frogdevelopment.nihongo.dico.data.rest.search.Entry;
+import fr.frogdevelopment.nihongo.dico.data.rest.Entry;
 
 public class SearchViewModel extends AndroidViewModel {
 

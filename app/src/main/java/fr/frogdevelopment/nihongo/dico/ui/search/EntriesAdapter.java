@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.dico.R;
-import fr.frogdevelopment.nihongo.dico.data.rest.search.Entry;
+import fr.frogdevelopment.nihongo.dico.data.rest.Entry;
 import fr.frogdevelopment.nihongo.dico.ui.main.CustomTypefaceSpan;
 
 import static android.graphics.Typeface.BOLD;

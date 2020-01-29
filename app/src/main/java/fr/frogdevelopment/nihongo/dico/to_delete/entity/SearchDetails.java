@@ -1,8 +1,10 @@
-package fr.frogdevelopment.nihongo.dico.data.rest.search;
+package fr.frogdevelopment.nihongo.dico.to_delete.entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
+import fr.frogdevelopment.nihongo.dico.data.rest.Sentence;
 
 public class SearchDetails implements Serializable {
 

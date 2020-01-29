@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import fr.frogdevelopment.nihongo.dico.data.rest.search.EntryDetails;
+import fr.frogdevelopment.nihongo.dico.data.rest.EntryDetails;
 
 public class DetailsViewModel extends AndroidViewModel {
 
