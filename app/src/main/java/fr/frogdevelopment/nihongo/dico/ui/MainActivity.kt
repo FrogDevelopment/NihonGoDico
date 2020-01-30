@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity(), OnNavigateToListener {
     private fun switchToDetails() {
         binding.bottomAppBar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
         binding.bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
-        binding.fab.setImageResource(R.drawable.ic_speak)
+        binding.fab.setImageResource(R.drawable.ic_baseline_record_voice_over_24)
         isSearching = false
     }
 

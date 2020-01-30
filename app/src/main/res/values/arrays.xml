@@ -4,10 +4,26 @@
     <array name="settings_languages">
         <item>@string/settings_lang_eng_value</item>
         <item>@string/settings_lang_fra_value</item>
+        <item>@string/settings_lang_dut_value</item>
+        <item>@string/settings_lang_ger_value</item>
+        <item>@string/settings_lang_rus_value</item>
+        <item>@string/settings_lang_hun_value</item>
+        <item>@string/settings_lang_ita_value</item>
+        <item>@string/settings_lang_esp_value</item>
+        <item>@string/settings_lang_slv_value</item>
+        <item>@string/settings_lang_swe_value</item>
     </array>
     <array name="settings_languages_label">
         <item>@string/settings_lang_eng_label</item>
         <item>@string/settings_lang_fra_label</item>
+        <item>@string/settings_lang_dut_label</item>
+        <item>@string/settings_lang_ger_label</item>
+        <item>@string/settings_lang_rus_label</item>
+        <item>@string/settings_lang_hun_label</item>
+        <item>@string/settings_lang_ita_label</item>
+        <item>@string/settings_lang_esp_label</item>
+        <item>@string/settings_lang_slv_label</item>
+        <item>@string/settings_lang_swe_label</item>
     </array>
 
 </resources>

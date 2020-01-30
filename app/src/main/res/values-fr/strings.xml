@@ -6,26 +6,214 @@
     <!-- ****** -->
     <string name="search_label">chercher</string>
     <string name="search_hint">Chercher un mot</string>
-    <string name="no_results">Aucun résultats</string>
 
-    <plurals name="search_results">
-        <item quantity="one">%1$d résultat</item>
-        <item quantity="other">%1$d résultats</item>
-    </plurals>
+    <!-- ******* -->
+    <!-- DETAILS -->
+    <!-- ******* -->
+    <string name="misc_title">Information de sense</string>
+    <string name="misc_abbr">abréviation</string>
+    <string name="misc_aphorism">aphorisme (dicton concis)</string>
+    <string name="misc_arch">archaism</string>
+    <string name="misc_chn">langue des enfants</string>
+    <string name="misc_col">expression familière</string>
+    <string name="misc_company">Nom de compagnie</string>
+    <string name="misc_dated">dated term</string>
+    <string name="misc_derog">derogatory</string>
+    <string name="misc_eK">exclusively kanji</string>
+    <string name="misc_fam">familiar language</string>
+    <string name="misc_fem">female term, language, or name</string>
+    <string name="misc_given">given name or forename, gender not specified</string>
+    <string name="misc_hist">historical term</string>
+    <string name="misc_hon">honorific or respectful (sonkeigo) language</string>
+    <string name="misc_hum">humble (kenjougo) language</string>
+    <string name="misc_id">idiomatic expression</string>
+    <string name="misc_joc">jocular, humorous term</string>
+    <string name="misc_litf">literary or formal term</string>
+    <string name="misc_m_sl">manga slang</string>
+    <string name="misc_male">male term, language, or name</string>
+    <string name="misc_net_sl">Internet slang</string>
+    <string name="misc_obs">obsolete term</string>
+    <string name="misc_obsc">obscure term</string>
+    <string name="misc_on_mim">onomatopoeic or mimetic word</string>
+    <string name="misc_organization">organization name</string>
+    <string name="misc_person">full name of a particular person</string>
+    <string name="misc_place">place name</string>
+    <string name="misc_poet">poetical term</string>
+    <string name="misc_pol">polite (teineigo) language</string>
+    <string name="misc_product">product name</string>
+    <string name="misc_proverb">proverb</string>
+    <string name="misc_quote">quotation</string>
+    <string name="misc_rare">rare</string>
+    <string name="misc_sens">sensitive</string>
+    <string name="misc_sl">slang</string>
+    <string name="misc_station">railway station</string>
+    <string name="misc_surname">family or surname</string>
+    <string name="misc_uk">word usually written using kana alone</string>
+    <string name="misc_unclass">unclassified name</string>
+    <string name="misc_vulg">vulgar expression or word</string>
+    <string name="misc_work">work of art, literature, music, etc. name</string>
+    <string name="misc_X">rudeor X-rated term (not displayed in educational software)</string>
+    <string name="misc_yoji">yojijukugo</string>
 
-    <!-- DOWNLOADS -->
-    <string name="downloads_title">Téléchargements</string>
-    <string name="downloads_language_title">Langue</string>
-    <string name="downloads_entries_hint">Choisissez une langue</string>
-    <string name="downloads_entries_title">Télécharger dictionnaire</string>
-    <string name="downloads_entries">Télécharger dictionnaire</string>
-    <string name="downloads_examples_title">Télécharger exemples</string>
-    <string name="downloads_examples">Télécharger exemples</string>
-    <string name="downloads_big_file_warning">Attention, le fichier étant volumineux, veuillez télécharger via WiFi. Continuer ?</string>
+    <string name="pos_title">Part-of-speech info</string>
+    <string name="pos_adj_f">noun or verb acting prenominally</string>
+    <string name="pos_adj_i">adjective (keiyoushi)</string>
+    <string name="pos_adj_ix">yoi/ii i-adjective</string>
+    <string name="pos_adj_kari">kari adjective (archaic)</string>
+    <string name="pos_adj_ku">ku adjective (archaic)</string>
+    <string name="pos_adj_na">adjectival nouns or quasi-adjectives (keiyodoshi)</string>
+    <string name="pos_adj_nari">archaic/formal form of na-adjective</string>
+    <string name="pos_adj_no">nouns which may take the genitive case particle \'no\'</string>
+    <string name="pos_adj_pn">pre-noun adjectival (rentaishi)</string>
+    <string name="pos_adj_shiku">shiku adjective (archaic)</string>
+    <string name="pos_adj_t">\'taru\' adjective</string>
+    <string name="pos_adv">adverb (fukushi)</string>
+    <string name="pos_adv_to">adverb taking the \'to\' particle</string>
+    <string name="pos_aux">auxiliary</string>
+    <string name="pos_aux_adj">auxiliary adjective</string>
+    <string name="pos_aux_v">auxiliary verb</string>
+    <string name="pos_conj">conjunction</string>
+    <string name="pos_cop">copula</string>
+    <string name="pos_ctr">counter</string>
+    <string name="pos_exp">Expressions (phrases, clauses, etc.)</string>
+    <string name="pos_int">interjection (kandoushi)</string>
+    <string name="pos_n">noun (common) (futsuumeishi)</string>
+    <string name="pos_n_adv">adverbial noun (fukushitekimeishi)</string>
+    <string name="pos_n_pr">proper noun</string>
+    <string name="pos_n_pref">noun, used as a prefix</string>
+    <string name="pos_n_suf">noun, used as a suffix</string>
+    <string name="pos_n_t">noun (temporal) (jisoumeishi)</string>
+    <string name="pos_num">numeric</string>
+    <string name="pos_pn">pronoun</string>
+    <string name="pos_pref">prefix</string>
+    <string name="pos_prt">particle</string>
+    <string name="pos_suf">suffix</string>
+    <string name="pos_unc">unclassified</string>
+    <string name="pos_v_unspec">verb unspecified</string>
+    <string name="pos_v1">Ichidan verb</string>
+    <string name="pos_v1_s">Ichidan verb - kureru special class</string>
+    <string name="pos_v2a_s">Nidan verb with \'u\' ending (archaic)</string>
+    <string name="pos_v2b_k">Nidan verb (upper class) with bu ending (archaic)</string>
+    <string name="pos_v2b_s">Nidan verb (lower class) with bu ending (archaic)</string>
+    <string name="pos_v2d_k">Nidan verb (upper class) with dzu ending (archaic)</string>
+    <string name="pos_v2d_s">Nidan verb (lower class) with dzu ending (archaic)</string>
+    <string name="pos_v2g_k">Nidan verb (upper class) with gu ending (archaic)</string>
+    <string name="pos_v2g_s">Nidan verb (lower class) with gu ending (archaic)</string>
+    <string name="pos_v2h_k">Nidan verb (upper class) with hu/fu ending (archaic)</string>
+    <string name="pos_v2h_s">Nidan verb (lower class) with hu/fu ending (archaic)</string>
+    <string name="pos_v2k_k">Nidan verb (upper class) with ku ending (archaic)</string>
+    <string name="pos_v2k_s">Nidan verb (lower class) with ku ending (archaic)</string>
+    <string name="pos_v2m_k">Nidan verb (upper class) with mu ending (archaic)</string>
+    <string name="pos_v2m_s">Nidan verb (lower class) with mu ending (archaic)</string>
+    <string name="pos_v2n_s">Nidan verb (lower class) with nu ending (archaic)</string>
+    <string name="pos_v2r_k">Nidan verb (upper class) with ru ending (archaic)</string>
+    <string name="pos_v2r_s">Nidan verb (lower class) with ru ending (archaic)</string>
+    <string name="pos_v2s_s">Nidan verb (lower class) with su ending (archaic)</string>
+    <string name="pos_v2t_k">Nidan verb (upper class) with tsu ending (archaic)</string>
+    <string name="pos_v2t_s">Nidan verb (lower class) with tsu ending (archaic)</string>
+    <string name="pos_v2w_s">Nidan verb (lower class) with u ending and we conjugation (archaic)</string>
+    <string name="pos_v2y_k">Nidan verb (upper class) with yu ending (archaic)</string>
+    <string name="pos_v2y_s">Nidan verb (lower class) with yu ending (archaic)</string>
+    <string name="pos_v2z_s">Nidan verb (lower class) with zu ending (archaic)</string>
+    <string name="pos_v4b">Yodan verb with bu ending (archaic)</string>
+    <string name="pos_v4g">Yodan verb with gu ending (archaic)</string>
+    <string name="pos_v4h">Yodan verb with \'hu/fu\' ending (archaic)</string>
+    <string name="pos_v4k">Yodan verb with ku ending (archaic)</string>
+    <string name="pos_v4m">Yodan verb with mu ending (archaic)</string>
+    <string name="pos_v4n">Yodan verb with nu ending (archaic)</string>
+    <string name="pos_v4r">Yodan verb with \'ru\' ending (archaic)</string>
+    <string name="pos_v4s">Yodan verb with su ending (archaic)</string>
+    <string name="pos_v4t">Yodan verb with tsu ending (archaic)</string>
+    <string name="pos_v5aru">Godan verb - -aru special class</string>
+    <string name="pos_v5b">Godan verb with \'bu\' ending</string>
+    <string name="pos_v5g">Godan verb with \'gu\' ending</string>
+    <string name="pos_v5k">Godan verb with \'ku\' ending</string>
+    <string name="pos_v5k_s">Godan verb - Iku/Yuku special class</string>
+    <string name="pos_v5m">Godan verb with \'mu\' ending</string>
+    <string name="pos_v5n">Godan verb with \'nu\' ending</string>
+    <string name="pos_v5r">Godan verb with \'ru\' ending</string>
+    <string name="pos_v5r_i">Godan verb with \'ru\' ending (irregular verb)</string>
+    <string name="pos_v5s">Godan verb with \'su\' ending</string>
+    <string name="pos_v5t">Godan verb with \'tsu\' ending</string>
+    <string name="pos_v5u">Godan verb with \'u\' ending</string>
+    <string name="pos_v5u_s">Godan verb with \'u\' ending (special class)</string>
+    <string name="pos_v5uru">Godan verb - Uru old class verb (old form of Eru)</string>
+    <string name="pos_vi">intransitive verb</string>
+    <string name="pos_vk">Kuru verb - special class</string>
+    <string name="pos_vn">irregular nu verb</string>
+    <string name="pos_vr">irregular ru verb, plain form ends with -ri</string>
+    <string name="pos_vs">noun or participle which takes the aux. verb suru</string>
+    <string name="pos_vs_c">su verb - precursor to the modern suru</string>
+    <string name="pos_vs_i">suru verb - irregular</string>
+    <string name="pos_vs_s">suru verb - special class</string>
+    <string name="pos_vt">transitive verb</string>
+    <string name="pos_vz">Ichidan verb - zuru verb (alternative form of -jiru verbs)</string>
 
-    <string name="exit_message">Quitter l\'application ?</string>
-    <string name="exit_yes">Quitter</string>
-    <string name="exit_no">Rester</string>
+    <string name="dial_title">Dialecte</string>
+    <string name="dial_hob">Hokkaidou-ben</string>
+    <string name="dial_ksb">Kansai-ben</string>
+    <string name="dial_ktb">Kantou-ben</string>
+    <string name="dial_kyb">Kyoto-ben</string>
+    <string name="dial_kyu">Kyuushuu-ben</string>
+    <string name="dial_nab">Nagano-ben</string>
+    <string name="dial_osb">Osaka-ben</string>
+    <string name="dial_rkb">Ryuukyuu-ben</string>
+    <string name="dial_std">Tokyo-ben (std)</string>
+    <string name="dial_thb">Touhoku-ben</string>
+    <string name="dial_tsb">Tosa-ben</string>
+    <string name="dial_tsug">Tsugaru-ben</string>
+
+    <string name="field_title">Domaine d\'utilisation</string>
+    <string name="field_anat">anatomical term</string>
+    <string name="field_archit">architecture term</string>
+    <string name="field_astron">astronomy, etc. term</string>
+    <string name="field_baseb">baseball term</string>
+    <string name="field_biol">biology term</string>
+    <string name="field_bot">botany term</string>
+    <string name="field_Buddh">Buddhist term</string>
+    <string name="field_bus">business term</string>
+    <string name="field_chem">chemistry term</string>
+    <string name="field_Christn">Christian term</string>
+    <string name="field_comp">computing term</string>
+    <string name="field_econ">economics term</string>
+    <string name="field_engr">engineering term</string>
+    <string name="field_finc">finance term</string>
+    <string name="field_food">food term</string>
+    <string name="field_geol">geology, etc. term</string>
+    <string name="field_geom">geometry term</string>
+    <string name="field_law">law, etc. term</string>
+    <string name="field_ling">linguistics term</string>
+    <string name="field_MA">martial arts term</string>
+    <string name="field_mahj">mahjong term</string>
+    <string name="field_math">mathematics term</string>
+    <string name="field_med">medicine, etc. term</string>
+    <string name="field_mil">military term</string>
+    <string name="field_music">music term</string>
+    <string name="field_physics">physics term</string>
+    <string name="field_Shinto">Shinto term</string>
+    <string name="field_shogi">shogi term</string>
+    <string name="field_sports">sports term</string>
+    <string name="field_sumo">sumo term</string>
+    <string name="field_zool">zoology term</string>
+
+    <string name="info_title">Information de lecture</string>
+    <string name="info_anat">anatomical term</string>
+    <string name="info_gikun">gikun (meaning) reading</string>
+    <string name="info_go">on-yomi, go</string>
+    <string name="info_ik">word containing irregular kana usage</string>
+    <string name="info_jouyou">approved reading for jouyou kanji</string>
+    <string name="info_kan">on-yomi, kan</string>
+    <string name="info_kanyou">on-yomi, kan\'you</string>
+    <string name="info_kun">kun-yomi</string>
+    <string name="info_name">reading used only in names (nanori)</string>
+    <string name="info_oik">old or irregular kana form</string>
+    <string name="info_ok">out-dated or obsolete kana usage</string>
+    <string name="info_on">on-yomi</string>
+    <string name="info_rad">reading used as name of radical</string>
+    <string name="info_tou">on-yomi, tou</string>
+    <string name="info_uK">word usually written using kanji alone</string>
+
+    <string name="sentences">Exemples</string>
 
     <string name="tips"><![CDATA[
         <p><b>Astuces de recherche :</b><ul>
@@ -37,11 +225,20 @@
         </ul></p>
     ]]></string>
 
-    <!-- FAVORITES -->
-    <string name="favorites_title">Favoris</string>
-    <string name="no_favorites">Aucun favoris</string>
+    <!-- ******** -->
+    <!-- SETTINGS -->
+    <!-- ******** -->
+    <string name="settings_dictionary_title">Dictionnaire</string>
+    <string name="settings_languages_title">Langages</string>
+    <string name="settings_about_application">Application</string>
+    <string name="settings_about_version_title">Version</string>
 
-
-    <string name="sentences">Exemples</string>
+    <!-- DOWNLOADS -->
+    <string name="downloads_title">Téléchargements</string>
+    <string name="downloads_language_title">Langue</string>
+    <string name="downloads_entries_hint">Choisissez une langue</string>
+    <string name="downloads_entries_title">Télécharger le dictionnaire</string>
+    <string name="downloads_examples_title">Télécharger les exemples</string>
+    <string name="downloads_examples">Télécharger les exemples</string>
 
 </resources>
