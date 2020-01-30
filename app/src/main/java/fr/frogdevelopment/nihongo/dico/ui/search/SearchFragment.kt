@@ -36,37 +36,32 @@ class SearchFragment : Fragment(), OnEntryClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = SearchFragmentBinding.inflate(layoutInflater)
         binding.entriesRecyclerview.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
-        searchViewModel.searching().observe(requireActivity(), Observer { isSearching: Boolean -> onSearch(isSearching) })
-        searchViewModel.entries().observe(requireActivity(), Observer { entries: List<Entry> -> onSearchFinished(entries) })
-        searchViewModel.error().observe(requireActivity(), Observer { error: String -> onSearchError(error) })
+        searchViewModel.query().observe(requireActivity(), Observer { query: String? -> onSearch(query) })
 
         return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        searchViewModel.searching().removeObservers(requireActivity())
-        searchViewModel.entries().removeObservers(requireActivity())
-        searchViewModel.error().removeObservers(requireActivity())
         _binding = null
     }
 
-    private fun onSearch(isSearching: Boolean) {
-        if (isSearching) {
-            showProgressBar()
-        } else {
+    private fun onSearch(query: String?) {
+        if (query == null) {
             hideProgressBar()
+        } else {
+            showProgressBar()
+            searchViewModel.search(query).observe(viewLifecycleOwner, Observer { entries -> onSearchFinished(entries) })
         }
     }
 
-    private fun onSearchFinished(entries: List<Entry>) {
+    private fun onSearchFinished(entries: List<Entry>?) {
         hideProgressBar()
-        binding.entriesRecyclerview.adapter = EntriesAdapter(requireContext(), this, entries)
-    }
-
-    private fun onSearchError(error: String) {
-        hideProgressBar()
-        Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+        if (entries == null) {
+            Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()
+        } else {
+            binding.entriesRecyclerview.adapter = EntriesAdapter(requireContext(), this, entries)
+        }
     }
 
     private fun showProgressBar() {

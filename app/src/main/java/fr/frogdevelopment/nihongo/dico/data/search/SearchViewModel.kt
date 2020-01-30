@@ -6,37 +6,32 @@ import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
 import fr.frogdevelopment.nihongo.dico.data.OnlineRepository
 import fr.frogdevelopment.nihongo.dico.data.rest.Entry
+import fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment
 
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
 
     private val preferences = PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
     private val onlineRepository = OnlineRepository
 
-    private val entries = MutableLiveData<List<Entry>>()
-    private val searching = MutableLiveData<Boolean>()
-    private val error = MutableLiveData<String>()
+    private var _query = MutableLiveData<String?>()
 
-    fun setEntries(entries: List<Entry>) {
-        this.entries.postValue(entries)
+    fun query(): MutableLiveData<String?> {
+        return _query
     }
 
-    fun entries(): MutableLiveData<List<Entry>> {
-        return entries
+    fun search(query: String): MutableLiveData<List<Entry>?> {
+        return if (isOffline()) {
+            MutableLiveData()
+        } else {
+            onlineRepository.search(language(), query)
+        }
     }
 
-    fun isSearching(isSearching: Boolean) {
-        searching.postValue(isSearching)
+    private fun isOffline(): Boolean {
+        return preferences.getBoolean(SettingsFragment.KEY_OFFLINE, SettingsFragment.OFFLINE_DEFAULT)
     }
 
-    fun searching(): MutableLiveData<Boolean> {
-        return searching
-    }
-
-    fun setError(error: String) {
-        this.error.postValue(error)
-    }
-
-    fun error(): MutableLiveData<String> {
-        return error
+    private fun language(): String {
+        return preferences.getString(SettingsFragment.KEY_LANGUAGE, SettingsFragment.LANGUAGE_DEFAULT)!!
     }
 }
