@@ -2,6 +2,13 @@
     <string name="app_name">Nihon Go! Dictionnaire</string>
 
     <!-- ****** -->
+    <!-- DRAWER -->
+    <!-- ****** -->
+    <string name="drawer_home">Home</string>
+    <string name="drawer_favorites">Favoris</string>
+    <string name="drawer_settings">Configuration</string>
+
+    <!-- ****** -->
     <!-- SEARCH -->
     <!-- ****** -->
     <string name="search_label">chercher</string>
