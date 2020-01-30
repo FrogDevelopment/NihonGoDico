@@ -110,7 +110,7 @@ class SearchFragment : Fragment(), OnEntryClickListener {
                     Log.e("NIHONGO_DICO", "Response code : " + response.code())
                     Toast.makeText(requireContext(), "Response code : " + response.code(), Toast.LENGTH_LONG).show()
                 } else {
-                    onDetails(response.body())
+                    onDetails(response.body()!!)
                 }
             }
 
@@ -122,7 +122,7 @@ class SearchFragment : Fragment(), OnEntryClickListener {
         })
     }
 
-    private fun onDetails(details: EntryDetails?) {
+    private fun onDetails(details: EntryDetails) {
         detailsViewModel.setDetails(details)
         requireActivity()
                 .supportFragmentManager

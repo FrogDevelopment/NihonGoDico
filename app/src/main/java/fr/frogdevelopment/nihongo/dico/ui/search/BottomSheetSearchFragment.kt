@@ -64,7 +64,7 @@ class BottomSheetSearchFragment : BottomSheetDialogFragment() {
                 if (response.code() != HttpURLConnection.HTTP_OK) {
                     viewModel.setError("Response code : " + response.code())
                 } else {
-                    viewModel.setEntries(response.body())
+                    viewModel.setEntries(response.body()!!)
                 }
             }
 
