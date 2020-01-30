@@ -5,13 +5,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/activity_vertical_margin">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/kanji"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:text="@{viewModel.entryDetails().kanji}"
             android:textSize="50sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -22,6 +23,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/kanji"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:text="@{viewModel.entryDetails().kana}"
             android:textSize="30sp"
             app:layout_constraintStart_toStartOf="@+id/kanji"
@@ -31,6 +34,8 @@
             android:id="@+id/reading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:text="@{viewModel.entryDetails().reading}"
             android:textSize="20sp"
             android:textStyle="italic"
@@ -41,8 +46,11 @@
             android:id="@+id/misc_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:text="@string/misc_title"
             android:textStyle="italic"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@+id/reading"
             app:layout_constraintTop_toBottomOf="@+id/reading" />
 
@@ -50,6 +58,8 @@
             android:id="@+id/misc_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             app:layout_constraintStart_toStartOf="@+id/misc_title"
             app:layout_constraintTop_toBottomOf="@+id/misc_title" />
 
@@ -57,8 +67,11 @@
             android:id="@+id/pos_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:text="@string/pos_title"
             android:textStyle="italic"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@+id/misc_value"
             app:layout_constraintTop_toBottomOf="@+id/misc_value" />
 
@@ -66,6 +79,8 @@
             android:id="@+id/pos_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             app:layout_constraintStart_toStartOf="@+id/pos_title"
             app:layout_constraintTop_toBottomOf="@+id/pos_title" />
 
@@ -73,8 +88,11 @@
             android:id="@+id/dial_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:text="@string/dial_title"
             android:textStyle="italic"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@+id/pos_value"
             app:layout_constraintTop_toBottomOf="@+id/pos_value" />
 
@@ -82,6 +100,8 @@
             android:id="@+id/dial_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             app:layout_constraintStart_toStartOf="@+id/dial_title"
             app:layout_constraintTop_toBottomOf="@+id/dial_title" />
 
@@ -89,8 +109,11 @@
             android:id="@+id/field_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:text="@string/field_title"
             android:textStyle="italic"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@+id/dial_value"
             app:layout_constraintTop_toBottomOf="@+id/dial_value" />
 
@@ -105,8 +128,11 @@
             android:id="@+id/info_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:text="@string/info_title"
             android:textStyle="italic"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@+id/field_value"
             app:layout_constraintTop_toBottomOf="@+id/field_value" />
 
@@ -114,6 +140,8 @@
             android:id="@+id/info_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             app:layout_constraintStart_toStartOf="@+id/info_title"
             app:layout_constraintTop_toBottomOf="@+id/info_title" />
 
@@ -121,6 +149,8 @@
             android:id="@+id/vocabulary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:text="@{viewModel.entryDetails().gloss}"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/info_value"
@@ -130,8 +160,11 @@
             android:id="@+id/sentences_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sentences"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="@string/sentences"
             android:textStyle="italic"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@+id/vocabulary"
             app:layout_constraintTop_toBottomOf="@+id/vocabulary" />
 

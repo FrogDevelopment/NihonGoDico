@@ -262,4 +262,6 @@
     <string name="info_rad" translatable="false">reading used as name of radical</string>
     <string name="info_tou" translatable="false">on-yomi, tou</string>
     <string name="info_uK" translatable="false">word usually written using kanji alone</string>
+
+    <string name="sentences">Examples</string>
 </resources>

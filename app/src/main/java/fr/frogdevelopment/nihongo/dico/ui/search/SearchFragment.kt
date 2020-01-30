@@ -1,7 +1,6 @@
 package fr.frogdevelopment.nihongo.dico.ui.search
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,22 +8,15 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import fr.frogdevelopment.nihongo.dico.R
 import fr.frogdevelopment.nihongo.dico.data.details.DetailsViewModel
 import fr.frogdevelopment.nihongo.dico.data.rest.Entry
 import fr.frogdevelopment.nihongo.dico.data.rest.EntryDetails
-import fr.frogdevelopment.nihongo.dico.data.rest.RestServiceFactory
 import fr.frogdevelopment.nihongo.dico.data.search.SearchViewModel
 import fr.frogdevelopment.nihongo.dico.databinding.SearchFragmentBinding
 import fr.frogdevelopment.nihongo.dico.ui.details.DetailsFragment
 import fr.frogdevelopment.nihongo.dico.ui.search.EntriesAdapter.OnEntryClickListener
-import fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.net.HttpURLConnection
 
 class SearchFragment : Fragment(), OnEntryClickListener {
 
@@ -87,50 +79,23 @@ class SearchFragment : Fragment(), OnEntryClickListener {
 
     override fun onEntryClick(senseSeq: String) {
         showProgressBar()
-        val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        val language = preferences.getString(SettingsFragment.KEY_LANGUAGE, SettingsFragment.LANGUAGE_DEFAULT)
-        val offline = preferences.getBoolean(SettingsFragment.KEY_OFFLINE, SettingsFragment.OFFLINE_DEFAULT)
-        if (offline) {
-            searchOffline(language!!, senseSeq)
+        detailsViewModel.searchEntryDetails(senseSeq).observe(viewLifecycleOwner, Observer { entryDetails -> showDetails(entryDetails) })
+    }
+
+    private fun showDetails(details: EntryDetails?) {
+        hideProgressBar()
+        if (details == null) {
+            Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()
         } else {
-            searchOnline(language!!, senseSeq)
+            requireActivity()
+                    .supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.main_container, DetailsFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit()
         }
     }
 
-    private fun searchOffline(language: String, senseSeq: String) {
-        hideProgressBar()
-        Toast.makeText(requireContext(), "Offline search not ready yet", Toast.LENGTH_LONG).show()
-    }
-
-    private fun searchOnline(language: String, senseSeq: String) {
-        RestServiceFactory.entriesClient.getDetails(language, senseSeq).enqueue(object : Callback<EntryDetails?> {
-            override fun onResponse(call: Call<EntryDetails?>, response: Response<EntryDetails?>) {
-                hideProgressBar()
-                if (response.code() != HttpURLConnection.HTTP_OK) {
-                    Log.e("NIHONGO_DICO", "Response code : " + response.code())
-                    Toast.makeText(requireContext(), "Response code : " + response.code(), Toast.LENGTH_LONG).show()
-                } else {
-                    onDetails(response.body()!!)
-                }
-            }
-
-            override fun onFailure(call: Call<EntryDetails?>, t: Throwable) {
-                hideProgressBar()
-                Log.e("NIHONGO_DICO", "Error while fetching details", t)
-                Toast.makeText(requireContext(), "Call failure", Toast.LENGTH_LONG).show()
-            }
-        })
-    }
-
-    private fun onDetails(details: EntryDetails) {
-        detailsViewModel.setDetails(details)
-        requireActivity()
-                .supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.main_container, DetailsFragment.newInstance())
-                .addToBackStack(null)
-                .commit()
-    }
     companion object {
         fun newInstance(): SearchFragment {
             return SearchFragment()

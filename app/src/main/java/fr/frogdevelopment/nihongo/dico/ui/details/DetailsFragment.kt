@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import fr.frogdevelopment.nihongo.dico.R
 import fr.frogdevelopment.nihongo.dico.data.details.DetailsViewModel
+import fr.frogdevelopment.nihongo.dico.data.rest.EntryDetails
 import fr.frogdevelopment.nihongo.dico.databinding.DetailsFragmentBinding
 import java.util.*
 
@@ -33,7 +34,12 @@ class DetailsFragment : Fragment() {
         binding.kanji.typeface = ResourcesCompat.getFont(requireContext(), R.font.sawarabi_mincho)
         binding.kana.typeface = ResourcesCompat.getFont(requireContext(), R.font.sawarabi_gothic)
 
-        val entryDetails = viewModel.entryDetails()!!
+        viewModel.entryDetails().observe(viewLifecycleOwner, androidx.lifecycle.Observer { entryDetails -> populateView(entryDetails!!) })
+
+        return binding.root
+    }
+
+    private fun populateView(entryDetails: EntryDetails) {
         if (entryDetails.pos!!.isEmpty()) {
             binding.posTitle.visibility = View.GONE
             binding.posValue.visibility = View.GONE
@@ -80,9 +86,8 @@ class DetailsFragment : Fragment() {
         }
 
         binding.sentences.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
-        fetchSentences()
-
-        return binding.root
+        binding.sentences.setHasFixedSize(true)
+        fetchSentences(entryDetails)
     }
 
     private fun toString(prefix: String, values: Set<String>): String {
@@ -109,9 +114,9 @@ class DetailsFragment : Fragment() {
         _binding = null
     }
 
-    private fun fetchSentences() {
+    private fun fetchSentences(entryDetails: EntryDetails) {
         binding.searchingProgress.visibility = View.VISIBLE
-        viewModel.sentences().observe(viewLifecycleOwner, androidx.lifecycle.Observer { sentences ->
+        viewModel.sentences(entryDetails).observe(viewLifecycleOwner, androidx.lifecycle.Observer { sentences ->
             binding.searchingProgress.visibility = View.INVISIBLE
             when {
                 sentences == null -> {
@@ -124,7 +129,7 @@ class DetailsFragment : Fragment() {
                 else -> {
                     val sentencesAdapter = SentencesAdapter(requireActivity(), sentences)
                     binding.sentences.adapter = sentencesAdapter
-                    binding.sentencesTitle.visibility = View.INVISIBLE
+                    binding.sentencesTitle.visibility = View.VISIBLE
                 }
             }
         })

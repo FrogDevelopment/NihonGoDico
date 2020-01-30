@@ -41,4 +41,7 @@
     <string name="favorites_title">Favoris</string>
     <string name="no_favorites">Aucun favoris</string>
 
+
+    <string name="sentences">Exemples</string>
+
 </resources>

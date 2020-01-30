@@ -8,13 +8,14 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="4dp">
+
             <TextView
                 android:id="@+id/japanese"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{sentence.japanese}"
-                android:textAppearance="?attr/textAppearanceListItem"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -26,7 +27,6 @@
                 android:layout_below="@id/japanese"
                 android:layout_alignStart="@id/japanese"
                 android:text="@{sentence.translation}"
-                android:textAppearance="?attr/textAppearanceListItemSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/japanese" />

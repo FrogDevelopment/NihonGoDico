@@ -10,7 +10,7 @@ import fr.frogdevelopment.nihongo.dico.data.rest.Entry
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
 
     private val preferences = PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
-    private val onlineRepository = OnlineRepository.instance
+    private val onlineRepository = OnlineRepository
 
     private val entries = MutableLiveData<List<Entry>>()
     private val searching = MutableLiveData<Boolean>()

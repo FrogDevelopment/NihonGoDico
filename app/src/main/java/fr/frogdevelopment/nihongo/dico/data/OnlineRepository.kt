@@ -10,7 +10,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class OnlineRepository private constructor() {
+object OnlineRepository {
 
     private val entriesClient = RestServiceFactory.entriesClient
     private val sentencesClient = RestServiceFactory.sentencesClient
@@ -38,8 +38,8 @@ class OnlineRepository private constructor() {
         return entries
     }
 
-    fun getEntryDetails(language: String, senseSeq: String): MutableLiveData<EntryDetails> {
-        val entryDetails = MutableLiveData<EntryDetails>()
+    fun getEntryDetails(language: String, senseSeq: String): MutableLiveData<EntryDetails?> {
+        val entryDetails = MutableLiveData<EntryDetails?>()
         entriesClient
                 .getDetails(language, senseSeq)
                 .enqueue(object : Callback<EntryDetails?> {
@@ -82,16 +82,4 @@ class OnlineRepository private constructor() {
                 })
         return sentences
     }
-
-    companion object {
-        private var singleton: OnlineRepository? = null
-        val instance: OnlineRepository
-            get() {
-                if (singleton == null) {
-                    singleton = OnlineRepository()
-                }
-                return singleton!!
-            }
-    }
-
 }

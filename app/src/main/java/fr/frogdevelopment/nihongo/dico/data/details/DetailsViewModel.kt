@@ -12,23 +12,28 @@ import fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment
 class DetailsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val preferences = PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
-    private val onlineRepository = OnlineRepository.instance
+    private val onlineRepository = OnlineRepository
 
-    private val liveData = MutableLiveData<EntryDetails>()
+    private lateinit var entryDetails: MutableLiveData<EntryDetails?>
 
-    fun setDetails(entryDetails: EntryDetails) {
-        this.liveData.postValue(entryDetails)
+    fun entryDetails(): MutableLiveData<EntryDetails?> {
+        return entryDetails
     }
 
-    fun entryDetails(): EntryDetails? {
-        return liveData.value
-    }
-
-    fun sentences(): MutableLiveData<List<Sentence>?> {
+    fun sentences(entryDetails: EntryDetails): MutableLiveData<List<Sentence>?> {
         return if (isOffline()) {
             MutableLiveData()
         } else {
-            onlineRepository.getSentences(language(), entryDetails()!!)
+            onlineRepository.getSentences(language(), entryDetails)
+        }
+    }
+
+    fun searchEntryDetails(senseSeq: String): MutableLiveData<EntryDetails?> {
+        return if (isOffline()) {
+            MutableLiveData()
+        } else {
+            entryDetails = onlineRepository.getEntryDetails(language(), senseSeq)
+            entryDetails
         }
     }
 
