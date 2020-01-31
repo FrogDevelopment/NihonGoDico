@@ -41,6 +41,21 @@ class BottomSheetSearchFragment : BottomSheetDialogFragment() {
                 return false
             }
         })
+        binding.bottomSearchField.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
+            override fun onSuggestionSelect(position: Int): Boolean {
+                return false
+            }
+
+            override fun onSuggestionClick(position: Int): Boolean {
+                val cursor = binding.bottomSearchField.suggestionsAdapter.cursor
+                cursor.moveToPosition(position)
+                val suggestion = cursor.getString(2)
+                viewModel.query().postValue(suggestion)
+                dismiss()
+                return true
+            }
+
+        })
 
         // Get the SearchView and set the searchable configuration
         val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
