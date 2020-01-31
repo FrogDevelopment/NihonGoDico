@@ -9,7 +9,7 @@ import fr.frogdevelopment.nihongo.dico.R
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
-    override fun onCreatePreferences(savedInstanceState: Bundle, rootKey: String) {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
         findPreference<Preference>("settings_version")!!.summary = BuildConfig.VERSION_NAME
@@ -28,7 +28,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     companion object {
         const val KEY_LANGUAGE = "languageTag"
-        const val LANGUAGE_DEFAULT = "end"
+        const val LANGUAGE_DEFAULT = "eng"
         const val KEY_OFFLINE = "settings_offline"
         const val OFFLINE_DEFAULT = false
 
