@@ -13,7 +13,6 @@
         android:layout_alignParentTop="true"
         android:imeOptions="actionSearch"
         app:iconifiedByDefault="false"
-        app:queryHint="@string/search_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

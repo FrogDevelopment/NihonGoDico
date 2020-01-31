@@ -14,6 +14,10 @@
     <!-- ****** -->
     <string name="search_label">Search</string>
     <string name="search_hint">Search a word</string>
+    <plurals name="search_results">
+        <item quantity="one">%1$d result</item>
+        <item quantity="other">%1$d results</item>
+    </plurals>
 
     <string name="tips"><![CDATA[
         <p><b>Search tips :</b><ul>

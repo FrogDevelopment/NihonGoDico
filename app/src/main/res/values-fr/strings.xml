@@ -13,6 +13,10 @@
     <!-- ****** -->
     <string name="search_label">chercher</string>
     <string name="search_hint">Chercher un mot</string>
+    <plurals name="search_results">
+        <item quantity="one">%1$d résultat</item>
+        <item quantity="other">%1$d résultats</item>
+    </plurals>
 
     <!-- ******* -->
     <!-- DETAILS -->

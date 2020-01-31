@@ -1,6 +1,7 @@
 package fr.frogdevelopment.nihongo.dico.ui.search
 
 import android.os.Bundle
+import android.provider.SearchRecentSuggestions
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import fr.frogdevelopment.nihongo.dico.R
+import fr.frogdevelopment.nihongo.dico.data.contentprovider.MySuggestionProvider
 import fr.frogdevelopment.nihongo.dico.data.details.DetailsViewModel
 import fr.frogdevelopment.nihongo.dico.data.rest.Entry
 import fr.frogdevelopment.nihongo.dico.data.rest.EntryDetails
@@ -22,6 +24,7 @@ class SearchFragment : Fragment(), OnEntryClickListener {
 
     private lateinit var searchViewModel: SearchViewModel
     private lateinit var detailsViewModel: DetailsViewModel
+    private lateinit var searchRecentSuggestions: SearchRecentSuggestions
 
     private var _binding: SearchFragmentBinding? = null
     // This property is only valid between onCreateView and onDestroyView.
@@ -31,6 +34,7 @@ class SearchFragment : Fragment(), OnEntryClickListener {
         super.onCreate(savedInstanceState)
         searchViewModel = ViewModelProvider(requireActivity()).get(SearchViewModel::class.java)
         detailsViewModel = ViewModelProvider(requireActivity()).get(DetailsViewModel::class.java)
+        searchRecentSuggestions = SearchRecentSuggestions(requireContext(), MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,15 +55,16 @@ class SearchFragment : Fragment(), OnEntryClickListener {
             hideProgressBar()
         } else {
             showProgressBar()
-            searchViewModel.search(query).observe(viewLifecycleOwner, Observer { entries -> onSearchFinished(entries) })
+            searchViewModel.search(query).observe(viewLifecycleOwner, Observer { entries -> onSearchFinished(query, entries) })
         }
     }
 
-    private fun onSearchFinished(entries: List<Entry>?) {
+    private fun onSearchFinished(query:String, entries: List<Entry>?) {
         hideProgressBar()
         if (entries == null) {
             Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()
         } else {
+            searchRecentSuggestions.saveRecentQuery(query, resources.getQuantityString(R.plurals.search_results, entries.size, entries.size))
             binding.entriesRecyclerview.adapter = EntriesAdapter(requireContext(), this, entries)
         }
     }

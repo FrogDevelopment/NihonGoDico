@@ -10,10 +10,7 @@
         android:supportsRtl="false"
         android:theme="@style/NihonGoTheme"
         android:usesCleartextTraffic="true">
-        <!-- Points to searchable activity so the whole app can invoke search. -->
-        <!-- <meta-data -->
-        <!-- android:name="android.app.default_searchable" -->
-        <!-- android:value="fr.frogdevelopment.nihongo.dico.ui.MainActivity" /> -->
+
         <activity
             android:name=".ui.SplashScreenActivity"
             android:label="@string/app_name"
@@ -26,7 +23,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".ui.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:parentActivityName=".ui.MainActivity">
@@ -37,14 +42,13 @@
         </activity>
 
         <provider
-            android:name=".data.contentprovider.NihonGoDicoContentProvider"
-            android:authorities=".NihonGoDicoContentProvider"
+            android:name=".data.contentprovider.MySuggestionProvider"
+            android:authorities="fr.frogdevelopment.nihongo.dico.NihonGoDicoContentProvider"
             android:exported="false" />
     </application>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

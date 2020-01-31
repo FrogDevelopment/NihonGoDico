@@ -1,5 +1,7 @@
 package fr.frogdevelopment.nihongo.dico.ui.search
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -39,6 +41,13 @@ class BottomSheetSearchFragment : BottomSheetDialogFragment() {
                 return false
             }
         })
+
+        // Get the SearchView and set the searchable configuration
+        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        (binding.bottomSearchField).apply {
+            setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+        }
+
         return binding.root
     }
 
