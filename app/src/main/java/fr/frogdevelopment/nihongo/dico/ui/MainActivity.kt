@@ -73,11 +73,7 @@ class MainActivity : AppCompatActivity(), OnNavigateToListener {
                 Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show()
             }
             else -> {
-                binding.fab.show()
-                supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.main_container, SearchFragment.newInstance())
-                        .commitNow()
+                // already on search, nothing to do
             }
         }
     }
