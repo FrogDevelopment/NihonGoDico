@@ -240,8 +240,19 @@
     <!-- ******** -->
     <!-- SETTINGS -->
     <!-- ******** -->
+    <string name="settings_clear_history_title">Supprimer l\'historique</string>
+    <string name="settings_clear_history_summary">Efface complètement l\'historique de rechercher</string>
+    <string name="settings_clear_history_dialog_title">Supprimer votre historique de recherche ?</string>
+    <string name="settings_clear_history_dialog_positive_button">Effacer</string>
+
+    <string name="settings_offline_title">Utiliser le dictionnaire télécharger</string>
+    <string name="settings_offline_summary_on">Rechercher hors ligne</string>
+    <string name="settings_offline_summary_off">Rechercher en ligne</string>
+    <string name="settings_offline_text_on">Hors ligne</string>
+    <string name="settings_offline_text_off">En ligne</string>
+
     <string name="settings_dictionary_title">Dictionnaire</string>
-    <string name="settings_languages_title">Langages</string>
+    <string name="settings_language_title">Langage</string>
     <string name="settings_about_application">Application</string>
     <string name="settings_about_version_title">Version</string>
 

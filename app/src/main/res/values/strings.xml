@@ -261,8 +261,19 @@
     <string name="settings_lang_slv_label" translatable="false">slv</string>
     <string name="settings_lang_swe_label" translatable="false">swe</string>
 
+    <string name="settings_clear_history_title">Clear search history</string>
+    <string name="settings_clear_history_summary">Completely delete the history of search</string>
+    <string name="settings_clear_history_dialog_title">Delete your search history ?</string>
+    <string name="settings_clear_history_dialog_positive_button">Clear</string>
+
+    <string name="settings_offline_title">Use downloaded dictionary</string>
+    <string name="settings_offline_summary_on">Search offline</string>
+    <string name="settings_offline_summary_off">Search online</string>
+    <string name="settings_offline_text_on">Offline</string>
+    <string name="settings_offline_text_off">Online</string>
+
     <string name="settings_dictionary_title">Dictionary</string>
-    <string name="settings_languages_title">Languages</string>
+    <string name="settings_language_title">Language</string>
     <string name="settings_about_application">Application</string>
     <string name="settings_about_version_title">Version</string>
 
