@@ -40,7 +40,7 @@ class SearchFragment : Fragment(), OnEntryClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = SearchFragmentBinding.inflate(layoutInflater)
         binding.entriesRecyclerview.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
-        searchViewModel.query().observe(requireActivity(), Observer { query: String? -> onSearch(query) })
+        searchViewModel.query().observe(viewLifecycleOwner, Observer { query: String? -> onSearch(query) })
 
         return binding.root
     }

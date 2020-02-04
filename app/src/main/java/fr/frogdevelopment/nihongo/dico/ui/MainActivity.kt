@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(), OnNavigateToListener {
             supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.main_container, SearchFragment.newInstance())
-                    .commit()
+                    .commitNow()
             supportFragmentManager
                     .addOnBackStackChangedListener { switchFaB() }
         }
