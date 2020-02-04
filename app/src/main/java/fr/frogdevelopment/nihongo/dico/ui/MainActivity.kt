@@ -82,6 +82,11 @@ class MainActivity : AppCompatActivity(), OnNavigateToListener {
         }
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        binding.fab.show()
+    }
+
     private val onVisibilityChangedListener: OnVisibilityChangedListener = object : OnVisibilityChangedListener() {
 
         override fun onHidden(fab: FloatingActionButton) {
