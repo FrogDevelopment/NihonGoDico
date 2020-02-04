@@ -2,7 +2,6 @@ package fr.frogdevelopment.nihongo.dico.data
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import fr.frogdevelopment.nihongo.dico.data.rest.Entry
 import fr.frogdevelopment.nihongo.dico.data.rest.EntryDetails
 import fr.frogdevelopment.nihongo.dico.data.rest.RestServiceFactory
 import fr.frogdevelopment.nihongo.dico.data.rest.Sentence

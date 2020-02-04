@@ -13,7 +13,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import fr.frogdevelopment.nihongo.dico.R
-import fr.frogdevelopment.nihongo.dico.data.rest.Entry
+import fr.frogdevelopment.nihongo.dico.data.Entry
 import fr.frogdevelopment.nihongo.dico.databinding.SearchRowBinding
 import fr.frogdevelopment.nihongo.dico.ui.main.CustomTypefaceSpan
 import org.apache.commons.lang3.StringUtils

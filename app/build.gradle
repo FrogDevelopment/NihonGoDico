@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'org.ajoberstar.grgit'
 
 def getVersionCode = { ->
@@ -56,17 +57,17 @@ android {
 
 dependencies {
     // Room components
-//    def room_version = '2.2.3'
-//    implementation "androidx.room:room-runtime:$room_version"
-//    implementation "androidx.room:room-rxjava2:$room_version"
-//    annotationProcessor "androidx.room:room-compiler:$room_version"
-//    androidTestImplementation "androidx.room:room-testing:$room_version"
+    def room_version = '2.2.3'
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    androidTestImplementation "androidx.room:room-testing:$room_version"
 
     // Lifecycle components
     def archLifecycleVersion = '2.2.0'
     implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
     annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
 
     // kotlin
     implementation "androidx.core:core-ktx:1.1.0"
