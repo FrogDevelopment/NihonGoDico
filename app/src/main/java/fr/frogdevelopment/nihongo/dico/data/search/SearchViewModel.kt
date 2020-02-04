@@ -27,7 +27,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun isOffline(): Boolean {
+    fun isOffline(): Boolean {
         return preferences.getBoolean(SettingsFragment.KEY_OFFLINE, SettingsFragment.OFFLINE_DEFAULT)
     }
 

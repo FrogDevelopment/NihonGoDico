@@ -63,6 +63,12 @@ class BottomSheetSearchFragment : BottomSheetDialogFragment() {
             setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
         }
 
+        if (viewModel.isOffline()) {
+            binding.onlineWarning.visibility = View.GONE
+        } else {
+            binding.onlineWarning.visibility = View.VISIBLE
+        }
+
         return binding.root
     }
 

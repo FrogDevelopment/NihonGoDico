@@ -12,6 +12,7 @@
     <!-- ****** -->
     <!-- SEARCH -->
     <!-- ****** -->
+    <string name="online_searching_warning">You\'re searching online!</string>
     <string name="search_label">Search</string>
     <string name="search_hint">Search a word</string>
     <plurals name="search_results">
@@ -276,4 +277,5 @@
     <string name="downloads_examples_info" translatable="false">CC-BY 2.0 Tatoeba</string>
     <string name="downloads_examples_summary" translatable="false">https://tatoeba.org</string>
     <string name="downloads_examples">Download examples</string>
+
 </resources>

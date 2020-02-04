@@ -6,6 +6,20 @@
     app:behavior_hideable="true"
     app:layout_behavior="@string/bottom_sheet_behavior">
 
+    <TextView
+        android:id="@+id/online_warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_orange_dark"
+        android:gravity="center"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:text="@string/online_searching_warning"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottom_search_field" />
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/bottom_search_field"
         android:layout_width="match_parent"
