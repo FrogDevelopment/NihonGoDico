@@ -72,6 +72,7 @@ dependencies {
     // kotlin
     implementation "androidx.core:core-ktx:1.1.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.10.2"
 
     // UI
     def appcompat_version = '1.1.0'

@@ -4,12 +4,13 @@ import android.text.SpannableString
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.io.Serializable
 
-class Entry : Serializable {
+class Entry(
+        val senseSeq: String,
+        val kanji: String?,
+        val kana: String,
+        val vocabulary: String
+) : Serializable {
 
-    var senseSeq: String? = null
-    var kanji: String? = null
-    var kana: String? = null
-    var vocabulary: String? = null
     @JsonIgnore
     var kanjiSpannable: SpannableString? = null
     @JsonIgnore
