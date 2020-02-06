@@ -46,7 +46,7 @@ class DetailsFragment : Fragment() {
         } else {
             binding.posTitle.visibility = View.VISIBLE
             binding.posValue.visibility = View.VISIBLE
-            binding.posValue.text = toString("pos_", entryDetails.pos!!)
+            binding.posValue.text = toString("pos_", entryDetails.pos)
         }
 
         if (entryDetails.field!!.isEmpty()) {
@@ -55,7 +55,7 @@ class DetailsFragment : Fragment() {
         } else {
             binding.fieldTitle.visibility = View.VISIBLE
             binding.fieldValue.visibility = View.VISIBLE
-            binding.fieldValue.text = toString("field_", entryDetails.field!!)
+            binding.fieldValue.text = toString("field_", entryDetails.field)
         }
 
         if (entryDetails.misc!!.isEmpty()) {
@@ -64,7 +64,7 @@ class DetailsFragment : Fragment() {
         } else {
             binding.miscTitle.visibility = View.VISIBLE
             binding.miscValue.visibility = View.VISIBLE
-            binding.miscValue.text = toString("misc_", entryDetails.misc!!)
+            binding.miscValue.text = toString("misc_", entryDetails.misc)
         }
 
         if (entryDetails.dial!!.isEmpty()) {
@@ -73,7 +73,7 @@ class DetailsFragment : Fragment() {
         } else {
             binding.dialTitle.visibility = View.VISIBLE
             binding.dialValue.visibility = View.VISIBLE
-            binding.dialValue.text = toString("dial_", entryDetails.dial!!)
+            binding.dialValue.text = toString("dial_", entryDetails.dial)
         }
 
         if (entryDetails.info == null) {
@@ -82,7 +82,7 @@ class DetailsFragment : Fragment() {
         } else {
             binding.infoTitle.visibility = View.VISIBLE
             binding.infoValue.visibility = View.VISIBLE
-            binding.infoValue.text = getStringResourceByName("info_", entryDetails.info!!)
+            binding.infoValue.text = getStringResourceByName("info_", entryDetails.info)
         }
 
         binding.sentences.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))

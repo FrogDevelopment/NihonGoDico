@@ -28,8 +28,8 @@ class EntriesAdapter(context: Context, private val listener: OnEntryClickListene
 
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
     private val mEntries: List<Entry> = entries
-    private val kanjiFont: Typeface? = ResourcesCompat.getFont(context, R.font.sawarabi_mincho)
-    private val kanaFont: Typeface? = ResourcesCompat.getFont(context, R.font.sawarabi_gothic)
+    private val kanjiFont: Typeface = ResourcesCompat.getFont(context, R.font.sawarabi_mincho)!!
+    private val kanaFont: Typeface = ResourcesCompat.getFont(context, R.font.sawarabi_gothic)!!
     private val colorMatch: Int = ResourcesCompat.getColor(context.resources, R.color.primary, null)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,7 +40,7 @@ class EntriesAdapter(context: Context, private val listener: OnEntryClickListene
         val entry = mEntries[position]
         handleHeader(holder, entry)
         handleVocabulary(holder, entry)
-        holder.itemView.setOnClickListener { listener.onEntryClick(entry.senseSeq!!) }
+        holder.itemView.setOnClickListener { listener.onEntryClick(entry.senseSeq) }
     }
 
     override fun getItemCount(): Int {
@@ -58,7 +58,7 @@ class EntriesAdapter(context: Context, private val listener: OnEntryClickListene
     private fun handleKanjiAndKana(holder: ViewHolder, entry: Entry) {
         if (entry.kanjiSpannable == null) {
             entry.kanjiSpannable = handleMatches(entry.kanji!!)
-            entry.kanjiSpannable!!.setSpan(CustomTypefaceSpan(kanjiFont!!), 0, entry.kanjiSpannable!!.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            entry.kanjiSpannable!!.setSpan(CustomTypefaceSpan(kanjiFont), 0, entry.kanjiSpannable!!.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         holder.binding.header.text = entry.kanjiSpannable
         handleKanaOnly(holder.binding.subhead, entry)
@@ -66,15 +66,15 @@ class EntriesAdapter(context: Context, private val listener: OnEntryClickListene
 
     private fun handleKanaOnly(textView: TextView, entry: Entry) {
         if (entry.kanaSpannable == null) {
-            entry.kanaSpannable = handleMatches(entry.kana!!)
-            entry.kanaSpannable!!.setSpan(CustomTypefaceSpan(kanaFont!!), 0, entry.kanaSpannable!!.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            entry.kanaSpannable = handleMatches(entry.kana)
+            entry.kanaSpannable!!.setSpan(CustomTypefaceSpan(kanaFont), 0, entry.kanaSpannable!!.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         textView.text = entry.kanaSpannable
     }
 
     private fun handleVocabulary(holder: ViewHolder, entry: Entry) {
         if (entry.vocabularySpannable == null) {
-            entry.vocabularySpannable = handleMatches(entry.vocabulary!!)
+            entry.vocabularySpannable = handleMatches(entry.vocabulary)
         }
         holder.binding.vocabulary.text = entry.vocabularySpannable
     }
