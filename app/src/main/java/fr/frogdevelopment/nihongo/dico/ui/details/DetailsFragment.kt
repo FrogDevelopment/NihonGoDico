@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import fr.frogdevelopment.nihongo.dico.R
 import fr.frogdevelopment.nihongo.dico.data.details.DetailsViewModel
-import fr.frogdevelopment.nihongo.dico.data.rest.EntryDetails
+import fr.frogdevelopment.nihongo.dico.data.entities.EntryDetails
 import fr.frogdevelopment.nihongo.dico.databinding.DetailsFragmentBinding
 import java.util.*
 

@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import fr.frogdevelopment.nihongo.dico.R
 import fr.frogdevelopment.nihongo.dico.data.contentprovider.MySuggestionProvider
 import fr.frogdevelopment.nihongo.dico.data.details.DetailsViewModel
-import fr.frogdevelopment.nihongo.dico.data.rest.Entry
-import fr.frogdevelopment.nihongo.dico.data.rest.EntryDetails
+import fr.frogdevelopment.nihongo.dico.data.entities.EntryDetails
+import fr.frogdevelopment.nihongo.dico.data.entities.EntrySearch
 import fr.frogdevelopment.nihongo.dico.data.search.SearchViewModel
 import fr.frogdevelopment.nihongo.dico.databinding.SearchFragmentBinding
 import fr.frogdevelopment.nihongo.dico.ui.details.DetailsFragment
@@ -59,7 +59,7 @@ class SearchFragment : Fragment(), OnEntryClickListener {
         }
     }
 
-    private fun onSearchFinished(query:String, entries: List<Entry>?) {
+    private fun onSearchFinished(query: String, entries: List<EntrySearch>?) {
         hideProgressBar()
         if (entries == null) {
             Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()

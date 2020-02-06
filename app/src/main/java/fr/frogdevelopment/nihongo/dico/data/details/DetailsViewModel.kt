@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
 import fr.frogdevelopment.nihongo.dico.data.OnlineRepository
-import fr.frogdevelopment.nihongo.dico.data.rest.EntryDetails
+import fr.frogdevelopment.nihongo.dico.data.entities.EntryDetails
 import fr.frogdevelopment.nihongo.dico.data.rest.Sentence
 import fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment
 

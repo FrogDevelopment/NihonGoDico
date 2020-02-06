@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
 import fr.frogdevelopment.nihongo.dico.data.OnlineRepository
-import fr.frogdevelopment.nihongo.dico.data.rest.Entry
+import fr.frogdevelopment.nihongo.dico.data.entities.EntrySearch
 import fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment
 
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
@@ -19,7 +19,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         return _query
     }
 
-    fun search(query: String): MutableLiveData<List<Entry>?> {
+    fun search(query: String): MutableLiveData<List<EntrySearch>?> {
         return if (isOffline()) {
             MutableLiveData()
         } else {

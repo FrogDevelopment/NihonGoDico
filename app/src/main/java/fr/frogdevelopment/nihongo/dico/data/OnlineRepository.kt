@@ -2,8 +2,8 @@ package fr.frogdevelopment.nihongo.dico.data
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import fr.frogdevelopment.nihongo.dico.data.rest.Entry
-import fr.frogdevelopment.nihongo.dico.data.rest.EntryDetails
+import fr.frogdevelopment.nihongo.dico.data.entities.EntryDetails
+import fr.frogdevelopment.nihongo.dico.data.entities.EntrySearch
 import fr.frogdevelopment.nihongo.dico.data.rest.RestServiceFactory
 import fr.frogdevelopment.nihongo.dico.data.rest.Sentence
 import retrofit2.Call
@@ -15,12 +15,12 @@ object OnlineRepository {
     private val entriesClient = RestServiceFactory.entriesClient
     private val sentencesClient = RestServiceFactory.sentencesClient
 
-    fun search(language: String, query: String): MutableLiveData<List<Entry>?> {
-        val entries = MutableLiveData<List<Entry>?>()
+    fun search(language: String, query: String): MutableLiveData<List<EntrySearch>?> {
+        val entries = MutableLiveData<List<EntrySearch>?>()
         entriesClient
                 .search(language, query)
-                .enqueue(object : Callback<List<Entry>> {
-                    override fun onResponse(call: Call<List<Entry>>, response: Response<List<Entry>>) {
+                .enqueue(object : Callback<List<EntrySearch>> {
+                    override fun onResponse(call: Call<List<EntrySearch>>, response: Response<List<EntrySearch>>) {
                         if (response.isSuccessful) {
                             entries.postValue(response.body())
                         } else {
@@ -29,7 +29,7 @@ object OnlineRepository {
                         }
                     }
 
-                    override fun onFailure(call: Call<List<Entry>>, t: Throwable) {
+                    override fun onFailure(call: Call<List<EntrySearch>>, t: Throwable) {
                         Log.e("NIHONGO_DICO", "Fetching entries error", t)
                         entries.postValue(null)
                     }
@@ -64,7 +64,7 @@ object OnlineRepository {
     fun getSentences(lang: String?, entryDetails: EntryDetails): MutableLiveData<List<Sentence>?> {
         val sentences = MutableLiveData<List<Sentence>?>()
         sentencesClient
-                .search(lang!!, entryDetails.kanji, entryDetails.kana!!, entryDetails.gloss!!)
+                .search(lang!!, entryDetails.kanji, entryDetails.kana, entryDetails.gloss!!)
                 .enqueue(object : Callback<List<Sentence>?> {
                     override fun onResponse(call: Call<List<Sentence>?>, response: Response<List<Sentence>?>) {
                         if (response.isSuccessful) {

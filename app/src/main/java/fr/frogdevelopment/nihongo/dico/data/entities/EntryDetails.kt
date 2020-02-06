@@ -1,9 +1,9 @@
-package fr.frogdevelopment.nihongo.dico.data.rest
+package fr.frogdevelopment.nihongo.dico.data.entities
 
 import java.io.Serializable
 
 class EntryDetails(
-        val entrySeq: Int?,
+        val entrySeq: Int,
         val kanji: String?,
         val kana: String,
         val reading: String,

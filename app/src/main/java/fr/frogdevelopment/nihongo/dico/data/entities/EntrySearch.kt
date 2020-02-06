@@ -1,10 +1,10 @@
-package fr.frogdevelopment.nihongo.dico.data.rest
+package fr.frogdevelopment.nihongo.dico.data.entities
 
 import android.text.SpannableString
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.io.Serializable
 
-class Entry(
+class EntrySearch(
         val senseSeq: String,
         val kanji: String?,
         val kana: String,
