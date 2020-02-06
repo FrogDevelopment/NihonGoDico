@@ -1,6 +1,5 @@
 package fr.frogdevelopment.nihongo.dico.data.rest
 
-import fr.frogdevelopment.nihongo.dico.data.Entry
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

@@ -11,9 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import fr.frogdevelopment.nihongo.dico.R
-import fr.frogdevelopment.nihongo.dico.data.Entry
 import fr.frogdevelopment.nihongo.dico.data.contentprovider.MySuggestionProvider
 import fr.frogdevelopment.nihongo.dico.data.details.DetailsViewModel
+import fr.frogdevelopment.nihongo.dico.data.rest.Entry
 import fr.frogdevelopment.nihongo.dico.data.rest.EntryDetails
 import fr.frogdevelopment.nihongo.dico.data.search.SearchViewModel
 import fr.frogdevelopment.nihongo.dico.databinding.SearchFragmentBinding

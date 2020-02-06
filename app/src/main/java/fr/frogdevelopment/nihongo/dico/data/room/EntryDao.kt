@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.data
+package fr.frogdevelopment.nihongo.dico.data.room
 
 import androidx.room.Dao
 

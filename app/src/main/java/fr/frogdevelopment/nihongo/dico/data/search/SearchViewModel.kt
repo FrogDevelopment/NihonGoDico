@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
-import fr.frogdevelopment.nihongo.dico.data.Entry
 import fr.frogdevelopment.nihongo.dico.data.OnlineRepository
+import fr.frogdevelopment.nihongo.dico.data.rest.Entry
 import fr.frogdevelopment.nihongo.dico.ui.settings.SettingsFragment
 
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
