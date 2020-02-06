@@ -1,7 +1,7 @@
 package fr.frogdevelopment.nihongo.dico.data.rest
 
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -63,7 +63,7 @@ class RestServiceFactory private constructor() {
     }
 
     init {
-        val objectMapper = ObjectMapper()
+        val objectMapper = jacksonObjectMapper()
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
