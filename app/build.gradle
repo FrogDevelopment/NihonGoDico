@@ -13,14 +13,14 @@ def getVersionName = { ->
 }
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '29.0.2'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.3'
 
     defaultConfig {
         applicationId "fr.frogdevelopment.nihongo.dico"
 
         minSdkVersion 24
-        targetSdkVersion 29
+        targetSdkVersion 30
 
         versionCode getVersionCode()
         versionName getVersionName()
@@ -57,7 +57,7 @@ android {
 
 dependencies {
     // Room components
-    def room_version = '2.2.3'
+    def room_version = '2.2.6'
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
@@ -70,36 +70,36 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
 
     // kotlin
-    implementation "androidx.core:core-ktx:1.1.0"
+    implementation "androidx.core:core-ktx:1.3.2"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.10.2"
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.12.0'
 
     // UI
-    def appcompat_version = '1.1.0'
-    def constraint_layout_version = '1.1.3'
-    def preferenceVersion = '1.1.0'
-    def material_version = '1.2.0-alpha04'
+    def appcompat_version = '1.2.0'
+    def constraint_layout_version = '2.0.4'
+    def preferenceVersion = '1.1.1'
+    def material_version = '1.2.1'
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
-    implementation "androidx.preference:preference:$preferenceVersion"
+    implementation "androidx.preference:preference-ktx:$preferenceVersion"
     implementation "com.google.android.material:material:$material_version"
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
     // Testing
     def coreTestingVersion = '2.1.0'
-    def junitVersion = '4.13'
-    def mockitoVersion = '3.2.4'
+    def junitVersion = '4.13.1'
+    def mockitoVersion = '3.6.28'
     androidTestImplementation "androidx.arch.core:core-testing:$coreTestingVersion"
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
 
     // REST Retrofit
-    def retrofit_version = '2.7.1'
+    def retrofit_version = '2.9.0'
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-jackson:$retrofit_version"
 
     // Divers
-    implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'org.apache.commons:commons-lang3:3.11'
 }
 
 task printVersion() {
