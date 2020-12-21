@@ -16,7 +16,7 @@ class RestServiceFactory private constructor() {
     private val retrofit: Retrofit
 
     companion object {
-        private const val BASE_URL = "https://gateway.frog-development.com/api/nihongo/dico/"
+        private const val BASE_URL = "https://gateway.nihongo.frog-development.com/api/nihongo/dico/"
         private val INSTANCE = RestServiceFactory()
 
         private fun <C> getClient(client: Class<C>): C {

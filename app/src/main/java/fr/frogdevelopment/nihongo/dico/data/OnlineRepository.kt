@@ -18,7 +18,7 @@ object OnlineRepository {
     fun search(language: String, query: String): MutableLiveData<List<EntrySearch>?> {
         val entries = MutableLiveData<List<EntrySearch>?>()
         entriesClient
-                .search(language, query)
+                .search(query, language)
                 .enqueue(object : Callback<List<EntrySearch>> {
                     override fun onResponse(call: Call<List<EntrySearch>>, response: Response<List<EntrySearch>>) {
                         if (response.isSuccessful) {
@@ -41,7 +41,7 @@ object OnlineRepository {
     fun getEntryDetails(language: String, senseSeq: String): MutableLiveData<EntryDetails?> {
         val entryDetails = MutableLiveData<EntryDetails?>()
         entriesClient
-                .getDetails(language, senseSeq)
+                .getDetails(senseSeq, language)
                 .enqueue(object : Callback<EntryDetails?> {
                     override fun onResponse(call: Call<EntryDetails?>, response: Response<EntryDetails?>) {
                         if (response.isSuccessful) {
