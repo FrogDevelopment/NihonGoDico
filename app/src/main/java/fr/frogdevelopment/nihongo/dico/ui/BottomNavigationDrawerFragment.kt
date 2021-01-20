@@ -22,7 +22,7 @@ class BottomNavigationDrawerFragment(private val onNavigateToListener: OnNavigat
         setStyle(DialogFragment.STYLE_NORMAL, R.style.NavigationBottomSheet)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = BottomsheetFragmentBinding.inflate(layoutInflater)
         binding.navigationView.setNavigationItemSelectedListener(this)
         return binding.root

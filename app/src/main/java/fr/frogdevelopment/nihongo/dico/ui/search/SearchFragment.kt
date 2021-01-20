@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import fr.frogdevelopment.nihongo.dico.R
@@ -27,6 +27,7 @@ class SearchFragment : Fragment(), OnEntryClickListener {
     private lateinit var searchRecentSuggestions: SearchRecentSuggestions
 
     private var _binding: SearchFragmentBinding? = null
+
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
@@ -37,12 +38,14 @@ class SearchFragment : Fragment(), OnEntryClickListener {
         searchRecentSuggestions = SearchRecentSuggestions(requireContext(), MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = SearchFragmentBinding.inflate(layoutInflater)
-        binding.entriesRecyclerview.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
-        searchViewModel.query().observe(viewLifecycleOwner, Observer { query: String? -> onSearch(query) })
-
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.entriesRecyclerview.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        searchViewModel.query().observe(viewLifecycleOwner, { query: String? -> onSearch(query) })
     }
 
     override fun onDestroyView() {
@@ -55,7 +58,7 @@ class SearchFragment : Fragment(), OnEntryClickListener {
             hideProgressBar()
         } else {
             showProgressBar()
-            searchViewModel.search(query).observe(viewLifecycleOwner, Observer { entries -> onSearchFinished(query, entries) })
+            searchViewModel.search(query).observe(viewLifecycleOwner, { entries -> onSearchFinished(query, entries) })
         }
     }
 
@@ -79,7 +82,7 @@ class SearchFragment : Fragment(), OnEntryClickListener {
 
     override fun onEntryClick(senseSeq: String) {
         showProgressBar()
-        detailsViewModel.searchEntryDetails(senseSeq).observe(viewLifecycleOwner, Observer { entryDetails -> showDetails(entryDetails) })
+        detailsViewModel.searchEntryDetails(senseSeq).observe(viewLifecycleOwner, { entryDetails -> showDetails(entryDetails) })
     }
 
     private fun showDetails(details: EntryDetails?) {
@@ -87,19 +90,12 @@ class SearchFragment : Fragment(), OnEntryClickListener {
         if (details == null) {
             Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()
         } else {
-            requireActivity()
-                    .supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.main_container, DetailsFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit()
+            requireActivity().supportFragmentManager.commit {
+                replace(R.id.main_container, DetailsFragment::class.java, null)
+                setReorderingAllowed(true)
+                addToBackStack("search")
+            }
         }
     }
 
-    companion object {
-        fun newInstance(): SearchFragment {
-            return SearchFragment()
-        }
-
-    }
 }

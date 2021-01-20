@@ -29,7 +29,7 @@ class EntriesAdapter(context: Context, private val listener: OnEntryClickListene
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
     private val mEntries: List<EntrySearch> = entries
     private val kanjiFont: Typeface = ResourcesCompat.getFont(context, R.font.sawarabi_mincho)!!
-    private val kanaFont: Typeface = ResourcesCompat.getFont(context, R.font.sawarabi_gothic)!!
+    private val kanaFont: Typeface = ResourcesCompat.getFont(context, R.font.sawarabi_mincho)!!
     private val colorMatch: Int = ResourcesCompat.getColor(context.resources, R.color.primary, null)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

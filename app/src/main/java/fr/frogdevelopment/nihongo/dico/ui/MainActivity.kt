@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.fragment.app.commit
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -22,21 +23,20 @@ class MainActivity : AppCompatActivity(), OnNavigateToListener {
     private var isSearching = false
     private lateinit var binding: MainActivityBinding
     private lateinit var bottomNavigationDrawerFragment: BottomNavigationDrawerFragment
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.bottomAppBar)
 
         if (savedInstanceState == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.main_container, SearchFragment.newInstance())
-                    .commitNow()
-            supportFragmentManager
-                    .addOnBackStackChangedListener { switchFaB() }
+            supportFragmentManager.commit {
+                replace(R.id.main_container, SearchFragment::class.java, null)
+                setReorderingAllowed(true)
+            }
+            supportFragmentManager.addOnBackStackChangedListener { switchFaB() }
         }
 
         isSearching = true
@@ -75,6 +75,14 @@ class MainActivity : AppCompatActivity(), OnNavigateToListener {
             else -> {
                 // already on search, nothing to do
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressed()
         }
     }
 
@@ -120,6 +128,5 @@ class MainActivity : AppCompatActivity(), OnNavigateToListener {
         binding.bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
         binding.fab.setImageResource(R.drawable.ic_baseline_search_24)
         isSearching = true
-        supportFragmentManager.popBackStackImmediate()
     }
 }

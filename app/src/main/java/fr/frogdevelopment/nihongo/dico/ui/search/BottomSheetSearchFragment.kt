@@ -28,7 +28,7 @@ class BottomSheetSearchFragment : BottomSheetDialogFragment() {
         viewModel = ViewModelProvider(requireActivity()).get(SearchViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = SearchsheetFragmentBinding.inflate(layoutInflater)
         binding.bottomSearchField.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import fr.frogdevelopment.nihongo.dico.R
 
 class SplashScreenActivity : Activity() {
@@ -12,7 +13,7 @@ class SplashScreenActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_screen_activity)
         // This method will be executed once the timer is over
-        Handler().postDelayed({ launchActivity() }, SPLASH_TIME_OUT)
+        Handler(Looper.myLooper()!!).postDelayed({ launchActivity() }, SPLASH_TIME_OUT)
     }
 
     private fun launchActivity() {

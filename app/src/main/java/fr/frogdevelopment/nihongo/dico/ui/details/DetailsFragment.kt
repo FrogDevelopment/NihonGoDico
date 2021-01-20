@@ -25,16 +25,16 @@ class DetailsFragment : Fragment() {
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = ViewModelProvider(requireActivity()).get(DetailsViewModel::class.java)
 
         _binding = DetailsFragmentBinding.inflate(layoutInflater)
         binding.viewModel = viewModel
 
         binding.kanji.typeface = ResourcesCompat.getFont(requireContext(), R.font.sawarabi_mincho)
-        binding.kana.typeface = ResourcesCompat.getFont(requireContext(), R.font.sawarabi_gothic)
+        binding.kana.typeface = ResourcesCompat.getFont(requireContext(), R.font.sawarabi_mincho)
 
-        viewModel.entryDetails().observe(viewLifecycleOwner, androidx.lifecycle.Observer { entryDetails -> populateView(entryDetails!!) })
+        viewModel.entryDetails().observe(viewLifecycleOwner, { entryDetails -> populateView(entryDetails!!) })
 
         return binding.root
     }
@@ -116,7 +116,7 @@ class DetailsFragment : Fragment() {
 
     private fun fetchSentences(entryDetails: EntryDetails) {
         binding.searchingProgress.visibility = View.VISIBLE
-        viewModel.sentences(entryDetails).observe(viewLifecycleOwner, androidx.lifecycle.Observer { sentences ->
+        viewModel.sentences(entryDetails).observe(viewLifecycleOwner, { sentences ->
             binding.searchingProgress.visibility = View.INVISIBLE
             when {
                 sentences == null -> {
@@ -135,9 +135,4 @@ class DetailsFragment : Fragment() {
         })
     }
 
-    companion object {
-        fun newInstance(): DetailsFragment {
-            return DetailsFragment()
-        }
-    }
 }

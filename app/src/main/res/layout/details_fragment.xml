@@ -121,6 +121,8 @@
             android:id="@+id/field_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             app:layout_constraintStart_toStartOf="@+id/field_title"
             app:layout_constraintTop_toBottomOf="@+id/field_title" />
 
@@ -162,6 +164,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
+            android:paddingTop="16dp"
             android:text="@string/sentences"
             android:textStyle="italic"
             android:visibility="invisible"
