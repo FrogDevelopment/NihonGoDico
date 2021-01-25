@@ -32,7 +32,7 @@ class BottomSheetSearchFragment : BottomSheetDialogFragment() {
         _binding = SearchsheetFragmentBinding.inflate(layoutInflater)
         binding.bottomSearchField.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                viewModel.query().postValue(query)
+                viewModel.search(query)
                 dismiss()
                 return true
             }
@@ -50,7 +50,7 @@ class BottomSheetSearchFragment : BottomSheetDialogFragment() {
                 val cursor = binding.bottomSearchField.suggestionsAdapter.cursor
                 cursor.moveToPosition(position)
                 val suggestion = cursor.getString(2)
-                viewModel.query().postValue(suggestion)
+                viewModel.search(suggestion)
                 dismiss()
                 return true
             }

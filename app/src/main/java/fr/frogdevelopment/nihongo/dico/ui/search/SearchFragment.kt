@@ -1,7 +1,6 @@
 package fr.frogdevelopment.nihongo.dico.ui.search
 
 import android.os.Bundle
-import android.provider.SearchRecentSuggestions
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import fr.frogdevelopment.nihongo.dico.R
-import fr.frogdevelopment.nihongo.dico.data.contentprovider.MySuggestionProvider
 import fr.frogdevelopment.nihongo.dico.data.details.DetailsViewModel
 import fr.frogdevelopment.nihongo.dico.data.entities.EntryDetails
 import fr.frogdevelopment.nihongo.dico.data.entities.EntrySearch
@@ -24,7 +22,6 @@ class SearchFragment : Fragment(), OnEntryClickListener {
 
     private lateinit var searchViewModel: SearchViewModel
     private lateinit var detailsViewModel: DetailsViewModel
-    private lateinit var searchRecentSuggestions: SearchRecentSuggestions
 
     private var _binding: SearchFragmentBinding? = null
 
@@ -35,7 +32,6 @@ class SearchFragment : Fragment(), OnEntryClickListener {
         super.onCreate(savedInstanceState)
         searchViewModel = ViewModelProvider(requireActivity()).get(SearchViewModel::class.java)
         detailsViewModel = ViewModelProvider(requireActivity()).get(DetailsViewModel::class.java)
-        searchRecentSuggestions = SearchRecentSuggestions(requireContext(), MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -45,7 +41,8 @@ class SearchFragment : Fragment(), OnEntryClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.entriesRecyclerview.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
-        searchViewModel.query().observe(viewLifecycleOwner, { query: String? -> onSearch(query) })
+        searchViewModel.isSearching.observe(viewLifecycleOwner, { isSearching -> onSearch(isSearching) })
+        searchViewModel.entries.observe(viewLifecycleOwner, { entries -> onSearchFinished(entries) })
     }
 
     override fun onDestroyView() {
@@ -53,21 +50,18 @@ class SearchFragment : Fragment(), OnEntryClickListener {
         _binding = null
     }
 
-    private fun onSearch(query: String?) {
-        if (query == null) {
-            hideProgressBar()
-        } else {
+    private fun onSearch(isSearching: Boolean) {
+        if (isSearching) {
             showProgressBar()
-            searchViewModel.search(query).observe(viewLifecycleOwner, { entries -> onSearchFinished(query, entries) })
+        } else {
+            hideProgressBar()
         }
     }
 
-    private fun onSearchFinished(query: String, entries: List<EntrySearch>?) {
-        hideProgressBar()
+    private fun onSearchFinished(entries: List<EntrySearch>?) {
         if (entries == null) {
             Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()
         } else {
-            searchRecentSuggestions.saveRecentQuery(query, resources.getQuantityString(R.plurals.search_results, entries.size, entries.size))
             binding.entriesRecyclerview.adapter = EntriesAdapter(requireContext(), this, entries)
         }
     }

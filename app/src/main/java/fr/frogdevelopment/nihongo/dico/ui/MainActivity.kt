@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), OnNavigateToListener {
             if (isSearching) {
                 bottomNavigationDrawerFragment.show(supportFragmentManager, bottomNavigationDrawerFragment.tag)
             } else {
-                switchFaB()
+                onBackPressed()
             }
             return true
         }
