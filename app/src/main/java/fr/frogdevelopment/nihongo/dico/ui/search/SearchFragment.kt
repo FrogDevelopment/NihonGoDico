@@ -17,6 +17,7 @@ import fr.frogdevelopment.nihongo.dico.data.search.SearchViewModel
 import fr.frogdevelopment.nihongo.dico.databinding.SearchFragmentBinding
 import fr.frogdevelopment.nihongo.dico.ui.details.DetailsFragment
 import fr.frogdevelopment.nihongo.dico.ui.search.EntriesAdapter.OnEntryClickListener
+import org.apache.commons.lang3.ArrayUtils
 
 class SearchFragment : Fragment(), OnEntryClickListener {
 
@@ -59,9 +60,12 @@ class SearchFragment : Fragment(), OnEntryClickListener {
     }
 
     private fun onSearchFinished(entries: List<EntrySearch>?) {
-        if (entries == null) {
-            Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()
+        if (entries == null || entries.isEmpty()) {
+            binding.entriesRecyclerview.visibility = View.GONE
+            binding.emptyView.visibility = View.VISIBLE
         } else {
+            binding.entriesRecyclerview.visibility = View.VISIBLE
+            binding.emptyView.visibility = View.GONE
             binding.entriesRecyclerview.adapter = EntriesAdapter(requireContext(), this, entries)
         }
     }

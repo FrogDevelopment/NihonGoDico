@@ -12,6 +12,7 @@
     <!-- SEARCH -->
     <!-- ****** -->
     <string name="online_searching_warning">Recherche en ligne !</string>
+    <string name="no_data_available">Aucun résultats à afficher</string>
     <string name="search_label">Chercher</string>
     <string name="search_hint">Chercher un mot</string>
     <plurals name="search_results">

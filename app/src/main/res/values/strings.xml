@@ -13,6 +13,7 @@
     <!-- SEARCH -->
     <!-- ****** -->
     <string name="online_searching_warning">You\'re searching online!</string>
+    <string name="no_data_available">No results to display</string>
     <string name="search_label">Search</string>
     <string name="search_hint">Search a word</string>
     <plurals name="search_results">
