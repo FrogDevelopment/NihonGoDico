@@ -91,8 +91,5 @@ class SettingsFragment : PreferenceFragmentCompat() {
         const val KEY_DOWNLOAD_ENTRIES = "settings_download_entries"
         const val KEY_DOWNLOAD_SENTENCES = "settings_download_sentences"
 
-        fun newInstance(): SettingsFragment {
-            return SettingsFragment()
-        }
     }
 }

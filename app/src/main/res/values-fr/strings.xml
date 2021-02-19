@@ -253,7 +253,7 @@
     <string name="settings_offline_text_off">En ligne</string>
 
     <string name="settings_dictionary_title">Dictionnaire</string>
-    <string name="settings_language_title">Langage</string>
+    <string name="settings_language_title">Langage de recherche</string>
     <string name="settings_about_application">Application</string>
     <string name="settings_about_version_title">Version</string>
 

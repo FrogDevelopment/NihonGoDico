@@ -274,7 +274,7 @@
     <string name="settings_offline_text_off">Online</string>
 
     <string name="settings_dictionary_title">Dictionary</string>
-    <string name="settings_language_title">Language</string>
+    <string name="settings_language_title">Search language</string>
     <string name="settings_about_application">Application</string>
     <string name="settings_about_version_title">Version</string>
 

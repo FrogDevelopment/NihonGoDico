@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface SentencesClient {
 
-    @GET("sentences/search")
+    @GET("nihongo-dico-sentences/search")
     fun search(@Query("lang") lang: String,
                @Query("kanji") kanji: String?,
                @Query("kana") kana: String,
