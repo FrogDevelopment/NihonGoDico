@@ -16,7 +16,7 @@ android {
     buildToolsVersion '30.0.3'
 
     defaultConfig {
-        applicationId 'fr.frogdevelopment.nihongo.dico'
+        applicationId 'com.frogdevelopment.nihongo.dico'
 
         minSdkVersion 24
         targetSdkVersion 30
@@ -103,6 +103,8 @@ dependencies {
 
     // Divers
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.commons:commons-csv:1.8'
+    implementation 'org.apache.commons:commons-compress:1.20'
 }
 
 task printVersion() {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fr.frogdevelopment.nihongo.dico">
+    package="com.frogdevelopment.nihongo.dico">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -48,8 +48,8 @@
         </activity>
 
         <provider
-            android:name=".data.contentprovider.MySuggestionProvider"
-            android:authorities="fr.frogdevelopment.nihongo.dico.NihonGoDicoContentProvider"
+            android:name=".data.contentprovider.NihonGoDicoContentProvider"
+            android:authorities="com.frogdevelopment.nihongo.dico.NihonGoDicoContentProvider"
             android:exported="false" />
     </application>
 

@@ -1,0 +1,42 @@
+package com.frogdevelopment.nihongo.dico.data.contentprovider;
+
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
+import android.provider.BaseColumns;
+
+public class EntryContract implements BaseColumns {
+
+    public static final String ENTRY_SEQ = "entry_seq";
+    public static final String KANJI     = "kanji";
+    public static final String KANA      = "kana";
+    public static final String READING   = "reading";
+
+    public static final int INDEX_ENTRY_SEQ = 1;
+    public static final int INDEX_KANJI     = 2;
+    public static final int INDEX_KANA      = 3;
+    public static final int INDEX_READING   = 4;
+
+    private static final String SQL_CREATE     = "CREATE TABLE entries (_id INTEGER PRIMARY KEY AUTOINCREMENT, entry_seq TEXT NOT NULL, kanji TEXT, kana TEXT NOT NULL, reading TEXT NOT NULL);";
+    private static final String SQL_CREATE_FTS = "CREATE VIRTUAL TABLE fts_entries USING fts4 (content='entries', kanji, kana)";
+    private static final String SQL_INSERT     = "INSERT INTO entries (entry_seq, kanji, kana, reading) VALUES (?,?,?,?);";
+    private static final String SQL_CLEAN      = "DELETE FROM entries;";
+    private static final String SQL_REBUILD    = "INSERT INTO fts_entries(fts_entries) VALUES('rebuild');";
+
+    static void create(SQLiteDatabase db) {
+        db.execSQL(SQL_CREATE);
+        db.execSQL(SQL_CREATE_FTS);
+    }
+
+    static SQLiteStatement compileInsertStatement(SQLiteDatabase db) {
+        return db.compileStatement(SQL_INSERT);
+    }
+
+    static void clean(SQLiteDatabase db) {
+        db.execSQL(SQL_CLEAN);
+    }
+
+    static void reBuild(SQLiteDatabase db) {
+        db.execSQL(SQL_REBUILD);
+    }
+
+}

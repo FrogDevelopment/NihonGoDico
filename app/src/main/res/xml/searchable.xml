@@ -3,8 +3,8 @@
             android:hint="@string/search_hint"
             android:label="@string/search_label"
             android:imeOptions="actionSearch"
-            android:searchSuggestAuthority="fr.frogdevelopment.nihongo.dico.NihonGoDicoContentProvider"
-            android:searchSuggestSelection=" ?"
+    android:searchSuggestAuthority="com.frogdevelopment.nihongo.dico.NihonGoDicoContentProvider"
+    android:searchSuggestSelection=" ?"
             android:searchSuggestThreshold="2">
 
 </searchable>
