@@ -67,21 +67,21 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$room_version"
 
     // Lifecycle components
-    def archLifecycleVersion = '2.2.0'
-    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
+    def archLifecycleVersion = '2.3.1'
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     kapt "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
 
     // kotlin
     implementation "androidx.core:core-ktx:1.3.2"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.12.2'
 
     // UI
     def appcompat_version = '1.2.0'
     def constraint_layout_version = '2.0.4'
     def preferenceVersion = '1.1.1'
-    def material_version = '1.2.1'
+    def material_version = '1.3.0'
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
     implementation "androidx.preference:preference-ktx:$preferenceVersion"
@@ -90,8 +90,8 @@ dependencies {
 
     // Testing
     def coreTestingVersion = '2.1.0'
-    def junitVersion = '4.13.1'
-    def mockitoVersion = '3.7.7'
+    def junitVersion = '4.13.2'
+    def mockitoVersion = '3.8.0'
     androidTestImplementation "androidx.arch.core:core-testing:$coreTestingVersion"
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
@@ -102,7 +102,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-jackson:$retrofit_version"
 
     // Divers
-    implementation 'org.apache.commons:commons-lang3:3.11'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
 }
 
 task printVersion() {
