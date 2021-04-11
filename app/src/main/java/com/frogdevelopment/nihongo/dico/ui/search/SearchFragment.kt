@@ -41,8 +41,8 @@ class SearchFragment : Fragment(), OnEntryClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.entriesRecyclerview.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
-        searchViewModel.isSearching.observe(viewLifecycleOwner, { isSearching -> onSearch(isSearching) })
-        searchViewModel.entries.observe(viewLifecycleOwner, { entries -> onSearchFinished(entries) })
+        searchViewModel.searching().observe(viewLifecycleOwner, { isSearching -> onSearch(isSearching) })
+        searchViewModel.entries().observe(viewLifecycleOwner, { entries -> onSearchFinished(entries) })
     }
 
     override fun onDestroyView() {
@@ -66,6 +66,7 @@ class SearchFragment : Fragment(), OnEntryClickListener {
             binding.entriesRecyclerview.visibility = View.VISIBLE
             binding.emptyView.visibility = View.GONE
             binding.entriesRecyclerview.adapter = EntriesAdapter(requireContext(), this, entries)
+            searchViewModel.saveRecentQuery(resources.getQuantityString(R.plurals.search_results, entries.size, entries.size))
         }
     }
 

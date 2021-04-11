@@ -6,10 +6,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.io.Serializable
 
 @JsonIgnoreProperties("rowid")
-@Entity(tableName = "entries")
-class Entry(
+@Entity(tableName = "senses")
+class Sense(
         @PrimaryKey(autoGenerate = true) val rowid: Int,
         val entry_seq: String,
-        val kanji: String?,
-        val kana: String,
-        val reading: String) : Serializable
+        val pos: String?,
+        val field: String?,
+        val misc: String?,
+        val info: String?,
+        val dial: String?,
+        val gloss: String
+) : Serializable

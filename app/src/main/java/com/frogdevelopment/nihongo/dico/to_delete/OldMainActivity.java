@@ -1,12 +1,7 @@
 package com.frogdevelopment.nihongo.dico.to_delete;
 
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
-import android.text.TextUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -45,74 +40,74 @@ public class OldMainActivity extends AppCompatActivity {
         }
     }
 
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+//    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+//
+//        final Uri uri;
+////        switch (id) {
+////            case LOADER_DICO_ID_KANJI:
+////                uri = NihonGoDicoContentProvider.URI_SEARCH_KANJI;
+////                break;
+////            case LOADER_DICO_ID_KANA:
+////                uri = NihonGoDicoContentProvider.URI_SEARCH_KANA;
+////                break;
+////            case LOADER_DICO_ID_GLOSS:
+////                uri = NihonGoDicoContentProvider.URI_SEARCH_GLOSS;
+////                break;
+////            default:
+////                return null;
+////        }
+//
+//        query = args.getString("query", "");
+//
+//        // query by word1+word2+...
+//        String[] searches = query.split(REGEX_SEARCH_SPLIT);
+//
+//        char charAt;
+//        StringBuilder selection = new StringBuilder();
+//        // if other words, check either include (+) or exclude (-) from query
+//        for (String search : searches) { // start 1, as first word already proceed
+//            if (TextUtils.isEmpty(search)) {
+//                continue;
+//            }
+//
+//            search = search.trim();
+//
+//            // check the character in front of word to know if inclusion or exclusion
+//            int startOfWord = query.indexOf(search);
+//
+//            if (startOfWord > 0) {
+//                do {
+//                    charAt = query.charAt(--startOfWord);
+//                } while (Character.isWhitespace(charAt));
+//
+//                switch (charAt) {
+//                    case '?': // OR
+//                        selection.append(" OR ");
+//                        break;
+//                    case '!': // NOT
+//                        selection.append(" -");
+//                        break;
+//                }
+//            }
+//
+//            if (search.split("\\s").length > 1 || search.contains("-")) { // phrase query or double-word => enclosing in double quotes
+//                selection.append("\"").append(cleanWord(search)).append("\"");
+//            } else {
+//                selection.append(cleanWord(search));
+//            }
+//        }
+//
+//        return new CursorLoader(this, uri, null, selection.toString(), null, null);
+//    }
 
-        final Uri uri;
-        switch (id) {
-            case LOADER_DICO_ID_KANJI:
-                uri = NihonGoDicoContentProvider.URI_SEARCH_KANJI;
-                break;
-            case LOADER_DICO_ID_KANA:
-                uri = NihonGoDicoContentProvider.URI_SEARCH_KANA;
-                break;
-            case LOADER_DICO_ID_GLOSS:
-                uri = NihonGoDicoContentProvider.URI_SEARCH_GLOSS;
-                break;
-            default:
-                return null;
-        }
+//    private static String cleanWord(String word) {
+//        return word
+//                .trim() // remove leading and trailing spaces
+//                .replace("'", "''") // replace ['] by [''] for sql syntax
+//                ; // todo other ?
+//    }
 
-        query = args.getString("query", "");
-
-        // query by word1+word2+...
-        String[] searches = query.split(REGEX_SEARCH_SPLIT);
-
-        char charAt;
-        StringBuilder selection = new StringBuilder();
-        // if other words, check either include (+) or exclude (-) from query
-        for (String search : searches) { // start 1, as first word already proceed
-            if (TextUtils.isEmpty(search)) {
-                continue;
-            }
-
-            search = search.trim();
-
-            // check the character in front of word to know if inclusion or exclusion
-            int startOfWord = query.indexOf(search);
-
-            if (startOfWord > 0) {
-                do {
-                    charAt = query.charAt(--startOfWord);
-                } while (Character.isWhitespace(charAt));
-
-                switch (charAt) {
-                    case '?': // OR
-                        selection.append(" OR ");
-                        break;
-                    case '!': // NOT
-                        selection.append(" -");
-                        break;
-                }
-            }
-
-            if (search.split("\\s").length > 1 || search.contains("-")) { // phrase query or double-word => enclosing in double quotes
-                selection.append("\"").append(cleanWord(search)).append("\"");
-            } else {
-                selection.append(cleanWord(search));
-            }
-        }
-
-        return new CursorLoader(this, uri, null, selection.toString(), null, null);
-    }
-
-    private static String cleanWord(String word) {
-        return word
-                .trim() // remove leading and trailing spaces
-                .replace("'", "''") // replace ['] by [''] for sql syntax
-                ; // todo other ?
-    }
-
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+//    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 //        int loaderId = loader.getId();
 //        if (data.getCount() > 0) {
 //
@@ -196,6 +191,6 @@ public class OldMainActivity extends AppCompatActivity {
 //
 //        mProgressBar.setVisibility(View.INVISIBLE);
 //        mSearchView.clearFocus();
-    }
+//    }
 
 }

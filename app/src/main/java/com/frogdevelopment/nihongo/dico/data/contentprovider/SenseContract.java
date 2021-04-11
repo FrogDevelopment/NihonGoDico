@@ -23,7 +23,7 @@ public class SenseContract implements BaseColumns {
     public static final int INDEX_DIAL      = 6;
     public static final int INDEX_GLOSS     = 7;
 
-    private static final String SQL_CREATE     = "CREATE TABLE senses (_id INTEGER PRIMARY KEY AUTOINCREMENT, entry_seq TEXT NOT NULL, pos TEXT, field TEXT, misc TEXT, info TEXT, dial TEXT, gloss TEXT NOT NULL);";
+    private static final String SQL_CREATE     = "CREATE TABLE senses (rowid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, entry_seq TEXT NOT NULL, pos TEXT, field TEXT, misc TEXT, info TEXT, dial TEXT, gloss TEXT NOT NULL);";
     private static final String SQL_CREATE_FTS = "CREATE VIRTUAL TABLE fts_gloss USING fts4 (content='senses', gloss)";
     private static final String SQL_INSERT     = "INSERT INTO senses (entry_seq, pos, field, misc, info, dial, gloss) VALUES (?, ?, ?, ?, ?, ?, ?);";
     private static final String SQL_CLEAN      = "DELETE FROM senses;";

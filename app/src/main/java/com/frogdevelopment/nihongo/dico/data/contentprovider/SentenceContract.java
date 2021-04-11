@@ -24,7 +24,7 @@ public class SentenceContract implements BaseColumns {
     public static final int INDEX_INDICES              = 5;
 
     // Queries
-    private static final String SQL_CREATE = "CREATE TABLE sentences (_id INTEGER PRIMARY KEY, japanese_ref INTEGER,translation_ref INTEGER,japanese_sentence TEXT NOT NULL,translation_sentence TEXT NOT NULL,indices TEXT NOT NULL);";
+    private static final String SQL_CREATE = "CREATE TABLE sentences (rowid INTEGER PRIMARY KEY NOT NULL, japanese_ref INTEGER,translation_ref INTEGER,japanese_sentence TEXT NOT NULL,translation_sentence TEXT NOT NULL,indices TEXT NOT NULL);";
     private static final String SQL_INSERT = "INSERT INTO sentences (japanese_ref,translation_ref,japanese_sentence,translation_sentence,indices) VALUES (?,?,?,?,?);";
     private static final String SQL_CLEAN  = "DELETE FROM sentences;";
 

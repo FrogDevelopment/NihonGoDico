@@ -16,7 +16,7 @@ public class EntryContract implements BaseColumns {
     public static final int INDEX_KANA      = 3;
     public static final int INDEX_READING   = 4;
 
-    private static final String SQL_CREATE     = "CREATE TABLE entries (_id INTEGER PRIMARY KEY AUTOINCREMENT, entry_seq TEXT NOT NULL, kanji TEXT, kana TEXT NOT NULL, reading TEXT NOT NULL);";
+    private static final String SQL_CREATE     = "CREATE TABLE entries (rowid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, entry_seq TEXT NOT NULL, kanji TEXT, kana TEXT NOT NULL, reading TEXT NOT NULL);";
     private static final String SQL_CREATE_FTS = "CREATE VIRTUAL TABLE fts_entries USING fts4 (content='entries', kanji, kana)";
     private static final String SQL_INSERT     = "INSERT INTO entries (entry_seq, kanji, kana, reading) VALUES (?,?,?,?);";
     private static final String SQL_CLEAN      = "DELETE FROM entries;";
