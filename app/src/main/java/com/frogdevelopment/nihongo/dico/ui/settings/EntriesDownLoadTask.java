@@ -41,8 +41,4 @@ class EntriesDownLoadTask extends AbstractDownLoadTask {
         return contentValues;
     }
 
-//    @Override
-//    protected void notifyRebuild(final ContentResolver contentResolver) {
-//        contentResolver.update(URI_REBUILD_DICO, null, null, null);
-//    }
 }

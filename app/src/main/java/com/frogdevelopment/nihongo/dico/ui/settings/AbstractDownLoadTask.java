@@ -124,14 +124,9 @@ abstract class AbstractDownLoadTask extends AsyncTask<String, Integer, Boolean> 
                 }
             }
         }
-
-//        notifyRebuild(contentResolver);
     }
 
     abstract protected ContentValues toContentValues(final CSVRecord record);
-
-//    abstract protected void notifyRebuild(final ContentResolver contentResolver);
-
 
     @Override
     protected void onPostExecute(Boolean result) {

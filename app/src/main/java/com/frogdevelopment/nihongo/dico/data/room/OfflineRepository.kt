@@ -8,10 +8,12 @@ import java.util.stream.Collectors
 class OfflineRepository(private val entryDao: EntryDao) {
 
     fun search(query: String): LiveData<List<EntrySearch>> {
-        return Transformations.map(entryDao.getEntries()) { entries ->
+        val wildcardQuery = java.lang.String.format("*%s*", query)
+        return Transformations.map(entryDao.searchByEnglishTerm(wildcardQuery)) { entries ->
             entries.stream()
-                    .map { entry -> EntrySearch("sense_seq", entry.kanji, entry.kana, "fixme") }
+                    .map { e -> EntrySearch(e.sense_seq, e.kanji, e.kana, e.gloss) }
                     .collect(Collectors.toList())
         }
+
     }
 }

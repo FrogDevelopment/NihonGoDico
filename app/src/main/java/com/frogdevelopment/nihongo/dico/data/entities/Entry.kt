@@ -1,15 +1,15 @@
 package com.frogdevelopment.nihongo.dico.data.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.io.Serializable
 
-@JsonIgnoreProperties("rowid")
-@Entity(tableName = "entries")
+@Entity(tableName = "entries", indices = [Index(value = ["entry_seq"], unique = true)])
 class Entry(
         @PrimaryKey(autoGenerate = true) val rowid: Int,
-        val entry_seq: String,
-        val kanji: String?,
-        val kana: String,
-        val reading: String) : Serializable
+        @ColumnInfo(name = "entry_seq") val entrySeq: String,
+        @ColumnInfo val kanji: String?,
+        @ColumnInfo val kana: String,
+        @ColumnInfo val reading: String) : Serializable

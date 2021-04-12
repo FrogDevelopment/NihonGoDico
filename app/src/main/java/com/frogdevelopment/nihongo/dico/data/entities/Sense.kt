@@ -1,19 +1,19 @@
 package com.frogdevelopment.nihongo.dico.data.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import java.io.Serializable
 
-@JsonIgnoreProperties("rowid")
-@Entity(tableName = "senses")
+@Entity(tableName = "senses", indices = [Index(value = ["entry_seq"]), Index(value = ["sense_seq"], unique = true)])
 class Sense(
         @PrimaryKey(autoGenerate = true) val rowid: Int,
-        val entry_seq: String,
-        val pos: String?,
-        val field: String?,
-        val misc: String?,
-        val info: String?,
-        val dial: String?,
-        val gloss: String
-) : Serializable
+        @ColumnInfo(name = "entry_seq") val entrySeq: String,
+        @ColumnInfo(name = "sense_seq") val senseSeq: String,
+        @ColumnInfo val pos: String?,
+        @ColumnInfo val field: String?,
+        @ColumnInfo val misc: String?,
+        @ColumnInfo val info: String?,
+        @ColumnInfo val dial: String?,
+        @ColumnInfo val gloss: String
+)

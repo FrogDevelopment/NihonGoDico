@@ -16,14 +16,16 @@ public class EntryContract implements BaseColumns {
     public static final int INDEX_KANA      = 3;
     public static final int INDEX_READING   = 4;
 
-    private static final String SQL_CREATE     = "CREATE TABLE entries (rowid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, entry_seq TEXT NOT NULL, kanji TEXT, kana TEXT NOT NULL, reading TEXT NOT NULL);";
-    private static final String SQL_CREATE_FTS = "CREATE VIRTUAL TABLE fts_entries USING fts4 (content='entries', kanji, kana)";
-    private static final String SQL_INSERT     = "INSERT INTO entries (entry_seq, kanji, kana, reading) VALUES (?,?,?,?);";
-    private static final String SQL_CLEAN      = "DELETE FROM entries;";
-    private static final String SQL_REBUILD    = "INSERT INTO fts_entries(fts_entries) VALUES('rebuild');";
+    private static final String SQL_CREATE_TABLE = "CREATE TABLE entries (rowid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, entry_seq TEXT NOT NULL, kanji TEXT, kana TEXT NOT NULL, reading TEXT NOT NULL);";
+    private static final String SQL_CREATE_INDEX = "CREATE UNIQUE INDEX index_entries_entry_seq ON entries(entry_seq);";
+    private static final String SQL_CREATE_FTS   = "CREATE VIRTUAL TABLE fts_entries USING fts4 (content=`entries`, `kanji`, `kana`)";
+    private static final String SQL_INSERT       = "INSERT INTO entries (entry_seq, kanji, kana, reading) VALUES (?,?,?,?);";
+    private static final String SQL_CLEAN        = "DELETE FROM entries;";
+    private static final String SQL_REBUILD      = "INSERT INTO fts_entries(fts_entries) VALUES('rebuild');";
 
     static void create(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE);
+        db.execSQL(SQL_CREATE_TABLE);
+        db.execSQL(SQL_CREATE_INDEX);
         db.execSQL(SQL_CREATE_FTS);
     }
 

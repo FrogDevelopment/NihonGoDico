@@ -28,9 +28,11 @@ import static com.frogdevelopment.nihongo.dico.data.contentprovider.SenseContrac
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SenseContract.INDEX_INFO;
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SenseContract.INDEX_MISC;
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SenseContract.INDEX_POS;
+import static com.frogdevelopment.nihongo.dico.data.contentprovider.SenseContract.INDEX_SENSE_SEQ;
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SenseContract.INFO;
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SenseContract.MISC;
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SenseContract.POS;
+import static com.frogdevelopment.nihongo.dico.data.contentprovider.SenseContract.SENSE_SEQ;
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.INDEX_INDICES;
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.INDEX_JAPANESE_REF;
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.INDEX_JAPANESE_SENTENCE;
@@ -280,6 +282,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
             sqLiteStatement.clearBindings();
 
             bindStringOrNull(sqLiteStatement, row, SenseContract.ENTRY_SEQ, SenseContract.INDEX_ENTRY_SEQ);
+            bindStringOrNull(sqLiteStatement, row, SENSE_SEQ, INDEX_SENSE_SEQ);
             bindStringOrNull(sqLiteStatement, row, POS, INDEX_POS);
             bindStringOrNull(sqLiteStatement, row, FIELD, INDEX_FIELD);
             bindStringOrNull(sqLiteStatement, row, MISC, INDEX_MISC);

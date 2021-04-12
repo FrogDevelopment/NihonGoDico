@@ -5,9 +5,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.frogdevelopment.nihongo.dico.data.entities.Entry
+import com.frogdevelopment.nihongo.dico.data.entities.EntryFts
 import com.frogdevelopment.nihongo.dico.data.entities.Sense
+import com.frogdevelopment.nihongo.dico.data.entities.SenseFts
 
-@Database(entities = [Entry::class, Sense::class], version = 1, exportSchema = false)
+@Database(entities = [
+    Entry::class, EntryFts::class,
+    Sense::class, SenseFts::class
+],
+        version = 1,
+        exportSchema = false)
 abstract class DicoRoomDatabase : RoomDatabase() {
 
     abstract fun entryDao(): EntryDao
