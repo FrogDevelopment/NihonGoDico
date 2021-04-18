@@ -1,44 +1,38 @@
 package com.frogdevelopment.nihongo.dico.to_delete;
 
-import android.os.Bundle;
-import android.provider.SearchRecentSuggestions;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.frogdevelopment.nihongo.dico.data.contentprovider.NihonGoDicoContentProvider;
-import com.frogdevelopment.nihongo.dico.utils.InputUtils;
 
 public class OldMainActivity extends AppCompatActivity {
 
-    private static final int LOADER_INIT = 0;
+    private static final int LOADER_INIT          = 0;
     private static final int LOADER_DICO_ID_KANJI = 100;
-    private static final int LOADER_DICO_ID_KANA = 200;
+    private static final int LOADER_DICO_ID_KANA  = 200;
     private static final int LOADER_DICO_ID_GLOSS = 300;
 
     private static final String REGEX_SEARCH_SPLIT = "\\+|!|\\?";
 
     private String query;
 
-    private void launchQueryFor(String query) {
-        // https://developer.android.com/guide/topics/search/adding-recent-query-suggestions.html
-        SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
-        suggestions.saveRecentQuery(query, null);
-
-        // fixme proposer la possibilité d'effacer l'history
-//            suggestions.clearHistory();
-
-        Bundle args = new Bundle();
-        args.putString("query", query.trim());
-
-        int loaderId;
-        if (InputUtils.containsKanji(query)) {
-            loaderId = LOADER_DICO_ID_KANJI;
-        } else if (InputUtils.isOnlyKana(query)) {
-            loaderId = LOADER_DICO_ID_KANA;
-        } else {
-            loaderId = LOADER_DICO_ID_GLOSS;
-        }
-    }
+//    private void launchQueryFor(String query) {
+////         https://developer.android.com/guide/topics/search/adding-recent-query-suggestions.html
+//        SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, NihonGoDicoContentProvider.AUTHORITY, NihonGoDicoContentProvider.MODE);
+//        suggestions.saveRecentQuery(query, null);
+//
+//        // fixme proposer la possibilité d'effacer l'history
+////            suggestions.clearHistory();
+//
+//        Bundle args = new Bundle();
+//        args.putString("query", query.trim());
+//
+//        int loaderId;
+//        if (InputUtils.containsKanji(query)) {
+//            loaderId = LOADER_DICO_ID_KANJI;
+//        } else if (InputUtils.isOnlyKana(query)) {
+//            loaderId = LOADER_DICO_ID_KANA;
+//        } else {
+//            loaderId = LOADER_DICO_ID_GLOSS;
+//        }
+//    }
 
 //    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 //

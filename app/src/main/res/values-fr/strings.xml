@@ -246,12 +246,6 @@
     <string name="settings_clear_history_dialog_title">Supprimer votre historique de recherche ?</string>
     <string name="settings_clear_history_dialog_positive_button">Effacer</string>
 
-    <string name="settings_offline_title">Utiliser le dictionnaire télécharger</string>
-    <string name="settings_offline_summary_on">Rechercher hors ligne</string>
-    <string name="settings_offline_summary_off">Rechercher en ligne</string>
-    <string name="settings_offline_text_on">Hors ligne</string>
-    <string name="settings_offline_text_off">En ligne</string>
-
     <string name="settings_dictionary_title">Dictionnaire</string>
     <string name="settings_language_title">Langage de recherche</string>
     <string name="settings_about_application">Application</string>
@@ -262,7 +256,7 @@
     <string name="downloads_language_title">Langue</string>
     <string name="downloads_entries_hint">Choisissez une langue</string>
     <string name="downloads_entries_title">Télécharger le dictionnaire</string>
-    <string name="downloads_examples_title">Télécharger les exemples</string>
-    <string name="downloads_examples">Télécharger les exemples</string>
+    <string name="downloads_sentences_title">Télécharger les exemples</string>
+    <string name="downloads_sentences">Télécharger les exemples</string>
 
 </resources>

@@ -267,12 +267,6 @@
     <string name="settings_clear_history_dialog_title">Delete your search history ?</string>
     <string name="settings_clear_history_dialog_positive_button">Clear</string>
 
-    <string name="settings_offline_title">Use downloaded dictionary</string>
-    <string name="settings_offline_summary_on">Search offline</string>
-    <string name="settings_offline_summary_off">Search online</string>
-    <string name="settings_offline_text_on">Offline</string>
-    <string name="settings_offline_text_off">Online</string>
-
     <string name="settings_dictionary_title">Dictionary</string>
     <string name="settings_language_title">Search language</string>
     <string name="settings_about_application">Application</string>
@@ -285,9 +279,9 @@
     <string name="downloads_entries_title">Download dictionary</string>
     <string name="downloads_entries_info" translatable="false">Copyright JMdict/EDICT &amp; EDRDG</string>
     <string name="downloads_entries_summary" translatable="false">https://www.edrdg.org/jmdict/edict_doc.html</string>
-    <string name="downloads_examples_title">Download examples</string>
-    <string name="downloads_examples_info" translatable="false">CC-BY 2.0 Tatoeba</string>
-    <string name="downloads_examples_summary" translatable="false">https://tatoeba.org</string>
-    <string name="downloads_examples">Download examples</string>
+    <string name="downloads_sentences">Download sentences</string>
+    <string name="downloads_sentences_title">Download sentences</string>
+    <string name="downloads_sentences_info" translatable="false">CC-BY 2.0 Tatoeba</string>
+    <string name="downloads_sentences_summary" translatable="false">https://tatoeba.org</string>
 
 </resources>

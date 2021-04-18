@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import java.io.Serializable
 
 @Entity(tableName = "entries", indices = [Index(value = ["entry_seq"], unique = true)])
 class Entry(
@@ -12,4 +11,4 @@ class Entry(
         @ColumnInfo(name = "entry_seq") val entrySeq: String,
         @ColumnInfo val kanji: String?,
         @ColumnInfo val kana: String,
-        @ColumnInfo val reading: String) : Serializable
+        @ColumnInfo val reading: String)

@@ -1,4 +1,4 @@
-package com.frogdevelopment.nihongo.dico.data.rest
+package com.frogdevelopment.nihongo.dico.data.entities
 
 import java.io.Serializable
 

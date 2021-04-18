@@ -39,6 +39,6 @@
 
         <variable
             name="sentence"
-            type="com.frogdevelopment.nihongo.dico.data.rest.Sentence" />
+            type="com.frogdevelopment.nihongo.dico.data.entities.Sentence" />
     </data>
 </layout>

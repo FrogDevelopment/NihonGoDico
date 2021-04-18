@@ -10,7 +10,6 @@ import android.util.Log
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreference
 import com.frogdevelopment.nihongo.dico.BuildConfig
 import com.frogdevelopment.nihongo.dico.R
 import com.frogdevelopment.nihongo.dico.data.contentprovider.NihonGoDicoContentProvider.*
@@ -28,13 +27,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
             clearHistory()
             true
         }
-
-        val offline = findPreference<SwitchPreference>(KEY_OFFLINE)
-        offline!!.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
-            handleDownloadsVisibility(java.lang.Boolean.TRUE == newValue)
-            true
-        }
-        handleDownloadsVisibility(offline.isChecked)
 
         val downloadEntries = findPreference<Preference>(KEY_DOWNLOAD_ENTRIES)
         downloadEntries!!.setOnPreferenceClickListener {
@@ -87,7 +79,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
     companion object {
         const val KEY_LANGUAGE = "languageTag"
         const val LANGUAGE_DEFAULT = "eng"
-        const val KEY_OFFLINE = "settings_offline"
         const val OFFLINE_DEFAULT = false
         const val KEY_CLEAR_HISTORY = "settings_clear_history"
         const val KEY_DOWNLOAD_ENTRIES = "settings_download_entries"

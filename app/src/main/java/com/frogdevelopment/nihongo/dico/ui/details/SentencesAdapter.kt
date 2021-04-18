@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.frogdevelopment.nihongo.dico.R
-import com.frogdevelopment.nihongo.dico.data.rest.Sentence
+import com.frogdevelopment.nihongo.dico.data.entities.Sentence
 import com.frogdevelopment.nihongo.dico.databinding.SentenceRowBinding
 
 class SentencesAdapter(context: Context, sentences: List<Sentence>) : RecyclerView.Adapter<SentencesAdapter.ViewHolder>() {
