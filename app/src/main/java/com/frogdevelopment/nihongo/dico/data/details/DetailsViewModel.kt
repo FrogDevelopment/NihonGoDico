@@ -3,30 +3,26 @@ package com.frogdevelopment.nihongo.dico.data.details
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.frogdevelopment.nihongo.dico.NihonGoDicoApplication
 import com.frogdevelopment.nihongo.dico.data.entities.EntryDetails
-import com.frogdevelopment.nihongo.dico.data.entities.Sentence
 
 class DetailsViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val offlineRepository = (application as NihonGoDicoApplication).searchRepository
+    private val detailsRepository = (application as NihonGoDicoApplication).detailsRepository
 
-    private lateinit var entryDetails: LiveData<EntryDetails?>
+    private lateinit var details: LiveData<EntryDetails>
 
-    fun entryDetails(): LiveData<EntryDetails?> {
-        return entryDetails
+    fun searchEntryDetails(senseSeq: String): LiveData<EntryDetails> {
+        details = detailsRepository.getDetails(senseSeq)
+        return details
     }
 
-    fun sentences(entryDetails: EntryDetails): LiveData<List<Sentence>?> {
-        return MutableLiveData()
-//            return offlineRepository.getSentences(entryDetails)
+    fun entryDetails(): LiveData<EntryDetails> {
+        return details
     }
 
-    fun searchEntryDetails(senseSeq: String): LiveData<EntryDetails?> {
-        return MutableLiveData()
-//        entryDetails = onlineRepository.getEntryDetails(senseSeq)
-//        return entryDetails
-    }
+//    fun sentences(entryDetails: EntryDetails): LiveData<List<Sentence>> {
+//        return searchRepository.getSentences(entryDetails)
+//    }
 
 }

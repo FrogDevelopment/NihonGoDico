@@ -4,20 +4,19 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.frogdevelopment.nihongo.dico.data.entities.Entry
-import com.frogdevelopment.nihongo.dico.data.entities.EntryFts
-import com.frogdevelopment.nihongo.dico.data.entities.Sense
-import com.frogdevelopment.nihongo.dico.data.entities.SenseFts
+import com.frogdevelopment.nihongo.dico.data.entities.*
 
 @Database(entities = [
     Entry::class, EntryFts::class,
     Sense::class, SenseFts::class
 ],
+        views = [EntryDetails::class],
         version = 1,
         exportSchema = false)
 abstract class DicoRoomDatabase : RoomDatabase() {
 
     abstract fun entryDao(): EntryDao
+    abstract fun senseDao(): SenseDao
 
     companion object {
         // Singleton prevents multiple instances of database opening at the

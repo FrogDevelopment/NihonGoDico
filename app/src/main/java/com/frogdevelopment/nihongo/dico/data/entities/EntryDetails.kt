@@ -1,16 +1,18 @@
 package com.frogdevelopment.nihongo.dico.data.entities
 
-import java.io.Serializable
+import androidx.room.ColumnInfo
+import androidx.room.DatabaseView
 
+@DatabaseView("SELECT entries.kanji, entries.kana, entries.reading, senses.sense_seq, senses.pos, senses.field, senses.misc, senses.info, senses.dial, senses.gloss FROM entries INNER JOIN senses ON senses.entry_seq = entries.entry_seq")
 class EntryDetails(
-        val entrySeq: Int,
         val kanji: String?,
         val kana: String,
         val reading: String,
-        val pos: Set<String>?,
-        val field: Set<String>?,
-        val misc: Set<String>?,
+        @ColumnInfo(name = "sense_seq") val senseSeq: String,
+        val pos: String?,
+        val field: String?,
+        val misc: String?,
         val info: String?,
-        val dial: Set<String>?,
+        val dial: String?,
         val gloss: String? = null
-) : Serializable
+)
