@@ -5,10 +5,12 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.frogdevelopment.nihongo.dico.NihonGoDicoApplication
 import com.frogdevelopment.nihongo.dico.data.entities.EntryDetails
+import com.frogdevelopment.nihongo.dico.data.entities.Sentence
 
 class DetailsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val detailsRepository = (application as NihonGoDicoApplication).detailsRepository
+    private val sentencesRepository = (application as NihonGoDicoApplication).sentencesRepository
 
     private lateinit var details: LiveData<EntryDetails>
 
@@ -21,8 +23,8 @@ class DetailsViewModel(application: Application) : AndroidViewModel(application)
         return details
     }
 
-//    fun sentences(entryDetails: EntryDetails): LiveData<List<Sentence>> {
-//        return searchRepository.getSentences(entryDetails)
-//    }
+    fun sentences(entryDetails: EntryDetails): LiveData<List<Sentence>> {
+        return sentencesRepository.getSentences(entryDetails)
+    }
 
 }

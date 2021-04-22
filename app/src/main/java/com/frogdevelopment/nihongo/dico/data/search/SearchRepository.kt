@@ -8,7 +8,6 @@ import com.frogdevelopment.nihongo.dico.data.room.EntryDao
 import com.frogdevelopment.nihongo.dico.utils.Input
 import com.frogdevelopment.nihongo.dico.utils.Input.KANA
 import com.frogdevelopment.nihongo.dico.utils.Input.KANJI
-import java.lang.String.format
 import java.util.stream.Collectors
 
 class SearchRepository(private val entryDao: EntryDao) {
@@ -17,21 +16,10 @@ class SearchRepository(private val entryDao: EntryDao) {
 
         val inputType = SearchUtils.getInputType(query)
 
-        val term: String
-        val searchResult: LiveData<List<SearchResultEntry>>
-        when (inputType) {
-            KANJI -> {
-                term = format("kanji:%s*", query)
-                searchResult = entryDao.searchByKanji(term)
-            }
-            KANA -> {
-                term = format("kana:%s*", query)
-                searchResult = entryDao.searchByKana(term)
-            }
-            else -> {
-                term = format("*%s*", query)
-                searchResult = entryDao.searchByRomaji(term)
-            }
+        val searchResult: LiveData<List<SearchResultEntry>> = when (inputType) {
+            KANJI -> entryDao.searchByKanji("kanji:$query*")
+            KANA -> entryDao.searchByKana("kana:$query*")
+            else -> entryDao.searchByRomaji("*$query*")
         }
 
         return Transformations.map(searchResult) { entries ->

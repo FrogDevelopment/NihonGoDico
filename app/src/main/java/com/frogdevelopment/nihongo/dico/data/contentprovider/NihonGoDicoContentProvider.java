@@ -61,7 +61,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
         public void onCreate(SQLiteDatabase db) {
             EntryContract.create(db);
             SenseContract.create(db);
-//            ExampleContract.create(db);
+            SentenceContract.create(db);
 //            FavoritesContract.create(db);
         }
 
@@ -130,6 +130,10 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
     private static final String REBUILD_DICO_PATH = "REBUILD_DICO";
     public static final  Uri    REBUILD_DICO_URI  = toUri(REBUILD_DICO_PATH);
 
+    private static final int    REBUILD_SENTENCE      = 31;
+    private static final String REBUILD_SENTENCE_PATH = "REBUILD_SENTENCE";
+    public static final  Uri    REBUILD_SENTENCE_URI  = toUri(REBUILD_SENTENCE_PATH);
+
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     private static Uri toUri(String path) {
@@ -145,6 +149,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
         sURIMatcher.addURI(AUTHORITY, CLEAN_DICO_PATH, CLEAN_DICO);
         sURIMatcher.addURI(AUTHORITY, CLEAN_SENTENCE_PATH, CLEAN_SENTENCE);
         sURIMatcher.addURI(AUTHORITY, REBUILD_DICO_PATH, REBUILD_DICO);
+        sURIMatcher.addURI(AUTHORITY, REBUILD_SENTENCE_PATH, REBUILD_SENTENCE);
     }
 
     public NihonGoDicoContentProvider() {
@@ -160,71 +165,10 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-        Cursor cursor;
-        switch (sURIMatcher.match(uri)) {
-
-            case URI_MATCH_SUGGEST:
-                return super.query(uri, projection, selection, selectionArgs, sortOrder);
-
-//            case FAVORITE_ID:
-//                String sql_favorites = "SELECT entry.kanji, entry.reading, sense.gloss, sense._id" +
-//                        " FROM entry" +
-//                        " INNER JOIN sense ON (entry._id = sense.entry_id)" +
-//                        " INNER JOIN favorites ON (sense._id = favorites.sense_id)" +
-//                        " ORDER BY sense.gloss";
-//                cursor = db.rawQuery(sql_favorites, null);
-//                break;
-
-            case ENTRY:
-                String sql_word = "SELECT sense.pos, sense.field, sense.misc, sense.dial, sense.info, favorites._ID" +
-                        " FROM sense " +
-                        " LEFT OUTER JOIN favorites ON (sense._id = favorites.sense_id)" +
-                        " WHERE sense._ID = ?";
-                cursor = db.rawQuery(sql_word, selectionArgs);
-                break;
-
-            case SENTENCE:
-                String sql = "SELECT japanese_sentence, translation_sentence FROM example WHERE _ID IN " +
-                        " (SELECT docid FROM fts_example WHERE fts_example MATCH ?)";
-                cursor = db.rawQuery(sql, selectionArgs);
-                break;
-
-//            case SEARCH_KANJI:
-//                String sql_kanji = "SELECT entry.kanji, entry.reading, sense.gloss, sense._id, favorites._ID FROM entry" +
-//                        " INNER JOIN sense ON (entry._id = sense.entry_id)" +
-//                        " LEFT OUTER JOIN favorites ON (sense._id = favorites.sense_id)" +
-//                        " WHERE entry._ID IN" +
-//                        " (SELECT docid FROM fts_entry WHERE kanji MATCH '" + selection + "')";
-//                cursor = db.rawQuery(sql_kanji, null);
-//                break;
-
-//            case SEARCH_KANA:
-//                String sql_kana = "SELECT entry.kanji, entry.reading, sense.gloss, sense._id, favorites._ID FROM entry" +
-//                        " INNER JOIN sense ON (entry._id = sense.entry_id)" +
-//                        " LEFT OUTER JOIN favorites ON (sense._id = favorites.sense_id)" +
-//                        " WHERE entry._ID IN" +
-//                        " (SELECT docid FROM fts_entry WHERE reading MATCH '" + selection + "')";
-//                cursor = db.rawQuery(sql_kana, null);
-//                break;
-
-//            case SEARCH_GLOSS:
-//                String sql_gloss = "SELECT entry.kanji, entry.reading, sense.gloss, sense._id, favorites._ID FROM entry" +
-//                        " INNER JOIN sense ON (entry._id = sense.entry_id)" +
-//                        " LEFT OUTER JOIN favorites ON (sense._id = favorites.sense_id)" +
-//                        " WHERE sense._ID IN" +
-//                        " (SELECT docid FROM fts_gloss WHERE fts_gloss MATCH '" + selection + "')";
-//                cursor = db.rawQuery(sql_gloss, null);
-//                break;
-
-            default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
+        if (sURIMatcher.match(uri) == URI_MATCH_SUGGEST) {
+            return super.query(uri, projection, selection, selectionArgs, sortOrder);
         }
-
-        // make sure that potential listeners are getting notified
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
-
-        return cursor;
+        throw new IllegalArgumentException("Unknown URI: " + uri);
     }
 
     @Override
@@ -335,6 +279,11 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
 
             case CLEAN_SENTENCE:
                 SentenceContract.clean(db);
+                return 0;
+
+            case REBUILD_SENTENCE:
+                SentenceContract.reBuild(db);
+                return 0;
 
             default:
                 return super.update(uri, values, selection, selectionArgs);

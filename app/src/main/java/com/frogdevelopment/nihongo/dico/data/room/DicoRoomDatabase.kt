@@ -6,10 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.frogdevelopment.nihongo.dico.data.entities.*
 
-@Database(entities = [
-    Entry::class, EntryFts::class,
-    Sense::class, SenseFts::class
-],
+@Database(
+        entities = [
+            Entry::class, EntryFts::class,
+            Sense::class, SenseFts::class,
+            Sentence::class, SentenceFts::class
+        ],
         views = [EntryDetails::class],
         version = 1,
         exportSchema = false)
@@ -17,6 +19,7 @@ abstract class DicoRoomDatabase : RoomDatabase() {
 
     abstract fun entryDao(): EntryDao
     abstract fun senseDao(): SenseDao
+    abstract fun sentenceDao(): SentenceDao
 
     companion object {
         // Singleton prevents multiple instances of database opening at the

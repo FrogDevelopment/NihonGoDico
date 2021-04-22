@@ -1,4 +1,4 @@
-package com.frogdevelopment.nihongo.dico.data.search
+package com.frogdevelopment.nihongo.dico.data.details
 
 import androidx.lifecycle.LiveData
 import com.frogdevelopment.nihongo.dico.data.entities.EntryDetails
