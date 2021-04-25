@@ -6,6 +6,7 @@
     <!-- ****** -->
     <string name="drawer_home">Home</string>
     <string name="drawer_favorites">Favoris</string>
+    <string name="drawer_web">Site web</string>
     <string name="drawer_settings">Configuration</string>
 
     <!-- ****** -->

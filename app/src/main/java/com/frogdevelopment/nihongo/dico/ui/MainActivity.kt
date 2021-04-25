@@ -1,6 +1,7 @@
 package com.frogdevelopment.nihongo.dico.ui
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
@@ -71,6 +72,13 @@ class MainActivity : AppCompatActivity(), OnNavigateToListener {
             R.id.nav_favorites -> {
                 binding.fab.hide()
                 Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_web -> {
+                val url = "https://www.nihongo-dico.frog-development.com"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivity(intent)
+                }
             }
             else -> {
                 // already on search, nothing to do
