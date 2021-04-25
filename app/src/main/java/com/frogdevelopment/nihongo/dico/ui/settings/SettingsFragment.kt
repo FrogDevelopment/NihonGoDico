@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.PowerManager
 import android.os.PowerManager.WakeLock
 import android.provider.SearchRecentSuggestions
-import android.util.Log
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -33,6 +32,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
             downloadEntries()
             true
         }
+
+        val downloadSentences = findPreference<Preference>(KEY_DOWNLOAD_SENTENCES)
+        downloadSentences!!.setOnPreferenceClickListener {
+            downloadSentences()
+            true
+        }
     }
 
     private fun clearHistory() {
@@ -46,10 +51,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 .show()
     }
 
-    private fun handleDownloadsVisibility(visible: Boolean) {
-        findPreference<Preference>("settings_download_category")!!.isVisible = visible
-    }
-
     private fun downloadEntries() {
         val languages = findPreference<ListPreference>(KEY_LANGUAGE)
         val lang = languages?.value
@@ -58,17 +59,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val wakeLock: WakeLock? = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, javaClass.name)
         wakeLock?.acquire(5 * 60 * 1000L /*5 minutes*/)
         val progressDialog = ProgressDialog(context)
-        progressDialog.setTitle("Downloading Entries") //fixme
+        progressDialog.setTitle("Downloading Dictionary") //fixme
         progressDialog.setCancelable(false)
         progressDialog.setCanceledOnTouchOutside(false)
         progressDialog.show()
 
         context?.contentResolver?.update(CLEAN_DICO_URI, null, null, null)
         EntriesDownLoadTask(context) {
-            Log.d("NIHONGO_DICO", "Entries Success")
-            progressDialog.setTitle("Downloading Senses") //fixme
             SensesDownLoadTask(context) {
-                Log.d("NIHONGO_DICO", "Senses Success")
                 context?.contentResolver?.update(REBUILD_DICO_URI, null, null, null)
                 wakeLock?.release()
                 progressDialog.dismiss()
@@ -76,10 +74,30 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }.execute(lang)
     }
 
+    private fun downloadSentences() {
+        val languages = findPreference<ListPreference>(KEY_LANGUAGE)
+        val lang = languages?.value
+
+        val pm = context?.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val wakeLock: WakeLock? = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, javaClass.name)
+        wakeLock?.acquire(5 * 60 * 1000L /*5 minutes*/)
+        val progressDialog = ProgressDialog(context)
+        progressDialog.setTitle("Downloading Sentences") //fixme
+        progressDialog.setCancelable(false)
+        progressDialog.setCanceledOnTouchOutside(false)
+        progressDialog.show()
+
+        context?.contentResolver?.update(CLEAN_SENTENCE_URI, null, null, null)
+        SentencesDownLoadTask(context) {
+            context?.contentResolver?.update(REBUILD_SENTENCE_URI, null, null, null)
+            wakeLock?.release()
+            progressDialog.dismiss()
+        }.execute(lang)
+    }
+
     companion object {
         const val KEY_LANGUAGE = "languageTag"
         const val LANGUAGE_DEFAULT = "eng"
-        const val OFFLINE_DEFAULT = false
         const val KEY_CLEAR_HISTORY = "settings_clear_history"
         const val KEY_DOWNLOAD_ENTRIES = "settings_download_entries"
         const val KEY_DOWNLOAD_SENTENCES = "settings_download_sentences"

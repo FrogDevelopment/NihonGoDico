@@ -8,6 +8,6 @@ import com.frogdevelopment.nihongo.dico.data.room.SentenceDao
 class SentenceRepository(private val sentenceDao: SentenceDao) {
 
     fun getSentences(entryDetails: EntryDetails): LiveData<List<Sentence>> {
-        return sentenceDao.getSentences("*${entryDetails.kana}*")
+        return sentenceDao.getSentences("*${entryDetails.kanji}*")
     }
 }

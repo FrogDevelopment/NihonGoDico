@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -92,9 +93,7 @@ class DetailsFragment : Fragment() {
     private fun toString(prefix: String, value: String): String {
         val values = value.split(",")
         val resources: MutableList<String?> = ArrayList(values.size)
-        for (value in values) {
-            resources.add(getStringResourceByName(prefix, value))
-        }
+        values.mapTo(resources) { getStringResourceByName(prefix, it) }
         return TextUtils.join(", ", resources)
     }
 
@@ -115,24 +114,24 @@ class DetailsFragment : Fragment() {
     }
 
     private fun fetchSentences(entryDetails: EntryDetails) {
-//        binding.searchingProgress.visibility = View.VISIBLE
-//        viewModel.sentences(entryDetails).observe(viewLifecycleOwner, { sentences ->
-//            binding.searchingProgress.visibility = View.INVISIBLE
-//            when {
-//                sentences == null -> {
-//                    binding.sentencesTitle.visibility = View.INVISIBLE
-//                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()
-//                }
-//                sentences.isEmpty() -> {
-//                    binding.sentencesTitle.visibility = View.INVISIBLE
-//                }
-//                else -> {
-//                    val sentencesAdapter = SentencesAdapter(requireActivity(), sentences)
-//                    binding.sentences.adapter = sentencesAdapter
-//                    binding.sentencesTitle.visibility = View.VISIBLE
-//                }
-//            }
-//        })
+        binding.searchingProgress.visibility = View.VISIBLE
+        viewModel.sentences(entryDetails).observe(viewLifecycleOwner, { sentences ->
+            binding.searchingProgress.visibility = View.INVISIBLE
+            when {
+                sentences == null -> {
+                    binding.sentencesTitle.visibility = View.INVISIBLE
+                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()
+                }
+                sentences.isEmpty() -> {
+                    binding.sentencesTitle.visibility = View.INVISIBLE
+                }
+                else -> {
+                    val sentencesAdapter = SentencesAdapter(requireActivity(), sentences)
+                    binding.sentences.adapter = sentencesAdapter
+                    binding.sentencesTitle.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 
 }

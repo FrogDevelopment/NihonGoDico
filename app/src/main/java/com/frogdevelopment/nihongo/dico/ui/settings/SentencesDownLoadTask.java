@@ -4,9 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import com.frogdevelopment.nihongo.dico.data.contentprovider.NihonGoDicoContentProvider;
-import com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract;
 
 import org.apache.commons.csv.CSVRecord;
+
+import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.JAPANESE;
+import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.LINKING;
+import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.TRANSLATION;
 
 class SentencesDownLoadTask extends AbstractDownLoadTask {
 
@@ -24,18 +27,12 @@ class SentencesDownLoadTask extends AbstractDownLoadTask {
     @Override
     protected ContentValues toContentValues(final CSVRecord record) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SentenceContract.JAPANESE_REF, record.get(SentenceContract.JAPANESE_REF));
-        contentValues.put(SentenceContract.TRANSLATION_REF, record.get(SentenceContract.TRANSLATION_REF));
-        contentValues.put(SentenceContract.JAPANESE_REF, record.get(SentenceContract.JAPANESE_REF));
-        contentValues.put(SentenceContract.TRANSLATION_SENTENCE, record.get(SentenceContract.TRANSLATION_SENTENCE));
-        contentValues.put(SentenceContract.INDICES, record.get(SentenceContract.INDICES));
+        contentValues.put(JAPANESE, record.get(JAPANESE));
+        contentValues.put(TRANSLATION, record.get(TRANSLATION));
+        contentValues.put(LINKING, record.get(LINKING));
 
         return contentValues;
     }
 
-//    @Override
-//    protected void notifyRebuild(final ContentResolver contentResolver) {
-//        contentResolver.update(URI_REBUILD_EXAMPLE, null, null, null);
-//    }
 }
 

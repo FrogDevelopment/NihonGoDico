@@ -22,7 +22,6 @@
         <Preference
             app:key="settings_download_sentences"
             app:title="@string/downloads_sentences"
-            android:enabled="false"
             app:icon="@drawable/ic_baseline_download_24" />
 
         <Preference

@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "sentences")
 class Sentence(
         @PrimaryKey(autoGenerate = true) val rowid: Int,
-        @ColumnInfo(name = "japanese_sentence") val japanese: String,
-        @ColumnInfo(name = "translation_sentence") val translation: String)
+        @ColumnInfo(name = "japanese") val japanese: String,
+        @ColumnInfo(name = "translation") val translation: String,
+        @ColumnInfo(name = "linking") val linking: String)

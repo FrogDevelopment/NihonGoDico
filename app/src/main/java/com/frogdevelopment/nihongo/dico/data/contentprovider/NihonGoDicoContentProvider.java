@@ -33,16 +33,16 @@ import static com.frogdevelopment.nihongo.dico.data.contentprovider.SenseContrac
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SenseContract.MISC;
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SenseContract.POS;
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SenseContract.SENSE_SEQ;
-import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.INDEX_INDICES;
-import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.INDEX_JAPANESE_REF;
-import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.INDEX_JAPANESE_SENTENCE;
-import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.INDEX_TRANSLATION_REF;
-import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.INDEX_TRANSLATION_SENTENCE;
-import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.INDICES;
-import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.JAPANESE_REF;
-import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.JAPANESE_SENTENCE;
-import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.TRANSLATION_REF;
-import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.TRANSLATION_SENTENCE;
+import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.INDEX_JAPANESE;
+import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.INDEX_LINKING;
+import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.INDEX_TRANSLATION;
+import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.JAPANESE;
+import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.LINKING;
+import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.TRANSLATION;
+import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.clean;
+import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.compileInsertStatement;
+import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.create;
+import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.reBuild;
 
 public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider {
 
@@ -61,7 +61,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
         public void onCreate(SQLiteDatabase db) {
             EntryContract.create(db);
             SenseContract.create(db);
-            SentenceContract.create(db);
+            create(db);
 //            FavoritesContract.create(db);
         }
 
@@ -239,15 +239,13 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
     }
 
     private void insertSentences(SQLiteDatabase db, ContentValues[] rows) {
-        SQLiteStatement sqLiteStatement = SentenceContract.compileInsertStatement(db);
+        SQLiteStatement sqLiteStatement = compileInsertStatement(db);
         for (ContentValues row : rows) {
             sqLiteStatement.clearBindings();
 
-            bindStringOrNull(sqLiteStatement, row, JAPANESE_REF, INDEX_JAPANESE_REF);
-            bindStringOrNull(sqLiteStatement, row, TRANSLATION_REF, INDEX_TRANSLATION_REF);
-            bindStringOrNull(sqLiteStatement, row, JAPANESE_SENTENCE, INDEX_JAPANESE_SENTENCE);
-            bindStringOrNull(sqLiteStatement, row, TRANSLATION_SENTENCE, INDEX_TRANSLATION_SENTENCE);
-            bindStringOrNull(sqLiteStatement, row, INDICES, INDEX_INDICES);
+            bindStringOrNull(sqLiteStatement, row, JAPANESE, INDEX_JAPANESE);
+            bindStringOrNull(sqLiteStatement, row, TRANSLATION, INDEX_TRANSLATION);
+            bindStringOrNull(sqLiteStatement, row, LINKING, INDEX_LINKING);
 
             sqLiteStatement.executeInsert();
         }
@@ -278,11 +276,11 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
                 return 0;
 
             case CLEAN_SENTENCE:
-                SentenceContract.clean(db);
+                clean(db);
                 return 0;
 
             case REBUILD_SENTENCE:
-                SentenceContract.reBuild(db);
+                reBuild(db);
                 return 0;
 
             default:
