@@ -10,7 +10,8 @@ import com.frogdevelopment.nihongo.dico.data.entities.*
         entities = [
             Entry::class, EntryFts::class,
             Sense::class, SenseFts::class,
-            Sentence::class, SentenceFts::class
+            Sentence::class, SentenceFts::class,
+            Favorite::class
         ],
         views = [EntryDetails::class],
         version = 1,

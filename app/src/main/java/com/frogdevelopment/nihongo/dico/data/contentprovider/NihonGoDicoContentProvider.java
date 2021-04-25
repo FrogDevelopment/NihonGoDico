@@ -41,7 +41,6 @@ import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceCont
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.TRANSLATION;
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.clean;
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.compileInsertStatement;
-import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.create;
 import static com.frogdevelopment.nihongo.dico.data.contentprovider.SentenceContract.reBuild;
 
 public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider {
@@ -61,8 +60,8 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
         public void onCreate(SQLiteDatabase db) {
             EntryContract.create(db);
             SenseContract.create(db);
-            create(db);
-//            FavoritesContract.create(db);
+            SentenceContract.create(db);
+            FavoritesContract.create(db);
         }
 
         // Upgrading database
