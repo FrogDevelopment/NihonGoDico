@@ -55,21 +55,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val languages = findPreference<ListPreference>(KEY_LANGUAGE)
         val lang = languages?.value
 
-        val pm = context?.getSystemService(Context.POWER_SERVICE) as PowerManager
-        val wakeLock: WakeLock? = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, javaClass.name)
-        wakeLock?.acquire(5 * 60 * 1000L /*5 minutes*/)
-        val progressDialog = ProgressDialog(context)
-        progressDialog.setTitle("Downloading Dictionary") //fixme
-        progressDialog.setCancelable(false)
-        progressDialog.setCanceledOnTouchOutside(false)
-        progressDialog.show()
+        val (wakeLock: WakeLock?, progressDialog) = showProgress("Downloading Dictionary")
 
         context?.contentResolver?.update(CLEAN_DICO_URI, null, null, null)
         EntriesDownLoadTask(context) {
             SensesDownLoadTask(context) {
                 context?.contentResolver?.update(REBUILD_DICO_URI, null, null, null)
-                wakeLock?.release()
-                progressDialog.dismiss()
+                hideProgress(wakeLock, progressDialog)
             }.execute(lang)
         }.execute(lang)
     }
@@ -78,26 +70,34 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val languages = findPreference<ListPreference>(KEY_LANGUAGE)
         val lang = languages?.value
 
-        val pm = context?.getSystemService(Context.POWER_SERVICE) as PowerManager
-        val wakeLock: WakeLock? = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, javaClass.name)
-        wakeLock?.acquire(5 * 60 * 1000L /*5 minutes*/)
-        val progressDialog = ProgressDialog(context)
-        progressDialog.setTitle("Downloading Sentences") //fixme
-        progressDialog.setCancelable(false)
-        progressDialog.setCanceledOnTouchOutside(false)
-        progressDialog.show()
+        val (wakeLock: WakeLock?, progressDialog) = showProgress("Downloading Sentences")
 
         context?.contentResolver?.update(CLEAN_SENTENCE_URI, null, null, null)
         SentencesDownLoadTask(context) {
             context?.contentResolver?.update(REBUILD_SENTENCE_URI, null, null, null)
-            wakeLock?.release()
-            progressDialog.dismiss()
+            hideProgress(wakeLock, progressDialog)
         }.execute(lang)
+    }
+
+    private fun showProgress(title: String): Pair<WakeLock?, ProgressDialog> {
+        val pm = context?.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val wakeLock: WakeLock? = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, javaClass.name)
+        wakeLock?.acquire(5 * 60 * 1000L /*5 minutes*/)
+        val progressDialog = ProgressDialog(context)
+        progressDialog.setTitle(title) //fixme
+        progressDialog.setCancelable(false)
+        progressDialog.setCanceledOnTouchOutside(false)
+        progressDialog.show()
+        return Pair(wakeLock, progressDialog)
+    }
+
+    private fun hideProgress(wakeLock: WakeLock?, progressDialog: ProgressDialog) {
+        wakeLock?.release()
+        progressDialog.dismiss()
     }
 
     companion object {
         const val KEY_LANGUAGE = "languageTag"
-        const val LANGUAGE_DEFAULT = "eng"
         const val KEY_CLEAR_HISTORY = "settings_clear_history"
         const val KEY_DOWNLOAD_ENTRIES = "settings_download_entries"
         const val KEY_DOWNLOAD_SENTENCES = "settings_download_sentences"
