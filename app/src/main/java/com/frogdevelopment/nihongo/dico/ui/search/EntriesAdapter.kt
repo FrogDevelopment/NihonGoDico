@@ -8,6 +8,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.Pair
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
@@ -19,7 +20,7 @@ import com.frogdevelopment.nihongo.dico.ui.main.CustomTypefaceSpan
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 
-class EntriesAdapter(context: Context, private val listener: OnEntryClickListener, entries: List<EntrySearch>) : RecyclerView.Adapter<EntriesAdapter.ViewHolder>() {
+class EntriesAdapter(context: Context, private val listener: OnEntryClickListener, private val entries: List<EntrySearch>) : RecyclerView.Adapter<EntriesAdapter.ViewHolder>() {
 
     @FunctionalInterface
     interface OnEntryClickListener {
@@ -27,7 +28,6 @@ class EntriesAdapter(context: Context, private val listener: OnEntryClickListene
     }
 
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
-    private val mEntries: List<EntrySearch> = entries
     private val kanjiFont: Typeface = ResourcesCompat.getFont(context, R.font.sawarabi_mincho)!!
     private val kanaFont: Typeface = ResourcesCompat.getFont(context, R.font.sawarabi_mincho)!!
     private val colorMatch: Int = ResourcesCompat.getColor(context.resources, R.color.primary, null)
@@ -37,14 +37,14 @@ class EntriesAdapter(context: Context, private val listener: OnEntryClickListene
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val entry = mEntries[position]
+        val entry = entries[position]
         handleHeader(holder, entry)
         handleVocabulary(holder, entry)
         holder.itemView.setOnClickListener { listener.onEntryClick(entry.senseSeq) }
     }
 
     override fun getItemCount(): Int {
-        return mEntries.size
+        return entries.size
     }
 
     private fun handleHeader(holder: ViewHolder, entry: EntrySearch) {
@@ -61,6 +61,10 @@ class EntriesAdapter(context: Context, private val listener: OnEntryClickListene
             entry.kanjiSpannable!!.setSpan(CustomTypefaceSpan(kanjiFont), 0, entry.kanjiSpannable!!.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         holder.binding.header.text = entry.kanjiSpannable
+        holder.binding.favorite.visibility = when {
+            entry.favorite -> View.VISIBLE
+            else -> View.INVISIBLE
+        }
         handleKanaOnly(holder.binding.subhead, entry)
     }
 

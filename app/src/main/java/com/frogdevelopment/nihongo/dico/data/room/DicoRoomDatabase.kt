@@ -21,6 +21,7 @@ abstract class DicoRoomDatabase : RoomDatabase() {
     abstract fun entryDao(): EntryDao
     abstract fun senseDao(): SenseDao
     abstract fun sentenceDao(): SentenceDao
+    abstract fun favoriteDao(): FavoriteDao
 
     companion object {
         // Singleton prevents multiple instances of database opening at the

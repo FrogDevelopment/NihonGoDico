@@ -22,6 +22,7 @@ class DetailsFragment : Fragment() {
     private lateinit var viewModel: DetailsViewModel
 
     private var _binding: DetailsFragmentBinding? = null
+
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
@@ -40,6 +41,12 @@ class DetailsFragment : Fragment() {
     }
 
     private fun populateView(entryDetails: EntryDetails) {
+        binding.favorite.setImageResource(when (entryDetails.favorite) {
+            true -> R.drawable.ic_baseline_favorite_24
+            else -> R.drawable.ic_baseline_favorite_border_24
+        })
+        binding.favorite.setOnClickListener { viewModel.toggleFavorite(entryDetails) }
+
         if (entryDetails.pos!!.isEmpty()) {
             binding.posTitle.visibility = View.GONE
             binding.posValue.visibility = View.GONE

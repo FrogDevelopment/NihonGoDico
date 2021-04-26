@@ -6,7 +6,8 @@ class EntrySearch(
         val senseSeq: String,
         val kanji: String?,
         val kana: String,
-        val vocabulary: String
+        val vocabulary: String,
+        val favorite: Boolean
 ) {
 
     var kanjiSpannable: SpannableString? = null

@@ -32,7 +32,7 @@ class SearchRepository(private val entryDao: EntryDao) {
     }
 
     private fun entrySearch(row: SearchResultEntry, query: String, inputType: Input): EntrySearch {
-        val entrySearch = EntrySearch(row.sense_seq, row.kanji, row.kana, row.gloss)
+        val entrySearch = EntrySearch(row.sense_seq, row.kanji, row.kana, row.gloss, row.favorite)
         ComputeSimilarity.computeSimilarity(entrySearch, query, inputType)
         return entrySearch
     }
