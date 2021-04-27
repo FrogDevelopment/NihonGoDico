@@ -3,6 +3,7 @@ package com.frogdevelopment.nihongo.dico.data.details
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.frogdevelopment.nihongo.dico.NihonGoDicoApplication
 import com.frogdevelopment.nihongo.dico.data.entities.EntryDetails
@@ -26,19 +27,20 @@ class DetailsViewModel(application: Application) : AndroidViewModel(application)
         return details
     }
 
+    fun setDetails(entryDetails: EntryDetails) {
+        details = MutableLiveData(entryDetails)
+    }
+
     fun sentences(entryDetails: EntryDetails): LiveData<List<Sentence>> {
         return sentencesRepository.getSentences(entryDetails)
     }
 
-
-    fun toggleFavorite(entryDetails: EntryDetails) = viewModelScope.launch {
+    fun toggleFavorite(entryDetails: EntryDetails) {
         if (entryDetails.favorite) {
-            favoritesRepository.delete(entryDetails.senseSeq)
+            viewModelScope.launch { favoritesRepository.delete(entryDetails.senseSeq) }
         } else {
-            favoritesRepository.insert(entryDetails.senseSeq)
+            viewModelScope.launch { favoritesRepository.insert(entryDetails.senseSeq) }
         }
         entryDetails.favorite = !entryDetails.favorite
     }
-
-
 }

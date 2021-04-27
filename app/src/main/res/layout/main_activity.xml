@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_search_24"
         app:layout_anchor="@id/bottom_app_bar"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        android:contentDescription="@string/search_label" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

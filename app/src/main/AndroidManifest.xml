@@ -48,6 +48,15 @@
                 android:value=".ui.MainActivity" />
         </activity>
 
+        <activity
+            android:name=".ui.favorites.FavoritesActivity"
+            android:parentActivityName=".ui.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
+
         <provider
             android:name=".data.contentprovider.NihonGoDicoContentProvider"
             android:authorities="com.frogdevelopment.nihongo.dico.NihonGoDicoContentProvider"

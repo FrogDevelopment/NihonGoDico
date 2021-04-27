@@ -21,9 +21,15 @@
         <item quantity="other">%1$d résultats</item>
     </plurals>
 
+    <!-- ********* -->
+    <!-- FAVORITES -->
+    <!-- ********* -->
+    <string name="favorites_title">Favoris</string>
+
     <!-- ******* -->
     <!-- DETAILS -->
     <!-- ******* -->
+    <string name="settings_title">Paramètres</string>
     <string name="misc_title">Information de sense</string>
     <string name="misc_abbr">abréviation</string>
     <string name="misc_aphorism">aphorisme (dicton concis)</string>

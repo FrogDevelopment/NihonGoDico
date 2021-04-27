@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -32,20 +31,17 @@ class DetailsFragment : Fragment() {
         _binding = DetailsFragmentBinding.inflate(layoutInflater)
         binding.viewModel = viewModel
 
-        binding.kanji.typeface = ResourcesCompat.getFont(requireContext(), R.font.sawarabi_mincho)
-        binding.kana.typeface = ResourcesCompat.getFont(requireContext(), R.font.sawarabi_mincho)
-
         viewModel.entryDetails().observe(viewLifecycleOwner, { entryDetails -> populateView(entryDetails!!) })
 
         return binding.root
     }
 
     private fun populateView(entryDetails: EntryDetails) {
-        binding.favorite.setImageResource(when (entryDetails.favorite) {
-            true -> R.drawable.ic_baseline_favorite_24
-            else -> R.drawable.ic_baseline_favorite_border_24
-        })
-        binding.favorite.setOnClickListener { viewModel.toggleFavorite(entryDetails) }
+        handleFavoriteDrawable(entryDetails)
+        binding.favorite.setOnClickListener {
+            viewModel.toggleFavorite(entryDetails)
+            handleFavoriteDrawable(entryDetails)
+        }
 
         if (entryDetails.pos!!.isEmpty()) {
             binding.posTitle.visibility = View.GONE
@@ -95,6 +91,13 @@ class DetailsFragment : Fragment() {
         binding.sentences.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         binding.sentences.setHasFixedSize(true)
         fetchSentences(entryDetails)
+    }
+
+    private fun handleFavoriteDrawable(entryDetails: EntryDetails) {
+        binding.favorite.setImageResource(when (entryDetails.favorite) {
+            true -> R.drawable.ic_baseline_favorite_24
+            else -> R.drawable.ic_baseline_favorite_border_24
+        })
     }
 
     private fun toString(prefix: String, value: String): String {

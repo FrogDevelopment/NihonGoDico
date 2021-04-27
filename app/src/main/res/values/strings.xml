@@ -32,6 +32,11 @@
         </ul></p>
     ]]></string>
 
+    <!-- ********* -->
+    <!-- FAVORITES -->
+    <!-- ********* -->
+    <string name="favorites_title">Favorites</string>
+
     <!-- ******* -->
     <!-- DETAILS -->
     <!-- ******* -->
@@ -242,6 +247,7 @@
     <!-- ******** -->
     <!-- SETTINGS -->
     <!-- ******** -->
+    <string name="settings_title">Settings</string>
     <string name="settings_lang_eng_value" translatable="false">eng</string>
     <string name="settings_lang_fra_value" translatable="false">fra</string>
     <string name="settings_lang_dut_value" translatable="false">dut</string>

@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.frogdevelopment.nihongo.dico.R
 import com.frogdevelopment.nihongo.dico.data.entities.EntrySearch
 import com.frogdevelopment.nihongo.dico.databinding.SearchRowBinding
-import com.frogdevelopment.nihongo.dico.ui.main.CustomTypefaceSpan
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 
@@ -28,8 +27,6 @@ class EntriesAdapter(context: Context, private val listener: OnEntryClickListene
     }
 
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
-    private val kanjiFont: Typeface = ResourcesCompat.getFont(context, R.font.sawarabi_mincho)!!
-    private val kanaFont: Typeface = ResourcesCompat.getFont(context, R.font.sawarabi_mincho)!!
     private val colorMatch: Int = ResourcesCompat.getColor(context.resources, R.color.primary, null)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -51,19 +48,19 @@ class EntriesAdapter(context: Context, private val listener: OnEntryClickListene
         if (StringUtils.isNotBlank(entry.kanji)) {
             handleKanjiAndKana(holder, entry)
         } else {
-            handleKanaOnly(holder.binding.header, entry)
+            handleKanaOnly(holder.binding.subhead, entry)
         }
     }
 
     private fun handleKanjiAndKana(holder: ViewHolder, entry: EntrySearch) {
         if (entry.kanjiSpannable == null) {
             entry.kanjiSpannable = handleMatches(entry.kanji!!)
-            entry.kanjiSpannable!!.setSpan(CustomTypefaceSpan(kanjiFont), 0, entry.kanjiSpannable!!.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         holder.binding.header.text = entry.kanjiSpannable
-        holder.binding.favorite.visibility = when {
-            entry.favorite -> View.VISIBLE
-            else -> View.INVISIBLE
+        if (entry.favorite) {
+            holder.binding.favorite.visibility = View.VISIBLE
+        } else {
+            holder.binding.favorite.visibility = View.INVISIBLE
         }
         handleKanaOnly(holder.binding.subhead, entry)
     }
@@ -71,7 +68,6 @@ class EntriesAdapter(context: Context, private val listener: OnEntryClickListene
     private fun handleKanaOnly(textView: TextView, entry: EntrySearch) {
         if (entry.kanaSpannable == null) {
             entry.kanaSpannable = handleMatches(entry.kana)
-            entry.kanaSpannable!!.setSpan(CustomTypefaceSpan(kanaFont), 0, entry.kanaSpannable!!.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         textView.text = entry.kanaSpannable
     }

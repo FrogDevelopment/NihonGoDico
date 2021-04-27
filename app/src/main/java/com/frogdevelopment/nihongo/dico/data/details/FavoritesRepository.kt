@@ -15,6 +15,6 @@ class FavoritesRepository(private val favoriteDao: FavoriteDao) {
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun delete(senseSeq: String) {
-        return favoriteDao.delete(Favorite(0, senseSeq))
+        return favoriteDao.delete(senseSeq)
     }
 }

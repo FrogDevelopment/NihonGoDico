@@ -19,7 +19,7 @@ import com.frogdevelopment.nihongo.dico.data.entities.*
 abstract class DicoRoomDatabase : RoomDatabase() {
 
     abstract fun entryDao(): EntryDao
-    abstract fun senseDao(): SenseDao
+    abstract fun senseDao(): DetailsDao
     abstract fun sentenceDao(): SentenceDao
     abstract fun favoriteDao(): FavoriteDao
 
