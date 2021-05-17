@@ -280,6 +280,8 @@
     <string name="settings_about_version_title">Version</string>
 
     <!-- DOWNLOADS -->
+    <string name="downloaded_date">Downloaded the %1$tY/%1$tm/%1$td</string>
+    <string name="downloaded_empty">Not downloaded yet</string>
     <string name="downloads_title">Downloads</string>
     <string name="downloads_language_title">Language</string>
     <string name="downloads_entries_hint">Select a language</string>

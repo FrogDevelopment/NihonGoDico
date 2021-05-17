@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId 'com.frogdevelopment.nihongo.dico'
 
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 30
 
         versionCode getVersionCode()
@@ -60,22 +60,20 @@ android {
 
 dependencies {
     // Room components
-    def room_version = '2.2.6'
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    androidTestImplementation "androidx.room:room-testing:$room_version"
+    implementation 'androidx.room:room-runtime:2.3.0'
+    implementation 'androidx.room:room-ktx:2.3.0'
+    kapt 'androidx.room:room-compiler:2.3.0'
+    androidTestImplementation 'androidx.room:room-testing:2.3.0'
 
     // Lifecycle components
-    def archLifecycleVersion = '2.3.1'
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    kapt "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    kapt 'androidx.lifecycle:lifecycle-common-java8:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
 
     // kotlin
-    implementation "androidx.core:core-ktx:1.3.2"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.12.2'
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.0'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.12.3'
 
     // UI
     def appcompat_version = '1.2.0'
@@ -91,10 +89,9 @@ dependencies {
     // Testing
     def coreTestingVersion = '2.1.0'
     def junitVersion = '4.13.2'
-    def mockitoVersion = '3.8.0'
     androidTestImplementation "androidx.arch.core:core-testing:$coreTestingVersion"
     testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.mockito:mockito-core:3.10.0"
 
     // Divers
     implementation 'org.apache.commons:commons-lang3:3.12.0'

@@ -13,13 +13,16 @@ import com.frogdevelopment.nihongo.dico.BuildConfig
 import com.frogdevelopment.nihongo.dico.R
 import com.frogdevelopment.nihongo.dico.data.contentprovider.NihonGoDicoContentProvider.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.time.Instant
+import java.time.ZoneId
+
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
-        findPreference<Preference>("settings_version")!!.summary = BuildConfig.VERSION_NAME
+        findPreference<Preference>(KEY_VERSION)!!.summary = BuildConfig.VERSION_NAME
 
         val clearHistory = findPreference<Preference>(KEY_CLEAR_HISTORY)
         clearHistory!!.setOnPreferenceClickListener {
@@ -32,23 +35,26 @@ class SettingsFragment : PreferenceFragmentCompat() {
             downloadEntries()
             true
         }
+        downloadEntries.summary = getDate(KEY_DOWNLOAD_ENTRIES)
 
         val downloadSentences = findPreference<Preference>(KEY_DOWNLOAD_SENTENCES)
         downloadSentences!!.setOnPreferenceClickListener {
             downloadSentences()
             true
         }
+        downloadSentences.summary = getDate(KEY_DOWNLOAD_SENTENCES)
     }
 
     private fun clearHistory() {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.settings_clear_history_dialog_title)
-                .setPositiveButton(R.string.settings_clear_history_dialog_positive_button) { _, _ ->
-                    val searchRecentSuggestions = SearchRecentSuggestions(requireContext(), AUTHORITY, MODE)
-                    searchRecentSuggestions.clearHistory()
-                }
-                .setNegativeButton(android.R.string.cancel, null)
-                .show()
+            .setTitle(R.string.settings_clear_history_dialog_title)
+            .setPositiveButton(R.string.settings_clear_history_dialog_positive_button) { _, _ ->
+                val searchRecentSuggestions =
+                    SearchRecentSuggestions(requireContext(), AUTHORITY, MODE)
+                searchRecentSuggestions.clearHistory()
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
     }
 
     private fun downloadEntries() {
@@ -62,6 +68,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             SensesDownLoadTask(context) {
                 context?.contentResolver?.update(REBUILD_DICO_URI, null, null, null)
                 hideProgress(wakeLock, progressDialog)
+                saveDate(KEY_DOWNLOAD_ENTRIES)
             }.execute(lang)
         }.execute(lang)
     }
@@ -76,6 +83,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         SentencesDownLoadTask(context) {
             context?.contentResolver?.update(REBUILD_SENTENCE_URI, null, null, null)
             hideProgress(wakeLock, progressDialog)
+            saveDate(KEY_DOWNLOAD_SENTENCES)
         }.execute(lang)
     }
 
@@ -96,7 +104,29 @@ class SettingsFragment : PreferenceFragmentCompat() {
         progressDialog.dismiss()
     }
 
+    private fun saveDate(preferenceName: String) {
+        val edit = preferenceManager.sharedPreferences.edit()
+        val now = Instant.now()
+        val toEpochMilli = now.toEpochMilli()
+        edit.putLong(preferenceName, toEpochMilli)
+        edit.apply()
+        findPreference<Preference>(preferenceName)!!.summary =
+            getString(R.string.downloaded_date, now.atZone(ZoneId.of("Z")))
+    }
+
+    private fun getDate(preferenceName: String): String {
+        val date = preferenceManager.sharedPreferences.getLong(preferenceName, 0)
+        return when {
+            date != 0L -> getString(
+                R.string.downloaded_date,
+                Instant.ofEpochMilli(date).atZone(ZoneId.of("Z"))
+            )
+            else -> getString(R.string.downloaded_empty)
+        }
+    }
+
     companion object {
+        const val KEY_VERSION = "settings_version"
         const val KEY_LANGUAGE = "languageTag"
         const val KEY_CLEAR_HISTORY = "settings_clear_history"
         const val KEY_DOWNLOAD_ENTRIES = "settings_download_entries"

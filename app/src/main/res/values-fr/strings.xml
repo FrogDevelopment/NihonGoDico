@@ -259,6 +259,8 @@
     <string name="settings_about_version_title">Version</string>
 
     <!-- DOWNLOADS -->
+    <string name="downloaded_date">Téléchargé lee %1$td/%1$tm/%1$tY</string>
+    <string name="downloaded_empty">Non téléchargé</string>
     <string name="downloads_title">Téléchargements</string>
     <string name="downloads_language_title">Langue</string>
     <string name="downloads_entries_hint">Choisissez une langue</string>
