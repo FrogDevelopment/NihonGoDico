@@ -1,0 +1,52 @@
+name: CI-CD - Release
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  testing:
+    name: Lint Check, Test, Release & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Java 8
+        uses: joschi/setup-jdk@v2
+        with:
+          java-version: '8'
+
+      - name: Run Linter
+        run: ./gradlew lintRelease
+
+      - name: Run Unit Tests
+        run: ./gradlew testReleaseUnitTest
+
+      - name: Generate Bundle
+        run: ./gradlew bundleRelease
+
+      - name: Sign app APK
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Upload AAB
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release.aab
+          path: app/build/outputs/bundle/release/app-release.aab
+
+      - name: Deploy to Play Store
+        id: deploy
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: fr.frogdevelopment.pregnancycalendar
+          releaseFiles: app/build/outputs/bundle/release/app-release.aab
+          track: beta
