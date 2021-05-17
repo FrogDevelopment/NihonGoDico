@@ -16,7 +16,7 @@ android {
     buildToolsVersion '30.0.3'
 
     defaultConfig {
-        applicationId 'com.frogdevelopment.nihongo.dico'
+        applicationId 'fr.frogdevelopment.nihongo.dico'
 
         minSdkVersion 26
         targetSdkVersion 30
