@@ -61,6 +61,15 @@
             android:name=".data.contentprovider.NihonGoDicoContentProvider"
             android:authorities="com.frogdevelopment.nihongo.dico.NihonGoDicoContentProvider"
             android:exported="false" />
+
+        <service
+            android:name=".service.DictionaryDownloadJobIntentService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".service.SentencesDownloadJobIntentService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
     <queries>

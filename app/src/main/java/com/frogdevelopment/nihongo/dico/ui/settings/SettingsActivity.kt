@@ -1,5 +1,9 @@
 package com.frogdevelopment.nihongo.dico.ui.settings
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
@@ -22,5 +26,23 @@ class SettingsActivity : AppCompatActivity() {
         setSupportActionBar(binding.bottomAppBar)
 
         binding.title.text = getText(R.string.settings_title)
+        createNotificationChannel()
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "my_channel"
+//            val name = getString(R.string.channel_name)
+            val descriptionText = "blablablabla"
+//            val descriptionText = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel("DICO_DOWNLOAD_CHANNEL", name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 }

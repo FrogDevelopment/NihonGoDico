@@ -16,12 +16,12 @@
 
         <Preference
             app:key="settings_download_entries"
-            app:title="@string/downloads_entries_title"
+            app:title="@string/downloads_dictionary_title"
             app:icon="@drawable/ic_baseline_download_24" />
 
         <Preference
             app:key="settings_download_sentences"
-            app:title="@string/downloads_sentences"
+            app:title="@string/downloads_sentences_title"
             app:icon="@drawable/ic_baseline_download_24" />
 
         <Preference
@@ -36,11 +36,11 @@
         <Preference
             app:icon="@drawable/ic_copyright"
             app:key="settings_about_entries"
-            app:summary="@string/downloads_entries_summary"
-            app:title="@string/downloads_entries_info">
+            app:summary="@string/downloads_dictionary_summary"
+            app:title="@string/downloads_dictionary_info">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="@string/downloads_entries_summary" />
+                android:data="@string/downloads_dictionary_summary" />
         </Preference>
 
         <Preference
