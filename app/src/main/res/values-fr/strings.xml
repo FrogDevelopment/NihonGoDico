@@ -263,9 +263,17 @@
     <string name="downloaded_empty">Non téléchargé</string>
     <string name="downloads_title">Téléchargements</string>
     <string name="downloads_language_title">Langue</string>
-    <string name="downloads_entries_hint">Choisissez une langue</string>
-    <string name="downloads_entries_title">Télécharger le dictionnaire</string>
+    <string name="downloads_dictionary_title">Télécharger le dictionnaire</string>
     <string name="downloads_sentences_title">Télécharger les exemples</string>
-    <string name="downloads_sentences">Télécharger les exemples</string>
+
+    <string name="downloads_toast_dictionary">Téléchargement du dictionnaire</string>
+    <string name="downloads_toast_sentences">Téléchargement des exemples</string>
+
+    <string name="downloads_notify_clean_data">Suppression ancienne données</string>
+    <string name="downloads_notify_rebuild_data">Reconstruction des données</string>
+    <string name="downloads_notify_downloading_entries">Téléchargement des mots</string>
+    <string name="downloads_notify_downloading_senses">Téléchargement des significations</string>
+    <string name="downloads_notify_downloading_sentences">Téléchargement des exemples</string>
+    <string name="downloads_notify_download_complete">Téléchargement fini</string>
 
 </resources>

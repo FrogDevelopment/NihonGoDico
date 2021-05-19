@@ -284,12 +284,21 @@
     <string name="downloaded_empty">Not downloaded yet</string>
     <string name="downloads_title">Downloads</string>
     <string name="downloads_language_title">Language</string>
-    <string name="downloads_entries_hint">Select a language</string>
-    <string name="downloads_entries_title">Download dictionary</string>
-    <string name="downloads_entries_info" translatable="false">Copyright JMdict/EDICT &amp; EDRDG</string>
-    <string name="downloads_entries_summary" translatable="false">https://www.edrdg.org/jmdict/edict_doc.html</string>
-    <string name="downloads_sentences">Download sentences</string>
+    <string name="downloads_dictionary_title">Download dictionary</string>
     <string name="downloads_sentences_title">Download sentences</string>
+
+    <string name="downloads_toast_dictionary">Downloading dictionary</string>
+    <string name="downloads_toast_sentences">Downloading sentences</string>
+
+    <string name="downloads_notify_clean_data">Deleting previous data</string>
+    <string name="downloads_notify_rebuild_data">Rebuilding data</string>
+    <string name="downloads_notify_downloading_entries">Downloading entries</string>
+    <string name="downloads_notify_downloading_senses">Downloading senses</string>
+    <string name="downloads_notify_downloading_sentences">Downloading sentences</string>
+    <string name="downloads_notify_download_complete">Download complete</string>
+
+    <string name="downloads_dictionary_info" translatable="false">Copyright JMdict/EDICT &amp; EDRDG</string>
+    <string name="downloads_dictionary_summary" translatable="false">https://www.edrdg.org/jmdict/edict_doc.html</string>
     <string name="downloads_sentences_info" translatable="false">CC-BY 2.0 Tatoeba</string>
     <string name="downloads_sentences_summary" translatable="false">https://tatoeba.org</string>
 
