@@ -10,7 +10,6 @@ import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.frogdevelopment.nihongo.dico.R
@@ -54,7 +53,7 @@ class ResultAdapter(
         } else {
             holder.binding.header.text = null
             holder.binding.header.visibility = View.GONE
-            handleKanaOnly(holder.binding.subhead, entry)
+            handleKanaOnly(holder, entry)
         }
     }
 
@@ -64,19 +63,20 @@ class ResultAdapter(
         }
         holder.binding.header.text = entry.kanjiSpannable
         holder.binding.header.visibility = View.VISIBLE
+        handleKanaOnly(holder, entry)
+    }
+
+    private fun handleKanaOnly(holder: ViewHolder, entry: EntrySearch) {
+        if (entry.kanaSpannable == null) {
+            entry.kanaSpannable = handleMatches(entry.kana)
+        }
+        holder.binding.subhead.text = entry.kanaSpannable
+
         if (entry.favorite) {
             holder.binding.favorite.visibility = View.VISIBLE
         } else {
             holder.binding.favorite.visibility = View.INVISIBLE
         }
-        handleKanaOnly(holder.binding.subhead, entry)
-    }
-
-    private fun handleKanaOnly(textView: TextView, entry: EntrySearch) {
-        if (entry.kanaSpannable == null) {
-            entry.kanaSpannable = handleMatches(entry.kana)
-        }
-        textView.text = entry.kanaSpannable
     }
 
     private fun handleVocabulary(holder: ViewHolder, entry: EntrySearch) {

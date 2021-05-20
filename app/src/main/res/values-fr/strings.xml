@@ -275,5 +275,6 @@
     <string name="downloads_notify_downloading_senses">Téléchargement des significations</string>
     <string name="downloads_notify_downloading_sentences">Téléchargement des exemples</string>
     <string name="downloads_notify_download_complete">Téléchargement fini</string>
+    <string name="search_favorite_description">favorite</string>
 
 </resources>
