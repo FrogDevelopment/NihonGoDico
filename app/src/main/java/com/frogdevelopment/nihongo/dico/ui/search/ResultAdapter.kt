@@ -19,7 +19,11 @@ import com.frogdevelopment.nihongo.dico.databinding.SearchRowBinding
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 
-class EntriesAdapter(context: Context, private val listener: OnEntryClickListener, private val entries: List<EntrySearch>) : RecyclerView.Adapter<EntriesAdapter.ViewHolder>() {
+class ResultAdapter(
+    context: Context,
+    private val listener: OnEntryClickListener,
+    private val entries: List<EntrySearch>
+) : RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
 
     @FunctionalInterface
     interface OnEntryClickListener {
@@ -48,6 +52,8 @@ class EntriesAdapter(context: Context, private val listener: OnEntryClickListene
         if (StringUtils.isNotBlank(entry.kanji)) {
             handleKanjiAndKana(holder, entry)
         } else {
+            holder.binding.header.text = null
+            holder.binding.header.visibility = View.GONE
             handleKanaOnly(holder.binding.subhead, entry)
         }
     }
@@ -57,6 +63,7 @@ class EntriesAdapter(context: Context, private val listener: OnEntryClickListene
             entry.kanjiSpannable = handleMatches(entry.kanji!!)
         }
         holder.binding.header.text = entry.kanjiSpannable
+        holder.binding.header.visibility = View.VISIBLE
         if (entry.favorite) {
             holder.binding.favorite.visibility = View.VISIBLE
         } else {
