@@ -301,5 +301,6 @@
     <string name="downloads_dictionary_summary" translatable="false">https://www.edrdg.org/jmdict/edict_doc.html</string>
     <string name="downloads_sentences_info" translatable="false">CC-BY 2.0 Tatoeba</string>
     <string name="downloads_sentences_summary" translatable="false">https://tatoeba.org</string>
+    <string name="search_favorite_description">favorite</string>
 
 </resources>
