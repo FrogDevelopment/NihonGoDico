@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.SearchRecentSuggestionsProvider;
 import android.content.UriMatcher;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
@@ -55,7 +54,6 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
             super(context, DATABASE_NAME, null, DATABASE_VERSION/*,DatabaseErrorHandler*/);
         }
 
-        // Creating Tables
         @Override
         public void onCreate(SQLiteDatabase db) {
             EntryContract.create(db);
@@ -64,33 +62,14 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
             FavoritesContract.create(db);
         }
 
-        // Upgrading database
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 //            switch (newVersion) {
 //                case 2:
-//
-//                    EntryContract.drop(db);
-//                    SenseContract.drop(db);
-//                    ExampleContract.drop(db);
-//
-//                    EntryContract.create(db);
-//                    SenseContract.create(db);
-//                    ExampleContract.create(db);
-//
-//                    // reset
-//                    SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
-//                    edit.putBoolean("entries_saved", false);
-//                    edit.putBoolean("examples_saved", false);
-//                    edit.apply();
-//                    break;
-//
-//                case 3:
-//                    FavoritesContract.create(db);
 //                    break;
 //
 //                default:
-//                    // nothing to do
+//                     nothing to do
 //                    break;
 //            }
         }
@@ -163,31 +142,22 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
     }
 
     @Override
-    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        if (sURIMatcher.match(uri) == URI_MATCH_SUGGEST) {
-            return super.query(uri, projection, selection, selectionArgs, sortOrder);
-        }
-        throw new IllegalArgumentException("Unknown URI: " + uri);
-    }
-
-    @Override
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
-        int numInserted;
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         try {
             db.beginTransaction();
 
             switch (sURIMatcher.match(uri)) {
                 case ENTRY:
-                    insertEntries(db, values);
+                    bulkInsertEntries(db, values);
                     break;
 
                 case SENSE:
-                    insertSenses(db, values);
+                    bulkInsertSenses(db, values);
                     break;
 
                 case SENTENCE:
-                    insertSentences(db, values);
+                    bulkInsertSentences(db, values);
                     break;
 
                 default:
@@ -195,17 +165,16 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
             }
 
             db.setTransactionSuccessful();
-            numInserted = values.length;
         } finally {
             db.endTransaction();
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
 
-        return numInserted;
+        return values.length;
     }
 
-    private void insertEntries(SQLiteDatabase db, ContentValues[] rows) {
+    private void bulkInsertEntries(SQLiteDatabase db, ContentValues[] rows) {
         SQLiteStatement sqLiteStatement = EntryContract.compileInsertStatement(db);
         for (ContentValues row : rows) {
             sqLiteStatement.clearBindings();
@@ -219,7 +188,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
         }
     }
 
-    private void insertSenses(SQLiteDatabase db, ContentValues[] rows) {
+    private void bulkInsertSenses(SQLiteDatabase db, ContentValues[] rows) {
         SQLiteStatement sqLiteStatement = SenseContract.compileInsertStatement(db);
         for (ContentValues row : rows) {
             sqLiteStatement.clearBindings();
@@ -237,7 +206,7 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
         }
     }
 
-    private void insertSentences(SQLiteDatabase db, ContentValues[] rows) {
+    private void bulkInsertSentences(SQLiteDatabase db, ContentValues[] rows) {
         SQLiteStatement sqLiteStatement = compileInsertStatement(db);
         for (ContentValues row : rows) {
             sqLiteStatement.clearBindings();
