@@ -16,7 +16,7 @@ import com.frogdevelopment.nihongo.dico.data.entities.EntrySearch
 import com.frogdevelopment.nihongo.dico.data.search.SearchViewModel
 import com.frogdevelopment.nihongo.dico.databinding.SearchFragmentBinding
 import com.frogdevelopment.nihongo.dico.ui.details.DetailsFragment
-import com.frogdevelopment.nihongo.dico.ui.search.EntriesAdapter.OnEntryClickListener
+import com.frogdevelopment.nihongo.dico.ui.search.ResultAdapter.OnEntryClickListener
 
 class SearchFragment : Fragment(), OnEntryClickListener {
 
@@ -65,7 +65,7 @@ class SearchFragment : Fragment(), OnEntryClickListener {
         } else {
             binding.entriesRecyclerview.visibility = View.VISIBLE
             binding.emptyView.visibility = View.GONE
-            binding.entriesRecyclerview.adapter = EntriesAdapter(requireContext(), this, entries)
+            binding.entriesRecyclerview.adapter = ResultAdapter(requireContext(), this, entries)
             searchViewModel.saveRecentQuery(resources.getQuantityString(R.plurals.search_results, entries.size, entries.size))
         }
     }
