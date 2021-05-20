@@ -31,9 +31,9 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "my_channel"
+            val name = "Downloads"
 //            val name = getString(R.string.channel_name)
-            val descriptionText = "blablablabla"
+            val descriptionText = "Notification of download progress"
 //            val descriptionText = getString(R.string.channel_description)
             val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel("DICO_DOWNLOAD_CHANNEL", name, importance).apply {
