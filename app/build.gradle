@@ -62,12 +62,12 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
 
     // kotlin
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.0'
-    runtimeOnly 'org.jetbrains.kotlin:kotlin-reflect:1.5.0'
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.20'
+    runtimeOnly 'org.jetbrains.kotlin:kotlin-reflect:1.5.20'
 
     // UI
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.preference:preference-ktx:1.1.1'
     implementation 'com.google.android.material:material:1.3.0'
@@ -76,7 +76,7 @@ dependencies {
     // Testing
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.mockito:mockito-core:3.10.0'
+    testImplementation 'org.mockito:mockito-core:3.11.2'
 
     // Divers
     implementation 'org.apache.commons:commons-lang3:3.12.0'
