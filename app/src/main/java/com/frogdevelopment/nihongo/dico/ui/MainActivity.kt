@@ -10,6 +10,7 @@ import com.frogdevelopment.nihongo.dico.R
 import com.frogdevelopment.nihongo.dico.databinding.MainActivityBinding
 import com.frogdevelopment.nihongo.dico.ui.BottomNavigationDrawerFragment.OnNavigateToListener
 import com.frogdevelopment.nihongo.dico.ui.favorites.FavoritesActivity
+import com.frogdevelopment.nihongo.dico.ui.history.HistoryActivity
 import com.frogdevelopment.nihongo.dico.ui.search.BottomSheetSearchFragment
 import com.frogdevelopment.nihongo.dico.ui.search.SearchFragment
 import com.frogdevelopment.nihongo.dico.ui.settings.SettingsActivity
@@ -60,6 +61,7 @@ class MainActivity : AppCompatActivity(), OnNavigateToListener {
         when (itemId) {
             R.id.nav_settings -> startActivity(Intent(this, SettingsActivity::class.java))
             R.id.nav_favorites -> startActivity(Intent(this, FavoritesActivity::class.java))
+            R.id.nav_history -> startActivity(Intent(this, HistoryActivity::class.java))
             R.id.nav_web -> {
                 val url = "https://www.nihongo-dico.frog-development.com"
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))

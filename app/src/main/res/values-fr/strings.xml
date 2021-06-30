@@ -6,6 +6,7 @@
     <!-- ****** -->
     <string name="drawer_home">Home</string>
     <string name="drawer_favorites">Favoris</string>
+    <string name="drawer_history">Historique</string>
     <string name="drawer_web">Site web</string>
     <string name="drawer_settings">Configuration</string>
 
@@ -25,6 +26,11 @@
     <!-- FAVORITES -->
     <!-- ********* -->
     <string name="favorites_title">Favoris</string>
+
+    <!-- ********* -->
+    <!-- HISTORY -->
+    <!-- ********* -->
+    <string name="history_title">Historique</string>
 
     <!-- ******* -->
     <!-- DETAILS -->

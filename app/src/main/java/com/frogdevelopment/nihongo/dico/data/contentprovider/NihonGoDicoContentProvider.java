@@ -112,6 +112,8 @@ public class NihonGoDicoContentProvider extends SearchRecentSuggestionsProvider 
     private static final String REBUILD_SENTENCE_PATH = "REBUILD_SENTENCE";
     public static final  Uri    REBUILD_SENTENCE_URI  = toUri(REBUILD_SENTENCE_PATH);
 
+    public static final Uri TEST_URI = toUri("suggestions");
+
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     private static Uri toUri(String path) {
