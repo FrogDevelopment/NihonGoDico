@@ -65,13 +65,13 @@ dependencies {
     // kotlin
     implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.20'
-    runtimeOnly 'org.jetbrains.kotlin:kotlin-reflect:1.5.20'
+    runtimeOnly 'org.jetbrains.kotlin:kotlin-reflect:1.5.21'
 
     // UI
-    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.preference:preference-ktx:1.1.1'
-    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
     // Testing
@@ -82,7 +82,7 @@ dependencies {
     // Divers
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.apache.commons:commons-csv:1.8'
-    implementation 'org.apache.commons:commons-compress:1.20'
+    implementation 'org.apache.commons:commons-compress:1.21'
 }
 
 repositories {

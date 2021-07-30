@@ -117,7 +117,7 @@ internal abstract class AbstractDownloadJobIntentService protected constructor(p
             .setContentText(getString(resId))
             .setSmallIcon(R.drawable.ic_baseline_download_24)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setNotificationSilent()
+            .setSilent(true)
             .setOngoing(true)
             .setProgress(100, progress, false)
         notificationManager.notify(notificationId, builder.build())
