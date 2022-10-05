@@ -41,7 +41,8 @@ internal abstract class AbstractDownloadJobIntentService protected constructor(p
     ) {
         var connection: HttpURLConnection? = null
         try {
-            val url = URL("http://legall.benoit.free.fr/nihongo/dico/$fileName")
+//            val url = URL("http://legall.benoit.free.fr/nihongo/dico/$fileName")
+            val url = URL("http://vps536376.ovh.net:88/dico/$fileName")
             connection = url.openConnection() as HttpURLConnection
             connection.connect()
             if (connection.responseCode != HttpURLConnection.HTTP_OK) {
@@ -65,7 +66,8 @@ internal abstract class AbstractDownloadJobIntentService protected constructor(p
             GzipCompressorInputStream(`is`).use { inputStream ->
                 TarArchiveInputStream(inputStream).use { tarIn ->
                     var entry: ArchiveEntry
-                    while (null != tarIn.nextEntry.also { entry = it }) {
+                    val nextEntry = tarIn.nextEntry
+                    while (null != nextEntry.also { entry = it }) {
                         if (entry.size < 1) {
                             continue
                         }
@@ -102,7 +104,7 @@ internal abstract class AbstractDownloadJobIntentService protected constructor(p
         super.onDestroy()
         val notificationManager = NotificationManagerCompat.from(this)
         val builder = NotificationCompat.Builder(this, "DICO_DOWNLOAD_CHANNEL")
-        builder.setContentTitle(getString(notificationTitle))
+            .setContentTitle(getString(notificationTitle))
             .setContentText(getString(R.string.downloads_notify_download_complete))
             .setSmallIcon(R.drawable.ic_baseline_check_circle_24)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -113,11 +115,11 @@ internal abstract class AbstractDownloadJobIntentService protected constructor(p
     protected fun notify(progress: Int, resId: Int) {
         val notificationManager = NotificationManagerCompat.from(this)
         val builder = NotificationCompat.Builder(this, "DICO_DOWNLOAD_CHANNEL")
-        builder.setContentTitle(getString(notificationTitle))
+            .setContentTitle(getString(notificationTitle))
             .setContentText(getString(resId))
             .setSmallIcon(R.drawable.ic_baseline_download_24)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setNotificationSilent()
+            .setSilent(true)
             .setOngoing(true)
             .setProgress(100, progress, false)
         notificationManager.notify(notificationId, builder.build())

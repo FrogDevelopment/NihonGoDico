@@ -94,7 +94,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun getDate(preferenceName: String): String {
-        val date = preferenceManager.sharedPreferences.getLong(preferenceName, 0)
+        val date = preferenceManager.sharedPreferences!!.getLong(preferenceName, 0)
         return when {
             date != 0L -> getString(
                 R.string.downloaded_date,
